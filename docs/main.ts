@@ -1,30 +1,36 @@
 declare const firebase;
-var docId = 'teste';
+var docId = '';
+var emailComplement = '@lamart-notepad.com';
 
 function initApp(){
     console.log('initApp');
+    docId = document.URL.split('?')[1];
+    if(!docId) docId = "teste";
+    else docId = docId.toLowerCase();
+    console.log({docId});
     firebase.auth().onAuthStateChanged((user)=>{
         if(user){
-            getContent(docId).then(data=>{
-                setTextArea(data.text);
-            });
-        } else {
-            firebaseauth().then(()=>{
-                console.log('logged in');
+            if(user.email !== docId+emailComplement){
+                console.log('logged as another user. Sign out...', user.email, {user});
+                firebase.auth().signOut();
+            }
+            else {
+                console.log('logged in', user.email, {user});
                 getContent(docId).then(data=>{
                     setTextArea(data.text);
                 });
-            });
+            }
+        } else {
+            console.log('signing in...');
+            firebaseauth();
         }
     });
 }
 
 function firebaseauth(){
-    let email = 'teste@lamart-notepad.com';
-    let password = 'teste@lamart-notepad.com';
-    return firebase.auth().signInWithEmailAndPassword(email, password).then((user) => {
-        console.log('logged in', {user});
-    })
+    let email = docId+emailComplement;
+    let password = docId+emailComplement;
+    return firebase.auth().signInWithEmailAndPassword(email, password);
 }
 
 var timeoutID;

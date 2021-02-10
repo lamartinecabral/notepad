@@ -1,28 +1,36 @@
-var docId = 'teste';
+var docId = '';
+var emailComplement = '@lamart-notepad.com';
 function initApp() {
     console.log('initApp');
+    docId = document.URL.split('?')[1];
+    if (!docId)
+        docId = "teste";
+    else
+        docId = docId.toLowerCase();
+    console.log({ docId: docId });
     firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
-            getContent(docId).then(function (data) {
-                setTextArea(data.text);
-            });
-        }
-        else {
-            firebaseauth().then(function () {
-                console.log('logged in');
+            if (user.email !== docId + emailComplement) {
+                console.log('logged as another user. Sign out...', user.email, { user: user });
+                firebase.auth().signOut();
+            }
+            else {
+                console.log('logged in', user.email, { user: user });
                 getContent(docId).then(function (data) {
                     setTextArea(data.text);
                 });
-            });
+            }
+        }
+        else {
+            console.log('signing in...');
+            firebaseauth();
         }
     });
 }
 function firebaseauth() {
-    var email = 'teste@lamart-notepad.com';
-    var password = 'teste@lamart-notepad.com';
-    return firebase.auth().signInWithEmailAndPassword(email, password).then(function (user) {
-        console.log('logged in', { user: user });
-    });
+    var email = docId + emailComplement;
+    var password = docId + emailComplement;
+    return firebase.auth().signInWithEmailAndPassword(email, password);
 }
 var timeoutID;
 function save(ev) {
