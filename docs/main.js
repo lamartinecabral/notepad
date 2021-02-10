@@ -45,7 +45,7 @@ function save(ev) {
             document.getElementById('textarea').className = "";
             console.log("atualizado");
         });
-    }, 400);
+    }, 500);
 }
 var killLiveContent = undefined;
 function liveContent(doc, col) {
@@ -85,6 +85,7 @@ function setContent(text, doc, col) {
             .then(function (res) { return res; });
 }
 function setTextArea(text) {
+    document.getElementById('textarea').readOnly = false;
     document.getElementById('textarea').value = text;
 }
 function getTextArea() {

@@ -45,7 +45,7 @@ function save(ev){
             document.getElementById('textarea').className = "";
             console.log("atualizado");
         });
-    }, 400);
+    }, 500);
 }
 
 var killLiveContent: Function = undefined;
@@ -84,14 +84,15 @@ function setContent(text: string, doc = undefined, col = 'docs'){
 }
 
 function setTextArea(text: string){
-    (document.getElementById('textarea') as any).value = text;
+    (document.getElementById('textarea') as HTMLTextAreaElement).readOnly = false;
+    (document.getElementById('textarea') as HTMLTextAreaElement).value = text;
 }
 
 function getTextArea(): string{
-    return (document.getElementById('textarea') as any).value;
+    return (document.getElementById('textarea') as HTMLTextAreaElement).value;
 }
 
-function tabinput(ev){
+function tabinput(ev: KeyboardEvent){
 	if(ev.keyCode !== 9) return;
     ev.preventDefault();
     document.execCommand('insertText',false,'\t');
