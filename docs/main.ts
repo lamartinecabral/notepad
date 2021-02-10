@@ -5,20 +5,22 @@ var emailComplement = '@lamart-notepad.com';
 function initApp(){
     console.log('initApp');
     docId = document.URL.split('?')[1];
-    if(!docId) docId = "teste";
+    if(!docId) return location.replace(document.URL.split('?')[0]+'?teste');
     else docId = docId.toLowerCase();
     console.log({docId});
     firebase.auth().onAuthStateChanged((user)=>{
         if(user){
             if(user.email !== docId+emailComplement){
                 console.log('logged as another user. Sign out...', user.email, {user});
+                if(typeof(killLiveContent) == 'function') killLiveContent();
                 firebase.auth().signOut();
             }
             else {
                 console.log('logged in', user.email, {user});
-                getContent(docId).then(data=>{
-                    setTextArea(data.text);
-                });
+                // getContent(docId).then(data=>{
+                //     setTextArea(data.text);
+                // });
+                liveContent(docId);
             }
         } else {
             console.log('signing in...');
@@ -43,7 +45,18 @@ function save(ev){
             document.getElementById('textarea').className = "";
             console.log("atualizado");
         });
-    }, 800);
+    }, 400);
+}
+
+var killLiveContent: Function = undefined;
+function liveContent(doc, col = 'docs'){
+    killLiveContent = firebase
+    .firestore()
+    .collection(col)
+    .doc(doc)
+    .onSnapshot((res) => {
+        setTextArea(res.data().text);
+    });
 }
 
 function getContent(doc, col = 'docs'){
