@@ -1,0 +1,28 @@
+<html>
+    <head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF-8">
+		<!-- <script>if('serviceWorker' in navigator){ navigator.serviceWorker.register('./sw.js', {scope: '/'}); };</script> -->
+		<link rel="icon" type="image/ico" href="./assets/favicon.ico">
+		<!-- <link rel="manifest" href="./manifest.webmanifest"> -->
+		<link rel="stylesheet" type="text/css" href="./style.css">
+	</head>
+	<body>
+		<script defer src="https://www.gstatic.com/firebasejs/8.2.4/firebase-app.js"></script>
+		<script defer src="https://www.gstatic.com/firebasejs/8.2.4/firebase-auth.js"></script>
+		<script defer src="https://www.gstatic.com/firebasejs/8.2.4/firebase-firestore.js"></script>
+		<script defer src="./assets/init-firebase.js"></script>
+
+		<textarea
+			name="textarea"
+			id="textarea"
+			autofocus
+			autocomplete="off"
+			autocorrect="off"
+			autocapitalize="off"
+			spellcheck="false"
+			onkeydown="tabinput(event)"
+			oninput="save(event)"
+		></textarea>
+	</body>
+	<script src="main.js"></script>
+</html>
