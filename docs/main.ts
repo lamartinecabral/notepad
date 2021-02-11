@@ -5,7 +5,7 @@ var emailComplement = '@lamart-notepad.com';
 function initApp(){
     console.log('initApp');
     docId = document.URL.split('?')[1];
-    if(!docId) return location.replace(document.URL.split('?')[0]+'?teste');
+    if(!docId) return location.replace(document.URL.split('?')[0]+'?default');
     else docId = docId.toLowerCase();
     console.log({docId});
     firebase.auth().onAuthStateChanged((user)=>{
