@@ -2,13 +2,14 @@ declare const firebase;
 var docId = '';
 var emailComplement = '@lamart-notepad.com';
 
+var unsubscribeAuthState = undefined;
 function initApp(){
     console.log('initApp');
     docId = document.URL.split('?')[1];
     if(!docId) return location.replace(document.URL.split('?')[0]+'?default');
     else docId = docId.toLowerCase();
     console.log({docId});
-    firebase.auth().onAuthStateChanged((user)=>{
+    unsubscribeAuthState = firebase.auth().onAuthStateChanged((user)=>{
         if(user){
             if(user.email !== docId+emailComplement){
                 console.log('logged as another user. Sign out...', user.email, {user});
