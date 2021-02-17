@@ -87,6 +87,7 @@ function setContent(text: string, doc = undefined, col = 'docs'){
 function setTextArea(text: string){
     (document.getElementById('textarea') as HTMLTextAreaElement).readOnly = false;
     (document.getElementById('textarea') as HTMLTextAreaElement).value = text;
+    (document.getElementById('textarea') as HTMLTextAreaElement).style.display = "unset";
 }
 
 function getTextArea(): string{

@@ -4,6 +4,7 @@
     height: 100%;
     resize: none;
     tab-size: 4;
+    display: none;
 }
 
 .updating{
