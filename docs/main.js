@@ -41,9 +41,9 @@ var timeoutID;
 function save(ev) {
     clearTimeout(timeoutID);
     // document.getElementById('textarea').classList.add("updating");
-    document.getElementById('status').hidden = false;
     timeoutID = setTimeout(function () {
         console.log("atualizando...");
+        document.getElementById('status').hidden = false;
         setContent(getTextArea(), docId).then(function () {
             // document.getElementById('textarea').classList.remove("updating");
             document.getElementById('status').hidden = true;
@@ -61,6 +61,8 @@ function liveContent(doc, col) {
         .onSnapshot(function (res) {
         if (isHidden) {
             document.getElementById('textarea').classList.toggle('hidden');
+            document.getElementById('status').hidden = true;
+            document.getElementById('status').children[0].innerText = "Atualizando...";
             isHidden = false;
         }
         setTextArea(res.data().text);
