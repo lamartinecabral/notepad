@@ -12,17 +12,18 @@
 		<script defer src="https://www.gstatic.com/firebasejs/8.2.4/firebase-firestore.js"></script>
 		<script defer src="./assets/init-firebase.js"></script>
 
+		<div id="status" hidden><span>atualizando...</span></div>
 		<textarea
 			name="textarea"
 			id="textarea"
 			autofocus
-			readonly
 			autocomplete="off"
 			autocorrect="off"
 			autocapitalize="off"
 			spellcheck="false"
 			onkeydown="tabinput(event)"
 			oninput="save(event)"
+			class="hidden"
 		></textarea>
 	</body>
 	<script src="main.js"></script>

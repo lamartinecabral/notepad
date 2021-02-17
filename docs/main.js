@@ -1,4 +1,5 @@
 var docId = '';
+var isHidden = true;
 var emailComplement = '@lamart-notepad.com';
 var unsubscribeAuthState = undefined;
 function initApp() {
@@ -39,11 +40,13 @@ function firebaseauth() {
 var timeoutID;
 function save(ev) {
     clearTimeout(timeoutID);
-    document.getElementById('textarea').className = "updating";
+    // document.getElementById('textarea').classList.add("updating");
+    document.getElementById('status').hidden = false;
     timeoutID = setTimeout(function () {
         console.log("atualizando...");
         setContent(getTextArea(), docId).then(function () {
-            document.getElementById('textarea').className = "";
+            // document.getElementById('textarea').classList.remove("updating");
+            document.getElementById('status').hidden = true;
             console.log("atualizado");
         });
     }, 500);
@@ -56,6 +59,10 @@ function liveContent(doc, col) {
         .collection(col)
         .doc(doc)
         .onSnapshot(function (res) {
+        if (isHidden) {
+            document.getElementById('textarea').classList.toggle('hidden');
+            isHidden = false;
+        }
         setTextArea(res.data().text);
     });
 }
@@ -87,15 +94,19 @@ function setContent(text, doc, col) {
 }
 function setTextArea(text) {
     var elem = document.getElementById('textarea');
-    elem.readOnly = false;
+    var selectionStart = elem.selectionStart;
+    var selectionEnd = elem.selectionEnd;
     elem.value = text;
-    elem.style.display = "unset";
+    elem.selectionStart = selectionStart;
+    elem.selectionEnd = selectionEnd;
 }
 function getTextArea() {
     return document.getElementById('textarea').value;
 }
 function tabinput(ev) {
-    if (ev.keyCode !== 9)
+    if (ev.keyCode !== 9 && ev.key !== "Tab")
+        return;
+    if (ev.ctrlKey || ev.shiftKey || ev.altKey)
         return;
     ev.preventDefault();
     document.execCommand('insertText', false, '\t');

@@ -1,5 +1,6 @@
 declare const firebase;
 var docId = '';
+var isHidden = true;
 var emailComplement = '@lamart-notepad.com';
 
 var unsubscribeAuthState = undefined;
@@ -39,11 +40,13 @@ function firebaseauth(){
 var timeoutID;
 function save(ev){
     clearTimeout(timeoutID);
-    document.getElementById('textarea').className = "updating";
+    // document.getElementById('textarea').classList.add("updating");
+    document.getElementById('status').hidden = false;
     timeoutID = setTimeout(() => {
         console.log("atualizando...");
         setContent(getTextArea(),docId).then(()=>{
-            document.getElementById('textarea').className = "";
+            // document.getElementById('textarea').classList.remove("updating");
+            document.getElementById('status').hidden = true;
             console.log("atualizado");
         });
     }, 500);
@@ -56,6 +59,10 @@ function liveContent(doc, col = 'docs'){
     .collection(col)
     .doc(doc)
     .onSnapshot((res) => {
+        if(isHidden){
+            (document.getElementById('textarea') as HTMLTextAreaElement).classList.toggle('hidden');
+            isHidden = false;
+        }
         setTextArea(res.data().text);
     });
 }
@@ -86,17 +93,21 @@ function setContent(text: string, doc = undefined, col = 'docs'){
 
 function setTextArea(text: string){
     let elem = document.getElementById('textarea') as HTMLTextAreaElement;
-    elem.readOnly = false;
+    const selectionStart = elem.selectionStart;
+    const selectionEnd = elem.selectionEnd;
     elem.value = text;
-    elem.style.display = "unset";
+    elem.selectionStart = selectionStart;
+    elem.selectionEnd = selectionEnd;
 }
+
 
 function getTextArea(): string{
     return (document.getElementById('textarea') as HTMLTextAreaElement).value;
 }
 
 function tabinput(ev: KeyboardEvent){
-	if(ev.keyCode !== 9) return;
+    if(ev.keyCode !== 9 && ev.key !== "Tab") return;
+    if(ev.ctrlKey || ev.shiftKey || ev.altKey) return;
     ev.preventDefault();
     document.execCommand('insertText',false,'\t');
 }
