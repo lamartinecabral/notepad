@@ -86,9 +86,10 @@ function setContent(text, doc, col) {
             .then(function (res) { return res; });
 }
 function setTextArea(text) {
-    document.getElementById('textarea').readOnly = false;
-    document.getElementById('textarea').value = text;
-    document.getElementById('textarea').style.display = "unset";
+    var elem = document.getElementById('textarea');
+    elem.readOnly = false;
+    elem.value = text;
+    elem.style.display = "unset";
 }
 function getTextArea() {
     return document.getElementById('textarea').value;
