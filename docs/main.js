@@ -1,7 +1,7 @@
 var docId = '';
 var isHidden = true;
 var emailComplement = '@lamart-notepad.com';
-var unsubscribeAuthState = undefined;
+var killAuthStateChanged = undefined;
 function initApp() {
     console.log('initApp');
     docId = document.URL.split('?')[1];
@@ -10,7 +10,7 @@ function initApp() {
     else
         docId = docId.toLowerCase();
     console.log({ docId: docId });
-    unsubscribeAuthState = firebase.auth().onAuthStateChanged(function (user) {
+    killAuthStateChanged = firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
             if (user.email !== docId + emailComplement) {
                 console.log('logged as another user. Sign out...', user.email, { user: user });
@@ -20,9 +20,6 @@ function initApp() {
             }
             else {
                 console.log('logged in', user.email, { user: user });
-                // getContent(docId).then(data=>{
-                //     setTextArea(data.text);
-                // });
                 liveContent(docId);
             }
         }
@@ -40,12 +37,10 @@ function firebaseauth() {
 var timeoutID;
 function save(ev) {
     clearTimeout(timeoutID);
-    // document.getElementById('textarea').classList.add("updating");
     timeoutID = setTimeout(function () {
         console.log("atualizando...");
         document.getElementById('status').hidden = false;
         setContent(getTextArea(), docId).then(function () {
-            // document.getElementById('textarea').classList.remove("updating");
             document.getElementById('status').hidden = true;
             console.log("atualizado");
         });

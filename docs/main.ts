@@ -3,14 +3,14 @@ var docId = '';
 var isHidden = true;
 var emailComplement = '@lamart-notepad.com';
 
-var unsubscribeAuthState = undefined;
+var killAuthStateChanged: ()=>void = undefined;
 function initApp(){
     console.log('initApp');
     docId = document.URL.split('?')[1];
     if(!docId) return location.replace(document.URL.split('?')[0]+'?default');
     else docId = docId.toLowerCase();
     console.log({docId});
-    unsubscribeAuthState = firebase.auth().onAuthStateChanged((user)=>{
+    killAuthStateChanged = firebase.auth().onAuthStateChanged((user)=>{
         if(user){
             if(user.email !== docId+emailComplement){
                 console.log('logged as another user. Sign out...', user.email, {user});
@@ -19,9 +19,6 @@ function initApp(){
             }
             else {
                 console.log('logged in', user.email, {user});
-                // getContent(docId).then(data=>{
-                //     setTextArea(data.text);
-                // });
                 liveContent(docId);
             }
         } else {
@@ -32,27 +29,25 @@ function initApp(){
 }
 
 function firebaseauth(){
-    let email = docId+emailComplement;
-    let password = docId+emailComplement;
+    const email = docId+emailComplement;
+    const password = docId+emailComplement;
     return firebase.auth().signInWithEmailAndPassword(email, password);
 }
 
 var timeoutID;
 function save(ev){
     clearTimeout(timeoutID);
-    // document.getElementById('textarea').classList.add("updating");
     timeoutID = setTimeout(() => {
         console.log("atualizando...");
         document.getElementById('status').hidden = false;
         setContent(getTextArea(),docId).then(()=>{
-            // document.getElementById('textarea').classList.remove("updating");
             document.getElementById('status').hidden = true;
             console.log("atualizado");
         });
     }, 500);
 }
 
-var killLiveContent: Function = undefined;
+var killLiveContent: ()=>void = undefined;
 function liveContent(doc, col = 'docs'){
     killLiveContent = firebase
     .firestore()
