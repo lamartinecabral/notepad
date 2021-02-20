@@ -1,29 +1,9 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /docs/{doc} {
+    match /docs/{docId} {
       allow get, update: if
-        request.auth.uid == request.resource.data.owner;
-    }
-    match /docs/default {
-      allow read, write: if
-          request.auth.uid == 'QWBtLRptPvVf79nvFcPauL9hyDB2';
-    }
-    match /docs/teste {
-      allow read, write: if
-          request.auth.uid == 'VKhzzV5KiKNkX3wTUIwiceuiAaD2';
-    }
-    match /docs/lamart {
-      allow read, write: if
-          request.auth.uid == 'Mf50XZR1DORZXaXGRv5xGNYYmd02';
-    }
-    match /docs/masterp1 {
-      allow read, write: if
-          request.auth.uid == 'k5yUVcrvlzPjEp53Zl79bdZ11QC3';
-    }
-    match /docs/masterpj {
-      allow read, write: if
-          request.auth.uid == 'Z7jojPtrAkPvWC7vrGdJimaN48K2';
+        request.auth.uid == docId;
     }
   }
 }

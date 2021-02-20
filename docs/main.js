@@ -1,18 +1,19 @@
-var docId = '';
+var docId;
+var username = '';
 var isHidden = true;
 var emailComplement = '@lamart-notepad.com';
 var killAuthStateChanged = undefined;
 function initApp() {
     console.log('initApp');
-    docId = document.URL.split('?')[1];
-    if (!docId)
+    username = document.URL.split('?')[1];
+    if (!username)
         return location.replace(document.URL.split('?')[0] + '?default');
     else
-        docId = docId.toLowerCase();
-    console.log({ docId: docId });
+        username = username.toLowerCase();
+    console.log({ docId: username });
     killAuthStateChanged = firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
-            if (user.email !== docId + emailComplement) {
+            if (user.email !== username + emailComplement) {
                 console.log('logged as another user. Sign out...', user.email, { user: user });
                 if (typeof (killLiveContent) == 'function')
                     killLiveContent();
@@ -20,7 +21,8 @@ function initApp() {
             }
             else {
                 console.log('logged in', user.email, { user: user });
-                liveContent(docId);
+                liveContent(user.uid);
+                docId = user.uid;
             }
         }
         else {
@@ -30,8 +32,8 @@ function initApp() {
     });
 }
 function firebaseauth() {
-    var email = docId + emailComplement;
-    var password = docId + emailComplement;
+    var email = username + emailComplement;
+    var password = username + emailComplement;
     return firebase.auth().signInWithEmailAndPassword(email, password);
 }
 var timeoutID;
@@ -80,7 +82,7 @@ function setContent(text, doc, col) {
             .firestore()
             .collection(col)
             .doc(doc)
-            .set({ text: text })
+            .update({ text: text })
             .then(function (res) { return res; });
     else
         return firebase

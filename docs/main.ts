@@ -1,25 +1,27 @@
 declare const firebase;
-var docId = '';
+var docId;
+var username = '';
 var isHidden = true;
 var emailComplement = '@lamart-notepad.com';
 
 var killAuthStateChanged: ()=>void = undefined;
 function initApp(){
     console.log('initApp');
-    docId = document.URL.split('?')[1];
-    if(!docId) return location.replace(document.URL.split('?')[0]+'?default');
-    else docId = docId.toLowerCase();
-    console.log({docId});
+    username = document.URL.split('?')[1];
+    if(!username) return location.replace(document.URL.split('?')[0]+'?default');
+    else username = username.toLowerCase();
+    console.log({docId: username});
     killAuthStateChanged = firebase.auth().onAuthStateChanged((user)=>{
         if(user){
-            if(user.email !== docId+emailComplement){
+            if(user.email !== username+emailComplement){
                 console.log('logged as another user. Sign out...', user.email, {user});
                 if(typeof(killLiveContent) == 'function') killLiveContent();
                 firebase.auth().signOut();
             }
             else {
                 console.log('logged in', user.email, {user});
-                liveContent(docId);
+                liveContent(user.uid);
+                docId = user.uid;
             }
         } else {
             console.log('signing in...');
@@ -29,8 +31,8 @@ function initApp(){
 }
 
 function firebaseauth(){
-    const email = docId+emailComplement;
-    const password = docId+emailComplement;
+    const email = username+emailComplement;
+    const password = username+emailComplement;
     return firebase.auth().signInWithEmailAndPassword(email, password);
 }
 
@@ -78,7 +80,7 @@ function setContent(text: string, doc = undefined, col = 'docs'){
     .firestore()
     .collection(col)
     .doc(doc)
-    .set({text}) as Promise<any>)
+    .update({text}) as Promise<any>)
     .then(res=>res);
 
     else return (firebase
