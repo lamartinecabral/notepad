@@ -1,9 +1,6 @@
 declare const firebase;
 var docId;
-var username = '';
-var password;
 var isHidden = true;
-var emailComplement = '@lamart-notepad.com';
 
 function initApp(){
 	console.log('initApp');
@@ -58,12 +55,6 @@ function setContent(text: string, doc = undefined, col = 'docs'){
 	.collection(col)
 	.doc(doc)
 	.set({text}) as Promise<any>)
-	.then(res=>res);
-
-	else return (firebase
-	.firestore()
-	.collection(col)
-	.add({text}) as Promise<any>)
 	.then(res=>res);
 }
 

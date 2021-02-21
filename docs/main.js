@@ -1,8 +1,5 @@
 var docId;
-var username = '';
-var password;
 var isHidden = true;
-var emailComplement = '@lamart-notepad.com';
 function initApp() {
     console.log('initApp');
     docId = document.URL.split('?')[1];
@@ -57,12 +54,6 @@ function setContent(text, doc, col) {
             .collection(col)
             .doc(doc)
             .set({ text: text })
-            .then(function (res) { return res; });
-    else
-        return firebase
-            .firestore()
-            .collection(col)
-            .add({ text: text })
             .then(function (res) { return res; });
 }
 function setTextArea(text) {
