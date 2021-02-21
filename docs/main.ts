@@ -6,7 +6,7 @@ function initApp(){
 	console.log('initApp');
 	docId = document.URL.split('?')[1];
 	if(!docId)
-		return location.replace(location.hostname+'?default');
+		return location.replace(location.origin+'?default');
 	liveContent(docId);
 }
 
