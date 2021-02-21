@@ -1,40 +1,14 @@
 var docId;
 var username = '';
+var password;
 var isHidden = true;
 var emailComplement = '@lamart-notepad.com';
-var killAuthStateChanged = undefined;
 function initApp() {
     console.log('initApp');
-    username = document.URL.split('?')[1];
-    if (!username)
-        return location.replace(document.URL.split('?')[0] + '?default');
-    else
-        username = username.toLowerCase();
-    console.log({ docId: username });
-    killAuthStateChanged = firebase.auth().onAuthStateChanged(function (user) {
-        if (user) {
-            if (user.email !== username + emailComplement) {
-                console.log('logged as another user. Sign out...', user.email, { user: user });
-                if (typeof (killLiveContent) == 'function')
-                    killLiveContent();
-                firebase.auth().signOut();
-            }
-            else {
-                console.log('logged in', user.email, { user: user });
-                liveContent(user.uid);
-                docId = user.uid;
-            }
-        }
-        else {
-            console.log('signing in...');
-            firebaseauth();
-        }
-    });
-}
-function firebaseauth() {
-    var email = username + emailComplement;
-    var password = username + emailComplement;
-    return firebase.auth().signInWithEmailAndPassword(email, password);
+    docId = document.URL.split('?')[1];
+    if (!docId)
+        return location.replace(location.hostname + '?default');
+    liveContent(docId);
 }
 var timeoutID;
 function save(ev) {
@@ -62,7 +36,7 @@ function liveContent(doc, col) {
             document.getElementById('status').children[0].innerText = "Atualizando...";
             isHidden = false;
         }
-        setTextArea(res.data().text);
+        setTextArea(res.data() ? res.data().text : '');
     });
 }
 function getContent(doc, col) {
@@ -82,7 +56,7 @@ function setContent(text, doc, col) {
             .firestore()
             .collection(col)
             .doc(doc)
-            .update({ text: text })
+            .set({ text: text })
             .then(function (res) { return res; });
     else
         return firebase

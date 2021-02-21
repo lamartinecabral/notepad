@@ -2,8 +2,13 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     match /docs/{docId} {
-      allow get, update: if
-        request.auth.uid == docId;
+      allow read, write: if
+        request.auth.uid == 'U23CfQYMJaRhLeiZsIQRAT9LPSC3';
+      allow write: if
+        request.resource.data.keys() == ['text'] &&
+        request.resource.data.text is string;
+      allow get: if
+        true;
     }
   }
 }
