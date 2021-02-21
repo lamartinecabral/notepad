@@ -40,15 +40,6 @@ function liveContent(doc, col = 'docs'){
 	});
 }
 
-function getContent(doc, col = 'docs'){
-	return (firebase
-	.firestore()
-	.collection(col)
-	.doc(doc)
-	.get() as Promise<any>)
-	.then(res=>res.data());
-}
-
 function setContent(text: string, doc = undefined, col = 'docs'){
 	if(doc) return (firebase
 	.firestore()

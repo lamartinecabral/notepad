@@ -36,15 +36,6 @@ function liveContent(doc, col) {
         setTextArea(res.data() ? res.data().text : '');
     });
 }
-function getContent(doc, col) {
-    if (col === void 0) { col = 'docs'; }
-    return firebase
-        .firestore()
-        .collection(col)
-        .doc(doc)
-        .get()
-        .then(function (res) { return res.data(); });
-}
 function setContent(text, doc, col) {
     if (doc === void 0) { doc = undefined; }
     if (col === void 0) { col = 'docs'; }
