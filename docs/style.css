@@ -1,5 +1,5 @@
 #status{
-    position: absolute;
+    position: fixed;
     text-align: center;
     width: 100%;
     font-family: monospace;
