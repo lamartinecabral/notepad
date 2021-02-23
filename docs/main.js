@@ -27,11 +27,13 @@ function liveContent(doc, col) {
         .collection(col)
         .doc(doc)
         .onSnapshot(function (res) {
+        if (res.metadata.hasPendingWrites)
+            return;
         if (isHidden) {
+            isHidden = false;
             document.getElementById('textarea').classList.toggle('hidden');
             document.getElementById('status').hidden = true;
             document.getElementById('status').children[0].innerText = "Atualizando...";
-            isHidden = false;
         }
         setTextArea(res.data() ? res.data().text : '');
     });

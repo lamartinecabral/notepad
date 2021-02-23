@@ -30,11 +30,12 @@ function liveContent(doc, col = 'docs'){
 	.collection(col)
 	.doc(doc)
 	.onSnapshot((res) => {
+		if(res.metadata.hasPendingWrites) return;
 		if(isHidden){
+			isHidden = false;
 			(document.getElementById('textarea') as HTMLTextAreaElement).classList.toggle('hidden');
 			(document.getElementById('status') as HTMLDivElement).hidden = true;
 			(document.getElementById('status').children[0] as HTMLSpanElement).innerText = "Atualizando...";
-			isHidden = false;
 		}
 		setTextArea(res.data() ? res.data().text : '');
 	});
