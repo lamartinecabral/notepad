@@ -1,5 +1,6 @@
 {
     "files":[
         "docs/main.ts",
+        "docs/admin.ts",
     ]
 }
