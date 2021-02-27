@@ -71,13 +71,14 @@ function tabinput(ev: KeyboardEvent){
 	document.execCommand('insertText',false,'\t');
 }
 
-function randomString(){
+function randomString(x = undefined){
 	let str = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-	let x = Math.floor(Math.random()*(1<<30));
+	if(isNaN(x)) x = Math.floor(Math.random()*56800235584);
 	let res = "";
 	while(x){
-		res += str[x%str.length];
+		res = str[x%str.length] + res;
 		x = Math.floor(x/str.length);
 	}
+	while(res.length < 6) res = '0'+res;
 	return res;
 }
