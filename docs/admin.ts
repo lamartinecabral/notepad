@@ -99,7 +99,7 @@ function clearDocs(func: (doc: Doc)=>boolean ){
 		for(let doc of res.docs){
 			if(func(doc.data() as Doc)){
 				counter++;
-				console.log(doc);
+				console.log(doc.data());
 				removeDoc(doc.id).then(()=>{
 					counter--;
 					if(counter === 0)

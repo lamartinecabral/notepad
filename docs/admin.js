@@ -89,7 +89,7 @@ function clearDocs(func) {
                 var doc = _a[_i];
                 if (func(doc.data())) {
                     counter++;
-                    console.log(doc);
+                    console.log(doc.data());
                     removeDoc(doc.id).then(function () {
                         counter--;
                         if (counter === 0)
