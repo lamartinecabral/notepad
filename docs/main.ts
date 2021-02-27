@@ -73,12 +73,16 @@ function tabinput(ev: KeyboardEvent){
 
 function randomString(x = undefined){
 	let str = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-	if(isNaN(x)) x = Math.floor(Math.random()*56800235584);
+	if(x === undefined) x = Math.floor(Math.random()*1073741824);
+	if(isNaN(x) || x !== Math.floor(x) || x < 0){
+		console.error("invalid number for random string");
+		return "";
+	}
 	let res = "";
 	while(x){
 		res = str[x%str.length] + res;
 		x = Math.floor(x/str.length);
 	}
-	while(res.length < 6) res = '0'+res;
+	while(res.length < 5) res = '0'+res;
 	return res;
 }

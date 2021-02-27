@@ -71,14 +71,18 @@ function tabinput(ev) {
 function randomString(x) {
     if (x === void 0) { x = undefined; }
     var str = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-    if (isNaN(x))
-        x = Math.floor(Math.random() * 56800235584);
+    if (x === undefined)
+        x = Math.floor(Math.random() * 1073741824);
+    if (isNaN(x) || x !== Math.floor(x) || x < 0) {
+        console.error("invalid number for random string");
+        return "";
+    }
     var res = "";
     while (x) {
         res = str[x % str.length] + res;
         x = Math.floor(x / str.length);
     }
-    while (res.length < 6)
+    while (res.length < 5)
         res = '0' + res;
     return res;
 }
