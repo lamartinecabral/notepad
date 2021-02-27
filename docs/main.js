@@ -4,7 +4,7 @@ function initApp() {
     console.log('initApp');
     docId = document.URL.split('?')[1];
     if (!docId)
-        return location.replace('?default');
+        return location.replace('?' + randomString());
     liveContent(docId);
 }
 var timeoutID;
@@ -67,4 +67,14 @@ function tabinput(ev) {
         return;
     ev.preventDefault();
     document.execCommand('insertText', false, '\t');
+}
+function randomString() {
+    var str = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    var x = Math.floor(Math.random() * (1 << 30));
+    var res = "";
+    while (x) {
+        res += str[x % str.length];
+        x = Math.floor(x / str.length);
+    }
+    return res;
 }

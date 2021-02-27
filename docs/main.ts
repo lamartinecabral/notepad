@@ -6,11 +6,11 @@ function initApp(){
 	console.log('initApp');
 	docId = document.URL.split('?')[1];
 	if(!docId)
-		return location.replace('?default');
+		return location.replace('?'+randomString());
 	liveContent(docId);
 }
 
-var timeoutID;
+var timeoutID: number;
 function save(ev){
 	clearTimeout(timeoutID);
 	timeoutID = setTimeout(() => {
@@ -69,4 +69,15 @@ function tabinput(ev: KeyboardEvent){
 	if(ev.ctrlKey || ev.shiftKey || ev.altKey) return;
 	ev.preventDefault();
 	document.execCommand('insertText',false,'\t');
+}
+
+function randomString(){
+	let str = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+	let x = Math.floor(Math.random()*(1<<30));
+	let res = "";
+	while(x){
+		res += str[x%str.length];
+		x = Math.floor(x/str.length);
+	}
+	return res;
 }
