@@ -114,7 +114,7 @@ function clearDocs(func: (doc: Doc)=>boolean ){
 declare const eruda;
 function initEruda(){
 	var script = document.createElement('script');
-	script.src="https://cdn.jsdelivr.net/npm/eruda";
+	script.src="./assets/eruda@2.4.1/eruda.js";
 	document.body.appendChild(script);
 	script.onload = function (){
 		eruda.init();
