@@ -111,12 +111,24 @@ function clearDocs(func: (doc: Doc)=>boolean ){
 	});
 }
 
+declare const eruda;
+function initEruda(){
+	var script = document.createElement('script');
+	script.src="https://cdn.jsdelivr.net/npm/eruda";
+	document.body.appendChild(script);
+	script.onload = function (){
+		eruda.init();
+		eruda.show();
+		document.getElementById('eruda-btn').hidden = true;
+	}
+}
+
 interface Doc{
 	text: string;
 }
 
 function help(){
-	let text = 
+	console.log(
 `interface Doc{
 	text: string;
 }
@@ -138,6 +150,5 @@ changePassword(password): Promise<void>;
 
 /* Deletes all docs which func returns true */
 clearDocs(func: (doc: Doc)=>boolean): void
-`;
-	console.log(text);
+`);
 }

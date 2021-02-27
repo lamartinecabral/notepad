@@ -101,7 +101,16 @@ function clearDocs(func) {
                 console.log("No doc deleted");
         });
 }
+function initEruda() {
+    var script = document.createElement('script');
+    script.src = "https://cdn.jsdelivr.net/npm/eruda";
+    document.body.appendChild(script);
+    script.onload = function () {
+        eruda.init();
+        eruda.show();
+        document.getElementById('eruda-btn').hidden = true;
+    };
+}
 function help() {
-    var text = "interface Doc{\n\ttext: string;\n}\n\nVariaveis disponiveis:\nauth = firebase.auth()\nfirestore = firebase.firestore()\ncollection = firebase.firestore().collection('docs')\n\nFun\u00E7\u00F5es dispon\u00EDveis:\nkillOnAuthStateChanged(): void;\ngetUser():                firebase.User;\nlogin(email,password):    Promise<void>;\nlogout():                 Promise<void>;\nlistDocs():               Promise<Record<string,Doc>>;\ngetDoc(docId):            Promise<Doc>;\nremoveDoc(docId):         Promise<void>;\nchangePassword(password): Promise<void>;\n\n/* Deletes all docs which func returns true */\nclearDocs(func: (doc: Doc)=>boolean): void\n";
-    console.log(text);
+    console.log("interface Doc{\n\ttext: string;\n}\n\nVariaveis disponiveis:\nauth = firebase.auth()\nfirestore = firebase.firestore()\ncollection = firebase.firestore().collection('docs')\n\nFun\u00E7\u00F5es dispon\u00EDveis:\nkillOnAuthStateChanged(): void;\ngetUser():                firebase.User;\nlogin(email,password):    Promise<void>;\nlogout():                 Promise<void>;\nlistDocs():               Promise<Record<string,Doc>>;\ngetDoc(docId):            Promise<Doc>;\nremoveDoc(docId):         Promise<void>;\nchangePassword(password): Promise<void>;\n\n/* Deletes all docs which func returns true */\nclearDocs(func: (doc: Doc)=>boolean): void\n");
 }
