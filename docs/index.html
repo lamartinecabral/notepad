@@ -5,6 +5,8 @@
 		<link rel="icon" type="image/ico" href="./assets/favicon.ico">
 		<!-- <link rel="manifest" href="./manifest.webmanifest"> -->
 		<link rel="stylesheet" type="text/css" href="./style.css">
+		<title>Notepad Online</title>
+		<noscript>This web app needs Javascript enabled.</noscript>
 	</head>
 	<body>
 		<script src="./assets/firebase@8.2.4/firebase-app.js"></script>
@@ -25,11 +27,11 @@
 			oninput="save(event)"
 			class="hidden"
 		></textarea>
+		<div class="footer">
+			<a href="https://github.com/lamartinecabral/notepad">
+				<img src="./assets/github.svg" alt="">
+			</a>
+		</div>
+		<script src="main.js"></script>
 	</body>
-	<footer>
-		<a href="https://github.com/lamartinecabral/notepad">
-			<img src="./assets/github.svg" alt="">
-		</a>
-	</footer>
-	<script src="main.js"></script>
 </html>
