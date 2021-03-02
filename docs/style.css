@@ -36,4 +36,5 @@
     text-align: center;
     width: 100%;
     top: calc(50% - 1em);
+    font-family: monospace;
 }
