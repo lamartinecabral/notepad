@@ -6,7 +6,7 @@
 		<!-- <link rel="manifest" href="./manifest.webmanifest"> -->
 		<link rel="stylesheet" type="text/css" href="./style.css">
 		<title>Notepad Online</title>
-		<noscript><div class="noscript">This web app needs Javascript enabled.</div></noscript>
+		<noscript><div id="noscript">This web app needs Javascript enabled.</div></noscript>
 	</head>
 	<body>
 		<script src="./assets/firebase@8.2.4/firebase-app.js"></script>
@@ -27,7 +27,7 @@
 			oninput="save(event)"
 			class="hidden"
 		></textarea>
-		<div class="github"><div>
+		<div id="github"><div>
 			<a href="https://github.com/lamartinecabral/notepad">
 				<img src="./assets/github.svg" alt="">
 			</a>

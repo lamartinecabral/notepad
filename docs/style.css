@@ -19,30 +19,31 @@
     tab-size: 4;
 }
 
+#github{
+    position: fixed;
+    width: 100%;
+    text-align: center;
+    bottom: 3px;
+}
+
+#github div{
+    background: white;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+#noscript{
+    position: fixed;
+    text-align: center;
+    width: 100%;
+    top: calc(50% - 1em);
+    font-family: monospace;
+}
+
 .hidden{
     opacity: 0;
 }
 
 .updating{
     box-shadow: 0 0 4px green;
-}
-
-.github{
-    position: fixed;
-    width: 100%;
-    text-align: center;
-    bottom: 3px;
-}
-.github div{
-    background: white;
-    border-radius: 50%;
-    display: inline-block;
-}
-
-.noscript{
-    position: fixed;
-    text-align: center;
-    width: 100%;
-    top: calc(50% - 1em);
-    font-family: monospace;
 }
