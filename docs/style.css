@@ -13,7 +13,8 @@
 #textarea{
     font-family: monospace;
     width: 100%;
-    height: calc(100% - 27px);
+    height: 100%;
+    /* height: calc(100% - 27px); */
     resize: none;
     tab-size: 4;
 }
@@ -26,9 +27,16 @@
     box-shadow: 0 0 4px green;
 }
 
-.footer{
+.github{
+    position: fixed;
+    width: 100%;
     text-align: center;
-    padding-top: 3px;
+    bottom: 3px;
+}
+.github div{
+    background: white;
+    border-radius: 50%;
+    display: inline-block;
 }
 
 .noscript{
