@@ -1,8 +1,11 @@
+body{
+    font-family: monospace;
+}
+
 #status{
     position: fixed;
     text-align: center;
     width: 100%;
-    font-family: monospace;
     top: 0;
 }
 
@@ -11,7 +14,6 @@
 }
 
 #textarea{
-    font-family: monospace;
     width: 100%;
     height: 100%;
     resize: none;
@@ -20,15 +22,10 @@
 
 #github{
     position: fixed;
-    width: 100%;
-    text-align: center;
-    bottom: 3px;
-}
-
-#github div{
     background: white;
     border-radius: 50%;
-    display: inline-block;
+    bottom: 3px;
+    left: calc(50% - 12px);
 }
 
 #noscript{
@@ -36,7 +33,6 @@
     text-align: center;
     width: 100%;
     top: calc(50% - 1em);
-    font-family: monospace;
 }
 
 .hidden{
