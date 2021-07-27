@@ -46,7 +46,7 @@ function setContent(text, doc, col) {
             .firestore()
             .collection(col)
             .doc(doc)
-            .set({ text: text })
+            .update({ text: text })
             .then(function (res) { return res; });
 }
 function setTextArea(text) {

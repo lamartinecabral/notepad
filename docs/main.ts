@@ -46,7 +46,7 @@ function setContent(text: string, doc = undefined, col = 'docs'){
 	.firestore()
 	.collection(col)
 	.doc(doc)
-	.set({text}) as Promise<any>)
+	.update({text}) as Promise<any>)
 	.then(res=>res);
 }
 
