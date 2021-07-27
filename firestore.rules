@@ -2,13 +2,52 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     match /docs/{docId} {
-      allow read, write: if
-        request.auth.uid == 'U23CfQYMJaRhLeiZsIQRAT9LPSC3';
+    	allow read, write: if
+    		request.auth.uid == 'U23CfQYMJaRhLeiZsIQRAT9LPSC3';
       allow write: if
-        request.resource.data.keys() == ['text'] &&
-        request.resource.data.text is string;
+      	// REGRA 1 - esse documento só pode ter os seguintes campos:
+        // 		text: string (obrigatorio)
+        // 		protected: string (opcional)
+        // 		public: boolean (opcional)
+        // REGRA 2 - apenas um campo pode ser alterado por operação
+        // REGRA 3 - se protected não existir, todos podem escrever
+        // REGRA 4 - se protected == auth.uid, usuario pode escrever
+        // REGRA 5 - se public == true, todos podem ler
+      	(
+        	affectedKeys() == ['text'].toSet() &&
+          (
+            !('protected' in resource.data.keys()) ||
+            request.auth.uid == resource.data.protected
+          )
+        ) || (
+        	(
+          	addedKeys() == ['protected'].toSet() &&
+            request.auth.uid == request.resource.data.protected
+          ) || (
+          	removedKeys() == ['protected'].toSet() &&
+            request.auth.uid == resource.data.protected
+          )
+        ) || (
+        	affectedKeys() == ['public'].toSet() &&
+          request.auth.uid == resource.data.protected
+        );
       allow get: if
-        true;
+      	!('protected' in resource.data.keys()) ||
+        request.auth.uid == resource.data.protected ||
+      	resource.data.public == true;
+    }
+    
+    function affectedKeys(){
+    	return resource.data.diff(request.resource.data).affectedKeys();
+    }
+    function addedKeys(){
+    	return resource.data.diff(request.resource.data).addedKeys();
+    }
+    function removedKeys(){
+    	return resource.data.diff(request.resource.data).removedKeys();
+    }
+    function changedKeys(){
+    	return resource.data.diff(request.resource.data).changedKeys();
     }
   }
 }
