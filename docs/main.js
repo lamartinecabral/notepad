@@ -5,6 +5,8 @@ function initApp() {
     docId = document.URL.split('?')[1];
     if (!docId)
         return location.replace('?' + randomString());
+    else
+        docId = docId.toLowerCase();
     liveContent(docId);
 }
 var timeoutID;
@@ -41,13 +43,17 @@ function liveContent(doc, col) {
 function setContent(text, doc, col) {
     if (doc === void 0) { doc = undefined; }
     if (col === void 0) { col = 'docs'; }
-    if (doc)
-        return firebase
-            .firestore()
-            .collection(col)
-            .doc(doc)
-            .update({ text: text })
-            .then(function (res) { return res; });
+    if (!doc)
+        return;
+    var docRef = firebase.firestore().collection(col).doc(doc);
+    return docRef.update({ text: text })
+        .then(function (res) { return res; })["catch"](function (err) {
+        if (err.message === "Requested entity was not found.")
+            return docRef.set({ text: text })
+                .then(function (res) { return res; });
+        else
+            throw err;
+    });
 }
 function setTextArea(text) {
     var elem = document.getElementById('textarea');
@@ -70,9 +76,10 @@ function tabinput(ev) {
 }
 function randomString(x) {
     if (x === void 0) { x = undefined; }
-    var str = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    var str = "0123456789abcdefghijklmnopqrstuvwxyz";
+    var maxrand = Math.pow(str.length, 5);
     if (x === undefined)
-        x = Math.floor(Math.random() * 1073741824);
+        x = Math.floor(Math.random() * maxrand);
     if (isNaN(x) || x !== Math.floor(x) || x < 0) {
         console.error("invalid number for random string");
         return "";
@@ -86,3 +93,68 @@ function randomString(x) {
         res = '0' + res;
     return res;
 }
+var notepade = /** @class */ (function () {
+    function notepade() {
+        throw Error("This can't be instantiated");
+    }
+    notepade.login = function (password) {
+        var email = docId + '@notepade.web.app';
+        firebase.auth().signInWithEmailAndPassword(email, password).then(function () {
+            console.log("User signed in");
+            if (killLiveContent)
+                killLiveContent();
+            liveContent(docId);
+        })["catch"](function () {
+            firebase.auth().createUserWithEmailAndPassword(email, password).then(function () {
+                console.log("User created");
+                if (killLiveContent)
+                    killLiveContent();
+                liveContent(docId);
+            });
+        });
+    };
+    notepade.logout = function () {
+        firebase.auth().signOut();
+    };
+    notepade.currentUser = function () {
+        return firebase.auth().currentUser;
+    };
+    notepade._update = function (obj, msg) {
+        return firebase.firestore().collection('docs').doc(docId).update(obj).then(function () {
+            console.log(msg);
+        })["catch"](function (err) {
+            console.error(err);
+            throw err;
+        });
+    };
+    notepade.protect = function (flag) {
+        var _this = this;
+        var _a;
+        if (flag === void 0) { flag = true; }
+        if (flag) {
+            this._update({ protected: (((_a = firebase.auth().currentUser) === null || _a === void 0 ? void 0 : _a.uid) || '') }, "This doc is now protected");
+        }
+        else {
+            this._update({ public: firebase.firestore.FieldValue["delete"]() }, "'public' attribute removed").then(function () {
+                _this._update({ protected: firebase.firestore.FieldValue["delete"]() }, "This doc is not protected anymore").then(function () {
+                    // firebase.auth().currentUser.delete().then(()=>{
+                    // 	console.log("User deleted");
+                    // })
+                });
+            });
+        }
+    };
+    notepade.public = function (flag) {
+        if (flag === void 0) { flag = true; }
+        if (flag) {
+            this._update({ public: true }, "This doc is now public");
+        }
+        else {
+            this._update({ public: firebase.firestore.FieldValue["delete"]() }, "'public' attribute removed");
+        }
+    };
+    notepade.unprotect = function () { return this.protect(false); };
+    notepade.unpublic = function () { return this.public(false); };
+    return notepade;
+}());
+Object.defineProperty(notepade, '_update', { enumerable: false });
