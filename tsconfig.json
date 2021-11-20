@@ -1,6 +1,10 @@
 {
     "files":[
         "docs/main.ts",
-        "docs/admin.ts",
-    ]
+        "docs/admin/main.ts",
+        "docs/coup/main.ts",
+    ],
+    "compilerOptions": {
+        "lib": ["DOM","ES6"],
+    }
 }
