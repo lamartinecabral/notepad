@@ -42,3 +42,19 @@ body{
 .updating{
     box-shadow: 0 0 4px green;
 }
+
+#buttons{
+    position: fixed;
+    top: 0px;
+    right: 3em;
+}
+
+#buttons span{
+    background: white;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.nodisplay{
+    display: none;
+}

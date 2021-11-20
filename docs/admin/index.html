@@ -1,0 +1,26 @@
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF-8">
+		<!-- <script>if('serviceWorker' in navigator){ navigator.serviceWorker.register('./sw.js', {scope: '/'}); };</script> -->
+		<link rel="icon" type="image/ico" href="../assets/favicon.ico">
+		<!-- <link rel="manifest" href="./manifest.webmanifest"> -->
+    </head>
+    <body style="font-family: monospace;">
+        <script>
+            function initApp(){
+                auth = firebase.auth();
+                firestore = firebase.firestore();
+                collection = firestore.collection('docs');
+                admin.initAdmin();
+            }
+        </script>
+        <script src="../assets/firebase@8.2.4/firebase-app.js"></script>
+		<script src="../assets/firebase@8.2.4/firebase-auth.js"></script>
+		<script src="../assets/firebase@8.2.4/firebase-firestore.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/8.2.4/firebase-storage.js"></script>
+		<script defer src="../assets/init-firebase.js"></script>
+        <p>Use the console. admin.help() for help.</p>
+        <button id="eruda-btn" onclick="admin.initEruda()">Init Eruda</button>
+        <script src="./main.js"></script>
+    </body>
+</html>

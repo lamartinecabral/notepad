@@ -1,5 +1,13 @@
 var docId;
 var isHidden = true;
+var state = {};
+var aux_state = {};
+function diffState() {
+    for (var i in state)
+        if (state[i] !== aux_state[i])
+            return aux_state = Object.assign({}, state), true;
+    return false;
+}
 function initApp() {
     console.log('initApp');
     docId = document.URL.split('?')[1];
@@ -8,6 +16,7 @@ function initApp() {
     else
         docId = docId.toLowerCase();
     liveContent(docId);
+    liveAuth();
 }
 var timeoutID;
 function save(ev) {
@@ -21,6 +30,26 @@ function save(ev) {
         });
     }, 500);
 }
+function liveAuth() {
+    firebase.auth().onAuthStateChanged(function (user) {
+        if (user) {
+            if (user.email.split('@')[0] === docId) {
+                console.log('Logged');
+                state.login = true;
+            }
+            else {
+                console.log('Not logged');
+                state.login = false;
+            }
+        }
+        else {
+            console.log("No user.");
+            state.login = false;
+        }
+        if (diffState())
+            updateApp();
+    });
+}
 var killLiveContent = undefined;
 function liveContent(doc, col) {
     if (col === void 0) { col = 'docs'; }
@@ -29,6 +58,16 @@ function liveContent(doc, col) {
         .collection(col)
         .doc(doc)
         .onSnapshot(function (res) {
+        if (res.exists) {
+            state.protected = res.data().protected !== undefined;
+            state.public = res.data().public !== undefined;
+        }
+        else {
+            state.protected = false;
+            state.public = false;
+        }
+        if (diffState())
+            updateApp();
         if (res.metadata.hasPendingWrites)
             return;
         if (isHidden) {
@@ -37,7 +76,7 @@ function liveContent(doc, col) {
             document.getElementById('status').hidden = true;
             document.getElementById('status').children[0].innerText = "Atualizando...";
         }
-        setTextArea(res.data() ? res.data().text : '');
+        setTextArea(res.exists ? res.data().text : '');
     });
 }
 function setContent(text, doc, col) {
@@ -46,14 +85,8 @@ function setContent(text, doc, col) {
     if (!doc)
         return;
     var docRef = firebase.firestore().collection(col).doc(doc);
-    return docRef.update({ text: text })
-        .then(function (res) { return res; })["catch"](function (err) {
-        if (err.message === "Requested entity was not found.")
-            return docRef.set({ text: text })
-                .then(function (res) { return res; });
-        else
-            throw err;
-    });
+    return docRef.update({ text: text })["catch"](function () { return docRef.set({ text: text }); })
+        .then(function (res) { return res; });
 }
 function setTextArea(text) {
     var elem = document.getElementById('textarea');
@@ -76,8 +109,10 @@ function tabinput(ev) {
 }
 function randomString(x) {
     if (x === void 0) { x = undefined; }
+    // let str = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     var str = "0123456789abcdefghijklmnopqrstuvwxyz";
-    var maxrand = Math.pow(str.length, 5);
+    // if(x === undefined) x = Math.floor(Math.random()*1073741824);
+    var maxrand = Math.pow(str.length, 6);
     if (x === undefined)
         x = Math.floor(Math.random() * maxrand);
     if (isNaN(x) || x !== Math.floor(x) || x < 0) {
@@ -89,27 +124,77 @@ function randomString(x) {
         res = str[x % str.length] + res;
         x = Math.floor(x / str.length);
     }
-    while (res.length < 5)
+    while (res.length < 6)
         res = '0' + res;
     return res;
+}
+function passwordAction() {
+    if (state.login)
+        notepade.logout();
+    else
+        notepade.login(prompt("Password:"))["catch"](function (err) { return alert(err.message); });
+}
+function protectAction() {
+    if (state.protected)
+        notepade.unprotect();
+    else
+        notepade.protect();
+}
+function publicAction() {
+    if (state.public)
+        notepade.unpublic();
+    else
+        notepade.public();
+}
+function updateApp() {
+    if (state.login) {
+        document.getElementById('login').innerHTML = 'logout';
+        document.getElementById('protect').classList.remove('nodisplay');
+        if (state.protected) {
+            document.getElementById('protect').innerHTML = 'unprotect';
+            document.getElementById('public').classList.remove('nodisplay');
+        }
+        else {
+            document.getElementById('protect').innerHTML = 'protect';
+            document.getElementById('public').classList.add('nodisplay');
+        }
+        if (state.public) {
+            document.getElementById('public').innerHTML = 'unpublic';
+        }
+        else {
+            document.getElementById('public').innerHTML = 'public';
+        }
+    }
+    else {
+        document.getElementById('login').innerHTML = 'password';
+        document.getElementById('protect').classList.add('nodisplay');
+        document.getElementById('public').classList.add('nodisplay');
+    }
 }
 var notepade = /** @class */ (function () {
     function notepade() {
         throw Error("This can't be instantiated");
     }
     notepade.login = function (password) {
-        var email = docId + '@notepade.web.app';
-        firebase.auth().signInWithEmailAndPassword(email, password).then(function () {
-            console.log("User signed in");
-            if (killLiveContent)
-                killLiveContent();
-            liveContent(docId);
-        })["catch"](function () {
-            firebase.auth().createUserWithEmailAndPassword(email, password).then(function () {
-                console.log("User created");
+        return new Promise(function (resolve, reject) {
+            var email = docId + '@notepade.web.app';
+            firebase.auth().signInWithEmailAndPassword(email, password).then(function () {
+                console.log("User signed in");
                 if (killLiveContent)
                     killLiveContent();
                 liveContent(docId);
+                resolve('');
+            })["catch"](function (err) {
+                firebase.auth().createUserWithEmailAndPassword(email, password).then(function () {
+                    console.log("User created");
+                    if (killLiveContent)
+                        killLiveContent();
+                    liveContent(docId);
+                    resolve('');
+                })["catch"](function () {
+                    console.error(err);
+                    reject(err);
+                });
             });
         });
     };
