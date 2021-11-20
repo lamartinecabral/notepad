@@ -53,7 +53,6 @@ body{
     background: white;
     text-decoration: underline;
     cursor: pointer;
-    z-index: 10;
 }
 
 .nodisplay{

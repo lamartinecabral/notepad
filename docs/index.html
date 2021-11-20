@@ -16,12 +16,6 @@
 
 		<div id="status"><span>Carregando...</span></div>
 
-		<div id="buttons">
-			<span id="login" onclick="passwordAction()"></span>
-			<span id="protect" onclick="protectAction()"></span>
-			<span id="public" onclick="publicAction()"></span>
-		</div>
-
 		<textarea
 			name="textarea"
 			id="textarea"
@@ -34,6 +28,12 @@
 			oninput="save(event)"
 			class="hidden"
 		></textarea>
+
+		<div id="buttons">
+			<span id="login" onclick="passwordAction()"></span>
+			<span id="protect" onclick="protectAction()"></span>
+			<span id="public" onclick="publicAction()"></span>
+		</div>
 
 		<div id="github">
 			<a href="https://github.com/lamartinecabral/notepad">
