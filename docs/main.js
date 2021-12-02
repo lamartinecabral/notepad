@@ -10,7 +10,7 @@ function diffState() {
 }
 function initApp() {
     console.log('initApp');
-    docId = document.URL.split('?')[1];
+    docId = document.URL.split('?')[1].split('#')[0];
     if (!docId)
         return location.replace('?' + randomString());
     else
@@ -47,7 +47,7 @@ function liveAuth() {
             state.login = false;
         }
         if (diffState())
-            updateApp();
+            updateButtons();
     });
 }
 var killLiveContent = undefined;
@@ -67,7 +67,7 @@ function liveContent(doc, col) {
             state.public = false;
         }
         if (diffState())
-            updateApp();
+            updateButtons();
         if (res.metadata.hasPendingWrites)
             return;
         if (isHidden) {
@@ -131,8 +131,12 @@ function randomString(x) {
 function passwordAction() {
     if (state.login)
         notepade.logout();
-    else
-        notepade.login(prompt("Password:"))["catch"](function (err) { return alert(err.message); });
+    else {
+        passwordModal().then(function (pwd) {
+            notepade.login(pwd)["catch"](function (err) { return alert(err.message); });
+        });
+        // notepade.login(prompt("Password:")).catch(err=>alert(err.message));
+    }
 }
 function protectAction() {
     if (state.protected)
@@ -146,7 +150,7 @@ function publicAction() {
     else
         notepade.public();
 }
-function updateApp() {
+function updateButtons() {
     if (state.login) {
         document.getElementById('login').innerHTML = 'logout';
         document.getElementById('protect').classList.remove('nodisplay');
@@ -243,3 +247,52 @@ var notepade = /** @class */ (function () {
     return notepade;
 }());
 Object.defineProperty(notepade, '_update', { enumerable: false });
+function passwordModal() {
+    return new Promise(function (resolve, reject) {
+        var div = document.createElement('div');
+        Object.assign(div.style, {
+            position: "fixed", top: 0, left: 0,
+            width: "100%", height: "100%",
+            background: "#0009"
+        });
+        div.addEventListener("click", function () {
+            div.remove();
+            reject("backdrop click");
+        });
+        div.addEventListener("keyup", function (ev) {
+            if (ev.key === "Escape" || ev.code === "Escape" || ev.keyCode === 27) {
+                reject("esc pressed");
+                div.remove();
+            }
+        });
+        // document.getElementById('textarea').insertBefore(div);
+        document.body.insertBefore(div, document.getElementById('textarea'));
+        var div2 = document.createElement('div');
+        Object.assign(div2.style, {
+            background: "white", padding: "2em",
+            position: "absolute", bottom: "50%", right: "50%",
+            transform: "translate(50%, 50%)"
+        });
+        div2.addEventListener("click", function (ev) { ev.stopPropagation(); });
+        div.append(div2);
+        var form = document.createElement('form');
+        form.addEventListener("submit", function (ev) {
+            ev.preventDefault();
+            div.remove();
+            resolve(ev.target[0].value);
+        });
+        div2.append(form);
+        var label = document.createElement('label');
+        label.innerHTML = "Password: ";
+        label.htmlFor = "pwd";
+        form.append(label);
+        var input = document.createElement('input');
+        input.type = "password";
+        input.name = "pwd";
+        setTimeout(function (i) { return i.select(); }, 0, input);
+        form.append(input);
+        var send = document.createElement('input');
+        send.type = "submit";
+        form.append(send);
+    });
+}

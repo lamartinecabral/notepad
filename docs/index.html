@@ -16,6 +16,18 @@
 
 		<div id="status"><span>Carregando...</span></div>
 
+		<div id="buttons">
+			<a href="#" id="login" onclick="passwordAction()"></a>
+			<a href="#" id="protect" onclick="protectAction()"></a>
+			<a href="#" id="public" onclick="publicAction()"></a>
+		</div>
+
+		<div id="github">
+			<a href="https://github.com/lamartinecabral/notepad">
+				<img src="./assets/github.svg" alt="">
+			</a>
+		</div>
+		
 		<textarea
 			name="textarea"
 			id="textarea"
@@ -29,18 +41,6 @@
 			class="hidden"
 		></textarea>
 
-		<div id="buttons">
-			<span id="login" onclick="passwordAction()"></span>
-			<span id="protect" onclick="protectAction()"></span>
-			<span id="public" onclick="publicAction()"></span>
-		</div>
-
-		<div id="github">
-			<a href="https://github.com/lamartinecabral/notepad">
-				<img src="./assets/github.svg" alt="">
-			</a>
-		</div>
-		
 		<script src="main.js"></script>
 	</body>
 </html>

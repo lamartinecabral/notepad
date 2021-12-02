@@ -12,7 +12,7 @@ function diffState(){
 
 function initApp(){
 	console.log('initApp');
-	docId = document.URL.split('?')[1];
+	docId = document.URL.split('?')[1].split('#')[0];
 	if(!docId)
 		return location.replace('?'+randomString());
 	else docId = docId.toLowerCase();
@@ -47,7 +47,7 @@ function liveAuth(){
 			console.log("No user.");
 			state.login = false;
 		}
-		if(diffState()) updateApp();
+		if(diffState()) updateButtons();
 	});
 }
 
@@ -65,7 +65,7 @@ function liveContent(doc, col = 'docs'){
 		} else {
 			state.protected = false; state.public = false;
 		}
-		if(diffState()) updateApp();
+		if(diffState()) updateButtons();
 
 		if(res.metadata.hasPendingWrites) return;
 		if(isHidden){
@@ -108,27 +108,19 @@ function tabinput(ev: KeyboardEvent){
 }
 
 function randomString(x = undefined){
-	// let str = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-	let str = "0123456789abcdefghijklmnopqrstuvwxyz";
-	// if(x === undefined) x = Math.floor(Math.random()*1073741824);
-	let maxrand = str.length**6;
-	if(x === undefined) x = Math.floor(Math.random()*maxrand);
-	if(isNaN(x) || x !== Math.floor(x) || x < 0){
-		console.error("invalid number for random string");
-		return "";
-	}
-	let res = "";
-	while(x){
-		res = str[x%str.length] + res;
-		x = Math.floor(x/str.length);
-	}
-	while(res.length < 6) res = '0'+res;
-	return res;
+	if(x) return x.toString(36);
+	let str = Math.floor(Math.random()*(36**6)).toString(36);
+	while(str.length < 6) str = '0'+str;
+	return str;
 }
 
 function passwordAction(){
 	if(state.login) notepade.logout();
-	else notepade.login(prompt("Password:")).catch(err=>alert(err.message));
+	else{
+		passwordModal().then(pwd=>{
+			notepade.login(pwd).catch(err=>alert(err.message));
+		});
+	}
 }
 
 function protectAction(){
@@ -141,7 +133,7 @@ function publicAction(){
 	else notepade.public();
 }
 
-function updateApp(){
+function updateButtons(){
 	if(state.login){
 		document.getElementById('login').innerHTML = 'logout';
 		document.getElementById('protect').classList.remove('nodisplay');
@@ -225,3 +217,55 @@ class notepade{
 	constructor(){ throw Error("This can't be instantiated"); }
 }
 Object.defineProperty(notepade,'_update',{enumerable:false});
+
+function passwordModal(): Promise<string>{
+	return new Promise((resolve,reject)=>{
+		let div = document.createElement('div') as HTMLDivElement;
+		Object.assign(div.style,{
+			position: "fixed", top: 0, left: 0,
+			width: "100%", height: "100%",
+			background: "#0009",
+		})
+		div.addEventListener("click",()=>{
+			div.remove();
+			reject("backdrop click");
+		});
+		div.addEventListener("keyup",ev=>{
+			if(ev.key === "Escape" || ev.code === "Escape" || ev.keyCode === 27){
+				reject("esc pressed");
+				div.remove();
+			}
+		});
+		document.body.insertBefore(div,document.getElementById('textarea'));
+	
+		let div2 = document.createElement('div') as HTMLDivElement;
+		Object.assign(div2.style,{
+			background: "white", padding: "2em",
+			position: "absolute", bottom: "50%", right: "50%",
+			transform: "translate(50%, 50%)",
+		})
+		div2.addEventListener("click",(ev)=>{ev.stopPropagation();});
+		div.append(div2);
+	
+		let form = document.createElement('form') as HTMLFormElement;
+		form.addEventListener("submit",(ev)=>{
+			ev.preventDefault();
+			div.remove();
+			resolve(ev.target[0].value);
+		});
+		div2.append(form);
+	
+		let label = document.createElement('label');
+		label.innerHTML = "Password: "; label.htmlFor = "pwd";
+		form.append(label);
+		
+		let input = document.createElement('input') as HTMLInputElement;
+		input.type = "password"; input.name = "pwd";
+		setTimeout(i=>i.select(), 0, input);
+		form.append(input);
+
+		let send = document.createElement('input') as HTMLInputElement;
+		send.type = "submit";
+		form.append(send);
+	})
+}

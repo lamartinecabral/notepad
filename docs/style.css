@@ -49,7 +49,7 @@ body{
     right: 3em;
 }
 
-#buttons span{
+#buttons a{
     background: white;
     text-decoration: underline;
     cursor: pointer;
