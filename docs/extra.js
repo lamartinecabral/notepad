@@ -106,6 +106,7 @@ function passwordModal() {
         form.append(input);
         var send = document.createElement('input');
         send.type = "submit";
+        Object.assign(send.style, { 'font-family': 'inherit' });
         form.append(send);
     });
 }
@@ -144,6 +145,7 @@ function optionsModal() {
         Object.assign(logout.style, { 'margin-top': '1em', 'text-align': 'center' });
         var button = document.createElement('button');
         button.innerText = 'Logout';
+        Object.assign(button.style, { 'font-family': 'inherit' });
         button.addEventListener('click', function () { clearInterval(intervalId); notepade.logout(); div.remove(); });
         logout.append(button);
         var prot, publ;

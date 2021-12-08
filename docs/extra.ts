@@ -96,7 +96,7 @@ function passwordModal(): Promise<string>{
 		form.append(input);
 
 		let send = document.createElement('input') as HTMLInputElement;
-		send.type = "submit";
+		send.type = "submit"; Object.assign(send.style,{'font-family':'inherit'});
 		form.append(send);
 	})
 }
@@ -136,7 +136,7 @@ function optionsModal(): Promise<string>{
 		Object.assign(logout.style,{'margin-top':'1em', 'text-align':'center'});
 
 		let button = document.createElement('button') as HTMLButtonElement;
-		button.innerText = 'Logout';
+		button.innerText = 'Logout'; Object.assign(button.style,{'font-family':'inherit'});
 		button.addEventListener('click',()=>{clearInterval(intervalId); notepade.logout(); div.remove();})
 		logout.append(button);
 
