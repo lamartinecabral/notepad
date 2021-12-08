@@ -105,7 +105,7 @@ function optionsModal(): Promise<string>{
 	return new Promise((resolve,reject)=>{
 		let intervalId = 0;
 		let div = backdrop(resolve,(msg)=>{clearInterval(intervalId);reject(msg)});
-		document.body.insertBefore(div,document.getElementById('textarea'));
+		document.body.insertBefore(div,document.getElementById('github'));
 		let div2 = whitebox(resolve,reject);
 		div.append(div2);
 
@@ -166,7 +166,7 @@ function backdrop(resolve,reject){
 	Object.assign(div.style,{
 		position: "fixed", top: 0, left: 0,
 		width: "100%", height: "100%",
-		background: "#0009",
+		background: "#0009", 'z-index': 1,
 	})
 	div.addEventListener("click",()=>{
 		div.remove();
