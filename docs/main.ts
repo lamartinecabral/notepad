@@ -124,27 +124,13 @@ function updateButtons(){
 	}
 }
 
-var extraLoaded = false;
-function loadExtra(): Promise<void>{
-	return new Promise((resolve,reject)=>{
-		if(extraLoaded) return resolve();
-		let extra = document.createElement('script') as HTMLScriptElement;
-		extra.src = 'extra.js';
-		document.body.append(extra);
-		extra.onload = ()=>{extraLoaded = true; resolve();}
-		setTimeout(()=>reject(), 60000);
-	})
-}
-
 function showOptions(){
-	loadExtra().then(()=>optionsModal());
+	optionsModal();
 }
 
 function passwordAction(){
-	loadExtra().then(()=>{
-		if(state.login) notepade.logout();
-		else passwordModal().then(pwd=>{
-			notepade.login(pwd).catch(err=>alert(err.message));
-		});
+	if(state.login) notepade.logout();
+	else passwordModal().then(pwd=>{
+		notepade.login(pwd).catch(err=>alert(err.message));
 	});
 }

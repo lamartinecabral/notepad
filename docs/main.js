@@ -126,28 +126,14 @@ function updateButtons() {
         document.getElementById('options').classList.add('nodisplay');
     }
 }
-var extraLoaded = false;
-function loadExtra() {
-    return new Promise(function (resolve, reject) {
-        if (extraLoaded)
-            return resolve();
-        var extra = document.createElement('script');
-        extra.src = 'extra.js';
-        document.body.append(extra);
-        extra.onload = function () { extraLoaded = true; resolve(); };
-        setTimeout(function () { return reject(); }, 60000);
-    });
-}
 function showOptions() {
-    loadExtra().then(function () { return optionsModal(); });
+    optionsModal();
 }
 function passwordAction() {
-    loadExtra().then(function () {
-        if (state.login)
-            notepade.logout();
-        else
-            passwordModal().then(function (pwd) {
-                notepade.login(pwd)["catch"](function (err) { return alert(err.message); });
-            });
-    });
+    if (state.login)
+        notepade.logout();
+    else
+        passwordModal().then(function (pwd) {
+            notepade.login(pwd)["catch"](function (err) { return alert(err.message); });
+        });
 }
