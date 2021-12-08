@@ -114,158 +114,37 @@ function randomString(x = undefined){
 	return str;
 }
 
-function passwordAction(){
-	if(state.login) notepade.logout();
-	else{
-		passwordModal().then(pwd=>{
-			notepade.login(pwd).catch(err=>alert(err.message));
-		});
-	}
-}
-
-function protectAction(){
-	if(state.protected) notepade.unprotect();
-	else notepade.protect();
-}
-
-function publicAction(){
-	if(state.public) notepade.unpublic();
-	else notepade.public();
-}
-
 function updateButtons(){
 	if(state.login){
-		document.getElementById('login').innerHTML = 'logout';
-		document.getElementById('protect').classList.remove('nodisplay');
-		if(state.protected){
-			document.getElementById('protect').innerHTML = 'unprotect';
-			document.getElementById('public').classList.remove('nodisplay');
-		} else {
-			document.getElementById('protect').innerHTML = 'protect';
-			document.getElementById('public').classList.add('nodisplay');
-		}
-		if(state.public){
-			document.getElementById('public').innerHTML = 'unpublic';
-		} else {
-			document.getElementById('public').innerHTML = 'public';
-		}
+		document.getElementById('login').classList.add('nodisplay');
+		document.getElementById('options').classList.remove('nodisplay');
 	} else {
-		document.getElementById('login').innerHTML = 'password';
-		document.getElementById('protect').classList.add('nodisplay');
-		document.getElementById('public').classList.add('nodisplay');
+		document.getElementById('login').classList.remove('nodisplay');
+		document.getElementById('options').classList.add('nodisplay');
 	}
 }
 
-class notepade{
-	static login(password: string){
-		return new Promise((resolve,reject)=>{
-			let email = docId+'@notepade.web.app';
-			firebase.auth().signInWithEmailAndPassword(email,password).then(()=>{
-				console.log("User signed in");
-				if(killLiveContent) killLiveContent();
-				liveContent(docId);
-				resolve('');
-			}).catch((err)=>{
-				firebase.auth().createUserWithEmailAndPassword(email,password).then(()=>{
-					console.log("User created");
-					if(killLiveContent) killLiveContent();
-					liveContent(docId);
-					resolve('');
-				}).catch(()=>{
-					console.error(err);
-					reject(err)
-				});
-			})
-		});
-	}
-	static logout(){
-		firebase.auth().signOut();
-	}
-	static currentUser(){
-		return firebase.auth().currentUser;
-	}
-	static _update(obj,msg){
-		return firebase.firestore().collection('docs').doc(docId).update(obj).then(()=>{
-			console.log(msg)
-		}).catch(err=>{
-			console.error(err);
-			throw err;
-		})
-	}
-	static protect(flag = true){
-		if(flag){
-			this._update({protected: (firebase.auth().currentUser?.uid || '')},"This doc is now protected");
-		} else {
-			this._update({public: firebase.firestore.FieldValue.delete()},"'public' attribute removed").then(()=>{
-				this._update({protected: firebase.firestore.FieldValue.delete()},"This doc is not protected anymore").then(()=>{
-					// firebase.auth().currentUser.delete().then(()=>{
-					// 	console.log("User deleted");
-					// })
-				});
-			});
-		}
-	}
-	static public(flag = true){
-		if(flag){
-			this._update({public: true},"This doc is now public");
-		} else {
-			this._update({public: firebase.firestore.FieldValue.delete()},"'public' attribute removed");
-		}
-	}
-	static unprotect(){ return this.protect(false); }
-	static unpublic(){ return this.public(false); }
-	constructor(){ throw Error("This can't be instantiated"); }
-}
-Object.defineProperty(notepade,'_update',{enumerable:false});
-
-function passwordModal(): Promise<string>{
+var extraLoaded = false;
+function loadExtra(): Promise<void>{
 	return new Promise((resolve,reject)=>{
-		let div = document.createElement('div') as HTMLDivElement;
-		Object.assign(div.style,{
-			position: "fixed", top: 0, left: 0,
-			width: "100%", height: "100%",
-			background: "#0009",
-		})
-		div.addEventListener("click",()=>{
-			div.remove();
-			reject("backdrop click");
-		});
-		div.addEventListener("keyup",ev=>{
-			if(ev.key === "Escape" || ev.code === "Escape" || ev.keyCode === 27){
-				reject("esc pressed");
-				div.remove();
-			}
-		});
-		document.body.insertBefore(div,document.getElementById('textarea'));
-	
-		let div2 = document.createElement('div') as HTMLDivElement;
-		Object.assign(div2.style,{
-			background: "white", padding: "2em",
-			position: "absolute", bottom: "50%", right: "50%",
-			transform: "translate(50%, 50%)",
-		})
-		div2.addEventListener("click",(ev)=>{ev.stopPropagation();});
-		div.append(div2);
-	
-		let form = document.createElement('form') as HTMLFormElement;
-		form.addEventListener("submit",(ev)=>{
-			ev.preventDefault();
-			div.remove();
-			resolve(ev.target[0].value);
-		});
-		div2.append(form);
-	
-		let label = document.createElement('label');
-		label.innerHTML = "Password: "; label.htmlFor = "pwd";
-		form.append(label);
-		
-		let input = document.createElement('input') as HTMLInputElement;
-		input.type = "password"; input.name = "pwd";
-		setTimeout(i=>i.select(), 0, input);
-		form.append(input);
-
-		let send = document.createElement('input') as HTMLInputElement;
-		send.type = "submit";
-		form.append(send);
+		if(extraLoaded) return resolve();
+		let extra = document.createElement('script') as HTMLScriptElement;
+		extra.src = 'extra.js';
+		document.body.append(extra);
+		extra.onload = ()=>{extraLoaded = true; resolve();}
+		setTimeout(()=>reject(), 60000);
 	})
+}
+
+function showOptions(){
+	loadExtra().then(()=>optionsModal());
+}
+
+function passwordAction(){
+	loadExtra().then(()=>{
+		if(state.login) notepade.logout();
+		else passwordModal().then(pwd=>{
+			notepade.login(pwd).catch(err=>alert(err.message));
+		});
+	});
 }

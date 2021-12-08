@@ -1,6 +1,7 @@
 {
     "files":[
         "docs/main.ts",
+        "docs/extra.ts",
         "docs/admin/main.ts",
     ],
     "compilerOptions": {
