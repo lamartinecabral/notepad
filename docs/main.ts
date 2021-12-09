@@ -12,7 +12,7 @@ function diffState(){
 
 function initApp(){
 	console.log('initApp');
-	docId = document.URL.split('?')[1].split('#')[0];
+	docId = (document.URL.split('?')[1] || '').split('#')[0];
 	if(!docId)
 		return location.replace('?'+randomString());
 	else docId = docId.toLowerCase();
