@@ -195,9 +195,10 @@ function backdrop(resolve, reject) {
 function whitebox(resolve, reject) {
     var div2 = document.createElement('div');
     Object.assign(div2.style, {
-        background: "white", padding: "2em",
+        background: "var(--background)", padding: "2em",
         position: "absolute", bottom: "50%", right: "50%",
-        transform: "translate(50%, 50%)"
+        transform: "translate(50%, 50%)", color: "var(--color)",
+        border: "1px solid var(--color)"
     });
     div2.addEventListener("click", function (ev) { ev.stopPropagation(); });
     return div2;

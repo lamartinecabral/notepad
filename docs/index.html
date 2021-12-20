@@ -8,7 +8,7 @@
 		<title>Notepad Online</title>
 		<noscript><div id="noscript">This web app needs Javascript enabled.</div></noscript>
 	</head>
-	<body>
+	<body hidden>
 		<script src="./assets/firebase@8.2.4/firebase-app.js"></script>
 		<script src="./assets/firebase@8.2.4/firebase-auth.js"></script>
 		<script src="./assets/firebase@8.2.4/firebase-firestore.js"></script>
@@ -17,8 +17,9 @@
 		<div id="status"><span>Carregando...</span></div>
 
 		<div id="buttons">
-			<a href="#" id="login" onclick="passwordAction()" class="nodisplay">password</a>
-			<a href="#" id="options" onclick="showOptions()" class="nodisplay">options</a>
+			<a href="#" id="theme" onclick="setTheme(true)">dark</a>
+			<a href="#" id="login" onclick="passwordAction()" hidden>password</a>
+			<a href="#" id="options" onclick="showOptions()" hidden>options</a>
 		</div>
 
 		<div id="github">
@@ -37,7 +38,7 @@
 			spellcheck="false"
 			onkeydown="tabinput(event)"
 			oninput="save(event)"
-			class="hidden"
+			hidden
 		></textarea>
 
 		<script src="main.js"></script>

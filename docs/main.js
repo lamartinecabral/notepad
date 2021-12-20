@@ -2,6 +2,7 @@ var docId;
 var isHidden = true;
 var state = {};
 var aux_state = {};
+var nightMode = false;
 function diffState() {
     for (var i in state)
         if (state[i] !== aux_state[i])
@@ -15,6 +16,8 @@ function initApp() {
         return location.replace('?' + randomString());
     else
         docId = docId.toLowerCase();
+    setTheme();
+    document.body.hidden = false;
     liveContent(docId);
     liveAuth();
 }
@@ -22,11 +25,15 @@ var timeoutID;
 function save(ev) {
     clearTimeout(timeoutID);
     timeoutID = setTimeout(function () {
-        console.log("atualizando...");
+        console.log("updating...");
         document.getElementById('status').hidden = false;
+        document.getElementById('status').children[0].innerText = "Saving...";
         setContent(getTextArea(), docId).then(function () {
             document.getElementById('status').hidden = true;
-            console.log("atualizado");
+            console.log("updated");
+        })["catch"](function (err) {
+            console.error(err);
+            document.getElementById('status').children[0].innerText = "Protected";
         });
     }, 500);
 }
@@ -72,11 +79,18 @@ function liveContent(doc, col) {
             return;
         if (isHidden) {
             isHidden = false;
-            document.getElementById('textarea').classList.toggle('hidden');
+            // (document.getElementById('textarea') as HTMLTextAreaElement).classList.toggle('nodisplay');
+            document.getElementById('textarea').hidden = isHidden;
             document.getElementById('status').hidden = true;
-            document.getElementById('status').children[0].innerText = "Atualizando...";
+            document.getElementById('status').children[0].innerText = "Saving...";
         }
         setTextArea(res.exists ? res.data().text : '');
+    }, function (err) {
+        console.error(err);
+        isHidden = true;
+        document.getElementById('textarea').hidden = isHidden;
+        document.getElementById('status').hidden = false;
+        document.getElementById('status').children[0].innerText = "Protected";
     });
 }
 function setContent(text, doc, col) {
@@ -86,7 +100,7 @@ function setContent(text, doc, col) {
         return;
     var docRef = firebase.firestore().collection(col).doc(doc);
     return docRef.update({ text: text })["catch"](function () { return docRef.set({ text: text }); })
-        .then(function (res) { return res; });
+        .then(function (res) { return console.log(res); });
 }
 function setTextArea(text) {
     var elem = document.getElementById('textarea');
@@ -118,12 +132,16 @@ function randomString(x) {
 }
 function updateButtons() {
     if (state.login) {
-        document.getElementById('login').classList.add('nodisplay');
-        document.getElementById('options').classList.remove('nodisplay');
+        document.getElementById('login').hidden = true;
+        document.getElementById('options').hidden = false;
+        // document.getElementById('login').classList.add('nodisplay');
+        // document.getElementById('options').classList.remove('nodisplay');
     }
     else {
-        document.getElementById('login').classList.remove('nodisplay');
-        document.getElementById('options').classList.add('nodisplay');
+        document.getElementById('login').hidden = false;
+        document.getElementById('options').hidden = true;
+        // document.getElementById('login').classList.remove('nodisplay');
+        // document.getElementById('options').classList.add('nodisplay');
     }
 }
 function showOptions() {
@@ -136,4 +154,14 @@ function passwordAction() {
         passwordModal().then(function (pwd) {
             notepade.login(pwd)["catch"](function (err) { return alert(err.message); });
         });
+}
+function setTheme(toggle) {
+    if (localStorage && localStorage.getItem('nightMode') !== null)
+        nightMode = localStorage.getItem('nightMode') === 'true';
+    if (toggle)
+        nightMode = !nightMode;
+    document.body.style.cssText = "--background: var(--" + (nightMode ? 'dark' : 'light') + "); --color: var(--" + (!nightMode ? 'dark' : 'light') + ");";
+    document.getElementById('theme').innerText = nightMode ? 'light' : 'dark';
+    if (localStorage)
+        localStorage.setItem('nightMode', '' + nightMode);
 }
