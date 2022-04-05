@@ -6,3 +6,7 @@ No signup, no login, no password.
 As simple and insecure as the Windows Notepad.
 
 Start your notepad by changing the url identifier: `notepade.web.app/?mynotepad`
+
+### Contact
+
+[lamartine.cb@gmail.com](mailto:lamartine.cb@gmail.com)
