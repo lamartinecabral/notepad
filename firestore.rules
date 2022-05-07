@@ -2,13 +2,13 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     match /docs/{docId} {
-    	allow read, write: if
-    		request.auth.uid == 'U23CfQYMJaRhLeiZsIQRAT9LPSC3';
+      allow read, write: if
+        request.auth.uid == 'U23CfQYMJaRhLeiZsIQRAT9LPSC3';
       allow create: if
-      	request.resource.data.keys() == ['text'] &&
+        request.resource.data.keys() == ['text'] &&
         request.resource.data.text is string;
       allow update: if
-      	// REGRA 1 - esse documento só pode ter os seguintes campos:
+        // REGRA 1 - esse documento só pode ter os seguintes campos:
         // 		text:				string	(required)
         // 		protected:	string	(optional)
         // 		public:			boolean	(optional)
@@ -20,7 +20,7 @@ service cloud.firestore {
         !exists(request.path) ||
         affectedKeys().size() == 0 ||
         (
-        	changedKeys() == ['text'].toSet() &&
+          changedKeys() == ['text'].toSet() &&
           request.resource.data.text is string &&
           (
             !('protected' in resource.data.keys()) ||
@@ -33,27 +33,27 @@ service cloud.firestore {
           removedKeys() == ['protected'].toSet() &&
           request.auth.uid == resource.data.protected
         ) || (
-        	affectedKeys() == ['public'].toSet() &&
+          affectedKeys() == ['public'].toSet() &&
           request.auth.uid == resource.data.protected
         );
       allow get: if
-      	!exists(request.path) ||
-      	!('protected' in resource.data.keys()) ||
+        !exists(request.path) ||
+        !('protected' in resource.data.keys()) ||
         request.auth.uid == resource.data.protected ||
-      	resource.data.public == true;
+        resource.data.public == true;
     }
     
     function affectedKeys(){
-    	return request.resource.data.diff(resource.data).affectedKeys();
+      return request.resource.data.diff(resource.data).affectedKeys();
     }
     function addedKeys(){
-    	return request.resource.data.diff(resource.data).addedKeys();
+      return request.resource.data.diff(resource.data).addedKeys();
     }
     function removedKeys(){
-    	return request.resource.data.diff(resource.data).removedKeys();
+      return request.resource.data.diff(resource.data).removedKeys();
     }
     function changedKeys(){
-    	return request.resource.data.diff(resource.data).changedKeys();
+      return request.resource.data.diff(resource.data).changedKeys();
     }
   }
 }
