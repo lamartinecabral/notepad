@@ -7,40 +7,43 @@ service cloud.firestore {
       allow create: if
         request.resource.data.keys() == ['text'] &&
         request.resource.data.text is string;
+      allow update, get: if !exists(request.path);
+      allow update: if affectedKeys().size() == 0;
+
+      // REGRA 1 - esse documento só pode ter os seguintes campos:
+      //   text:      string  (required)
+      //   protected: string  (optional)
+      //   public:    boolean (optional)
+      // REGRA 2 - apenas um campo pode ser alterado por operação
+      // REGRA 3 - se protected não existir, todos podem ler/escrever
+      // REGRA 4 - se protected == auth.uid, usuario pode ler/escrever
+      // REGRA 5 - se public == true, todos podem ler
+
       allow update: if
-        // REGRA 1 - esse documento só pode ter os seguintes campos:
-        //   text:      string  (required)
-        //   protected: string  (optional)
-        //   public:    boolean (optional)
-        // REGRA 2 - apenas um campo pode ser alterado por operação
-        // REGRA 3 - se protected não existir, todos podem ler/escrever
-        // REGRA 4 - se protected == auth.uid, usuario pode ler/escrever
-        // REGRA 5 - se public == true, todos podem ler
-        
-        !exists(request.path) ||
-        affectedKeys().size() == 0 ||
+        changedKeys() == ['text'].toSet() &&
+        request.resource.data.text is string &&
         (
-          changedKeys() == ['text'].toSet() &&
-          request.resource.data.text is string &&
-          (
-            !('protected' in resource.data.keys()) ||
-            request.auth.uid == resource.data.protected
-          )
-        ) || (
-          addedKeys() == ['protected'].toSet() &&
-          request.auth != null && request.auth.uid == request.resource.data.protected
-        ) || (
-          removedKeys() == ['protected'].toSet() &&
-          request.auth.uid == resource.data.protected
-        ) || (
-          affectedKeys() == ['public'].toSet() &&
+          !('protected' in resource.data.keys()) ||
           request.auth.uid == resource.data.protected
         );
+      allow update: if 
+        addedKeys() == ['protected'].toSet() &&
+        request.auth != null &&
+        request.auth.uid == request.resource.data.protected;
+      allow update: if
+        removedKeys() == ['protected'].toSet() &&
+        request.auth.uid == resource.data.protected;
+      allow update: if
+        affectedKeys() == ['public'].toSet() &&
+        request.auth.uid == resource.data.protected;
+
       allow get: if
-        !exists(request.path) ||
-        !('protected' in resource.data.keys()) ||
-        request.auth.uid == resource.data.protected ||
+        !('protected' in resource.data.keys());
+      allow get: if
+        request.auth.uid == resource.data.protected;
+      allow get: if
         resource.data.public == true;
+
     }
     
     function affectedKeys(){
