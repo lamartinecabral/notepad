@@ -9,9 +9,9 @@ service cloud.firestore {
         request.resource.data.text is string;
       allow update: if
         // REGRA 1 - esse documento só pode ter os seguintes campos:
-        // 		text:				string	(required)
-        // 		protected:	string	(optional)
-        // 		public:			boolean	(optional)
+        //   text:      string  (required)
+        //   protected: string  (optional)
+        //   public:    boolean (optional)
         // REGRA 2 - apenas um campo pode ser alterado por operação
         // REGRA 3 - se protected não existir, todos podem ler/escrever
         // REGRA 4 - se protected == auth.uid, usuario pode ler/escrever
