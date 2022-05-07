@@ -77,7 +77,6 @@ function liveContent(doc, col = 'docs'){
 		if(res.metadata.hasPendingWrites) return;
 		if(isHidden){
 			isHidden = false;
-			// (document.getElementById('textarea') as HTMLTextAreaElement).classList.toggle('nodisplay');
 			(document.getElementById('textarea') as HTMLTextAreaElement).hidden = isHidden;
 			(document.getElementById('status') as HTMLDivElement).hidden = true;
 			(document.getElementById('status').children[0] as HTMLSpanElement).innerText = "Saving...";
@@ -132,13 +131,9 @@ function updateButtons(){
 	if(state.login){
 		document.getElementById('login').hidden = true;
 		document.getElementById('options').hidden = false;
-		// document.getElementById('login').classList.add('nodisplay');
-		// document.getElementById('options').classList.remove('nodisplay');
 	} else {
 		document.getElementById('login').hidden = false;
 		document.getElementById('options').hidden = true;
-		// document.getElementById('login').classList.remove('nodisplay');
-		// document.getElementById('options').classList.add('nodisplay');
 	}
 }
 
