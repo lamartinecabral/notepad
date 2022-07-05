@@ -1,5 +1,8 @@
+//@ts-ignore
 declare const auth;
+//@ts-ignore
 declare const firestore;
+//@ts-ignore
 declare const collection;
 declare const eruda;
 

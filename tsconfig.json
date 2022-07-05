@@ -3,6 +3,7 @@
         "docs/main.ts",
         "docs/extra.ts",
         "docs/admin/main.ts",
+        "docs/markdown/main.ts",
     ],
     "compilerOptions": {
         "lib": ["DOM","ES6"],
