@@ -4,7 +4,7 @@
 		<!-- <script>if('serviceWorker' in navigator){ navigator.serviceWorker.register('./sw.js', {scope: '/'}); };</script> -->
 		<link rel="icon" type="image/ico" href="./assets/favicon.ico">
 		<!-- <link rel="manifest" href="./manifest.webmanifest"> -->
-		<link rel="stylesheet" type="text/css" href="./style.css">
+		<link rel="stylesheet" type="text/css" href="./main.css">
 		<title>Notepad Online</title>
 		<noscript><div id="noscript">This web app needs Javascript enabled.</div></noscript>
 	</head>
@@ -17,9 +17,9 @@
 		<div id="status"><span>Carregando...</span></div>
 
 		<div id="buttons">
-			<a href="#" id="theme" onclick="setTheme(true)">dark</a>
-			<a href="#" id="login" onclick="passwordAction()" hidden>password</a>
-			<a href="#" id="options" onclick="showOptions()" hidden>options</a>
+			<a href="#" id="theme" onclick="View.Action.theme(true)">dark</a>
+			<a href="#" id="login" onclick="View.Action.password()" hidden>password</a>
+			<a href="#" id="options" onclick="View.Action.options()" hidden>options</a>
 		</div>
 
 		<div id="github">
@@ -36,12 +36,12 @@
 			autocorrect="off"
 			autocapitalize="off"
 			spellcheck="false"
-			onkeydown="tabinput(event)"
-			oninput="save(event)"
+			onkeydown="View.textArea.tabinput(event)"
+			oninput="View.Action.save(event)"
 			hidden
 		></textarea>
 
 		<script src="main.js"></script>
-		<script src="extra.js" id="extra"></script>
+		<script src="modal.js" id="extra"></script>
 	</body>
 </html>

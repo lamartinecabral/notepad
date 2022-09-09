@@ -1,0 +1,7 @@
+{
+    "scripts": {
+        "start": "python3 -m http.server --directory web",
+        "deploy": "firebase deploy --only hosting",
+        "deploy:rules": "firebase deploy --only rules"
+    }
+}

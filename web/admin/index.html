@@ -11,7 +11,7 @@
                 auth = firebase.auth();
                 firestore = firebase.firestore();
                 collection = firestore.collection('docs');
-                admin.initAdmin();
+                admin.initApp();
             }
         </script>
         <script src="../assets/firebase@8.2.4/firebase-app.js"></script>
@@ -20,6 +20,6 @@
 		<script defer src="../assets/init-firebase.js"></script>
         <p>Use the console. admin.help() for help.</p>
         <button id="eruda-btn" onclick="admin.initEruda()">Init Eruda</button>
-        <script src="./main.js"></script>
+        <script src="./admin.js"></script>
     </body>
 </html>

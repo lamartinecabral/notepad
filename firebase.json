@@ -5,12 +5,11 @@
   },
   "hosting": {
     "site": "notepade",
-    "public": "docs",
+    "public": "web",
     "ignore": [
       "firebase.json",
       "**/.*",
-      "**/node_modules/**",
-      "**/*.ts"
+      "**/node_modules/**"
     ]
   }
 }
