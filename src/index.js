@@ -1,7 +1,10 @@
+// @ts-check
+
 import { Server } from "./server.js";
 import { View } from "./view.js";
 import { State } from "./state.js";
 
+// @ts-ignore
 window.View = View;
 
 function initApp() {

@@ -1,3 +1,5 @@
+// @ts-check
+
 import { Server } from "./server.js";
 import { State } from "./state.js";
 
@@ -15,6 +17,7 @@ export const Modal = {
       form.addEventListener("submit", (ev) => {
         ev.preventDefault();
         div.remove();
+        // @ts-ignore
         resolve(ev.target[0].value);
       });
       div2.append(form);
@@ -105,6 +108,7 @@ export const Modal = {
       logout.append(button);
 
       let prot, publ;
+      // @ts-ignore
       intervalId = setInterval(() => {
         if (prot === State.obj.protected && publ === State.obj.public) return;
         prot = State.obj.protected;

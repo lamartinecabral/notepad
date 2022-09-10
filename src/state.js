@@ -1,7 +1,9 @@
+// @ts-check
+
 import { randomString } from './utils.js'
 
 export const State = {
-  /** @type {{public: boolean, protected: boolean, login: boolean}} */
+  /** @type {{public?: boolean, protected?: boolean, login?: boolean}} */
   obj: {},
   aux: {},
   docId: (document.URL.split("?")[1] || "").split("#")[0],

@@ -1,4 +1,6 @@
-/** @param {number} x */
+// @ts-check
+
+/** @param {number | undefined} x */
 export function randomString(x = undefined) {
   let str = x && !isNaN(+x) && isFinite(+x)
     ? (+x).toString(36)

@@ -1,3 +1,5 @@
+// @ts-check
+
 import { State } from "./state.js";
 import { View } from "./view.js";
 import {
@@ -16,8 +18,9 @@ import {
 import { auth, db } from "./firebase.js";
 
 export const Server = {
-  /** @type {() => void} */
-  killLiveContent: null,
+  /** @type {import("firebase/auth").Unsubscribe} */
+  // @ts-ignore
+  killLiveContent = null,
   liveContent: function (docId, colId = "docs") {
     Server.killLiveContent = onSnapshot(
       doc(db, colId, docId),
@@ -53,6 +56,7 @@ export const Server = {
   liveAuth: function () {
     onAuthStateChanged(auth, (user) => {
       if (user) {
+        // @ts-ignore
         if (user.email.split("@")[0] === State.docId) {
           console.log("Logged");
           State.obj.login = true;

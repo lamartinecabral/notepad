@@ -1,17 +1,23 @@
+// @ts-check
+
 import { Modal } from "./modal.js";
 import { Server } from "./server.js";
 import { State } from "./state.js";
 
 export const View = {
+  /** @returns {HTMLElement | any} */
+  // @ts-ignore
+  getById: (id) => View.getById(id),
+
   status: {
-    elem: () => document.getElementById("status"),
+    elem: () => View.getById("status"),
     /** @type {() => HTMLSpanElement} */
     span: () => View.status.elem().children[0],
   },
 
   textArea: {
     /** @type {() => HTMLTextAreaElement} */
-    elem: () => document.getElementById("textarea"),
+    elem: () => View.getById("textarea"),
 
     /** @param {string} text */
     set: function (text) {
@@ -38,15 +44,17 @@ export const View = {
 
   updateButtons: function () {
     if (State.obj.login) {
-      document.getElementById("login").hidden = true;
-      document.getElementById("options").hidden = false;
+      View.getById("login").hidden = true;
+      View.getById("options").hidden = false;
     } else {
-      document.getElementById("login").hidden = false;
-      document.getElementById("options").hidden = true;
+      View.getById("login").hidden = false;
+      View.getById("options").hidden = true;
     }
   },
 
   Action: {
+    /** @type {NodeJS.Timeout} */
+    // @ts-ignore
     saveTimeoutID: null,
     save: function (ev) {
       clearTimeout(View.Action.saveTimeoutID);
@@ -56,7 +64,7 @@ export const View = {
         View.status.span().innerText = "Saving...";
         Server.setContent(View.textArea.get(), State.docId)
           .then(() => {
-            document.getElementById("status").hidden = true;
+            View.getById("status").hidden = true;
             console.log("updated");
           })
           .catch((err) => {
@@ -73,7 +81,7 @@ export const View = {
       document.body.style.cssText =
         `--background: var(--${View.nightMode ? "dark" : "light"}); ` +
         `--color: var(--${!View.nightMode ? "dark" : "light"});`;
-      document.getElementById("theme").innerText = View.nightMode
+      View.getById("theme").innerText = View.nightMode
         ? "light"
         : "dark";
       if (localStorage) localStorage.setItem("nightMode", "" + View.nightMode);
