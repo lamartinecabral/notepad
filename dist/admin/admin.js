@@ -8,8 +8,9 @@ var admin = {
 			if (user) {
 				console.log("Logged user", user);
 				if (user.uid != "U23CfQYMJaRhLeiZsIQRAT9LPSC3") {
-					console.log("User is not admin. Signing Out.");
-					logout();
+					console.log("User is not admin.")
+					// console.log("User is not admin. Signing Out.");
+					// admin.logout();
 				} else {
 					console.log("Done.");
 				}
