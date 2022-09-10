@@ -1,3 +1,5 @@
+dist/main.js*
+
 # Logs
 logs
 *.log

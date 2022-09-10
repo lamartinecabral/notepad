@@ -7,6 +7,15 @@ As simple and insecure as the Windows Notepad.
 
 Start your notepad by changing the identifier after the question mark: `notepade.web.app/?mynotepad`
 
-### Contact
+### Contact:
 
 [lamartine.cb@gmail.com](mailto:lamartine.cb@gmail.com)
+
+### Installation:
+
+```
+npm install -g webpack webpack-cli
+npm install
+npm run build
+npm run serve
+```
