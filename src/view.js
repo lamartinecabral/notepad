@@ -7,7 +7,7 @@ import { State } from "./state.js";
 export const View = {
   /** @returns {HTMLElement | any} */
   // @ts-ignore
-  getById: (id) => View.getById(id),
+  getById: (id) => document.getElementById(id),
 
   status: {
     elem: () => View.getById("status"),

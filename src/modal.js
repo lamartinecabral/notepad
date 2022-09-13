@@ -39,6 +39,15 @@ export const Modal = {
       send.type = "submit";
       Object.assign(send.style, { "font-family": "monospace" });
       form.append(send);
+      
+      /** @type {HTMLInputElement} */
+      let username = document.createElement("input");
+      username.value = State.docId;
+      username.style.display = "none";
+      username.type = "text";
+      username.name = "docId";
+      form.append(username);
+
     });
   },
 

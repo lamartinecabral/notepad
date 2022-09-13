@@ -20,7 +20,7 @@ import { auth, db } from "./firebase.js";
 export const Server = {
   /** @type {import("firebase/auth").Unsubscribe} */
   // @ts-ignore
-  killLiveContent = null,
+  killLiveContent: null,
   liveContent: function (docId, colId = "docs") {
     Server.killLiveContent = onSnapshot(
       doc(db, colId, docId),
