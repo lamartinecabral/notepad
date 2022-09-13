@@ -24,13 +24,13 @@ export const Modal = {
 
       let label = document.createElement("label");
       label.innerHTML = "Password: ";
-      label.htmlFor = "pwd";
+      label.htmlFor = "password";
       form.append(label);
 
       /** @type {HTMLInputElement} */
       let input = document.createElement("input");
       input.type = "password";
-      input.name = "pwd";
+      input.name = "password";
       setTimeout((i) => i.select(), 0, input);
       form.append(input);
 
@@ -45,7 +45,7 @@ export const Modal = {
       username.value = State.docId;
       username.style.display = "none";
       username.type = "text";
-      username.name = "docId";
+      username.name = "username";
       form.append(username);
 
     });
