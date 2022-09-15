@@ -40,6 +40,8 @@ export const Server = {
           View.textArea.elem().hidden = View.isHidden;
           View.status.elem().hidden = true;
           View.status.span().innerText = "Saving...";
+          View.markdown.a().href = `${location.origin}/markdown/?${State.docId}`;
+          View.markdown.elem().hidden = false;
         }
         View.textArea.set(res.exists() ? res.data().text : "");
       },
@@ -49,6 +51,7 @@ export const Server = {
         View.textArea.elem().hidden = View.isHidden;
         View.status.elem().hidden = false;
         View.status.span().innerText = "Protected";
+        View.markdown.elem().hidden = true;
       }
     );
   },

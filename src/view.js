@@ -5,18 +5,20 @@ import { Server } from "./server.js";
 import { State } from "./state.js";
 
 export const View = {
-  /** @returns {HTMLElement | any} */
+  /** @returns {HTMLElement} */
   // @ts-ignore
   getById: (id) => document.getElementById(id),
 
   status: {
     elem: () => View.getById("status"),
     /** @type {() => HTMLSpanElement} */
+    // @ts-ignore
     span: () => View.status.elem().children[0],
   },
 
   textArea: {
     /** @type {() => HTMLTextAreaElement} */
+    // @ts-ignore
     elem: () => View.getById("textarea"),
 
     /** @param {string} text */
@@ -40,6 +42,13 @@ export const View = {
       ev.preventDefault();
       document.execCommand("insertText", false, "\t");
     },
+  },
+
+  markdown: {
+    elem: () => View.getById('markdown'),
+    /** @type {() => HTMLAnchorElement} */
+    // @ts-ignore
+    a: () => View.markdown.elem().children[0],
   },
 
   updateButtons: function () {

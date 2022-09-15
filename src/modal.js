@@ -24,7 +24,7 @@ export const Modal = {
 
       let label = document.createElement("label");
       label.innerHTML = "Password: ";
-      label.htmlFor = "password";
+      label.htmlFor = "password"
       form.append(label);
 
       /** @type {HTMLInputElement} */

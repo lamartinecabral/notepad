@@ -14,8 +14,6 @@ Start your notepad by changing the identifier after the question mark: `notepade
 ### Installation:
 
 ```
-npm install -g webpack webpack-cli
 npm install
-npm run build
-npm run serve
+npm start
 ```

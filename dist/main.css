@@ -37,6 +37,10 @@ body{
     left: calc(50% - 12px);
 }
 
+#markdown{
+    color: red;
+}
+
 #noscript{
     position: fixed;
     text-align: center;
@@ -54,7 +58,13 @@ body{
     right: 3em;
 }
 
-#buttons a{
+#markdown{
+    position: fixed;
+    bottom: 2px;
+    right: 3em;
+}
+
+#buttons a,#markdown a{
     text-decoration: underline;
     cursor: pointer;
     background: var(--background);
