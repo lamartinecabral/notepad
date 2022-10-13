@@ -3,7 +3,7 @@ var hash;
 
 var html = {
 	initApp: function () {
-		console.log("initHTML");
+		// console.log("initHTML");
 		[docId, hash] = (document.URL.split("?")[1] || "").split("#");
 		if (!docId)
 			html.setContent("<h1>HTML IFrame</h1>");
@@ -16,8 +16,8 @@ var html = {
 
 	/** @param {string} text */
 	setContent: function (text) {
-		var el = document.getElementsByTagName('iframe')[0];
-		if(el) document.body.remove(el);
+		var el = document.getElementById('iframe');
+		if(el) el.remove();
 		/** @type {HTMLIFrameElement} */
 		var iframe = document.createElement('iframe');
 		iframe.id = 'iframe';
@@ -31,10 +31,10 @@ var html = {
 				if (user.email.split("@")[0] === docId) {
 					console.log("Logged");
 				} else {
-					console.log("Not logged");
+					// console.log("Not logged");
 				}
 			} else {
-				console.log("No user.");
+				// console.log("No user.");
 			}
 		});
 	},
@@ -46,7 +46,6 @@ var html = {
 			(res) => {
 				if (res.metadata.hasPendingWrites) return;
 				html.setContent(res.exists ? res.data().text : "");
-				html.killLiveContent();
 			},
 			(err) => {
 				console.error(err);
