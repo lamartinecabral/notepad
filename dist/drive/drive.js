@@ -62,7 +62,8 @@ var drive = {
 
 		var td1 = document.createElement('td');
 		var a = document.createElement('a');
-		a.innerText = itemRef.name;
+		a.download = a.innerText = itemRef.name;
+		a.target = "_blank";
 		a.href = url;
 		td1.append(a);
 		
