@@ -9,5 +9,11 @@ var firebaseConfig = {
 };
 // Initialize Firebase
 console.log('init firebase');
-firebase.initializeApp(firebaseConfig);
+(function(){
+    firebase.initializeApp(firebaseConfig);
+    
+    var docId = (document.URL.split("?")[1] || "").split("#")[0];
+    if(docId) firebase = firebase.initializeApp(firebaseConfig, docId);
+})();
+
 initApp();
