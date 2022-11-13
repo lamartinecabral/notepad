@@ -21,7 +21,7 @@ var html = {
 		/** @type {HTMLIFrameElement} */
 		var iframe = document.createElement('iframe');
 		iframe.id = 'iframe';
-		iframe.src = 'data:text/html;charset=utf-8,'+encodeURI(text);
+		iframe.src = 'data:text/html;charset=utf-8,'+encodeURIComponent(text);
 		document.body.append(iframe);
 	},
 
