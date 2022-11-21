@@ -1,12 +1,20 @@
 // Your web app's Firebase configuration
-var firebaseConfig = {
-    apiKey: "AIzaSyBiYQovHXW5g4nRWx2Cd-OfxJ81bHpLWk0",
-    authDomain: "lamart-notepad.firebaseapp.com",
-    projectId: "lamart-notepad",
-    storageBucket: "lamart-notepad.appspot.com",
-    messagingSenderId: "484168964554",
-    appId: "1:484168964554:web:79aaa5146d601e6df8d733"
-};
+var firebaseConfig = (str=>{
+	return [ k=>[ ...new Array(+k[0]).fill('='),
+			...k.substr(1).split('')
+		].reverse().join(''),
+		atob, JSON.parse
+	].reduce((a,b)=>b(a), str)
+})([
+	'2QfiMzM3QGOmRmNlFDM2QmN0ETNhFWY5cjOiV2d6QTN1QjN5gj',
+	'NxQDO0oTMiojIklEcwFmIsICN1UDN2kDO2EDN4QjI6ICZJJXZk',
+	'5WZTdmbpdWYzNXZtJCLi02bj5CdvB3cwBXYuQWYwVGdv5WL0JX',
+	'YtFGbiojI0V2ajVnQldWYy9GdzJCLiQWYwVGdv5WL0JXYtFGbi',
+	'ojIklEdjVmavJHciwiIt92YuAHchV2chJWZylmZuQWYwVGdv5W',
+	'L0JXYtFGbiojIulWYt9GRoRXdhJCLiAzaXxEcIJWM4oEem9ULk',
+	'NkM4dlUuRzZ1cFWIZ3bRlVaCl3UhpXSBJiOikXZLlGchJye'
+].join(''));
+
 // Initialize Firebase
 console.log('init firebase');
 (function(){

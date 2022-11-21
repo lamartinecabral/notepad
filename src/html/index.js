@@ -1,15 +1,16 @@
-var docId;
-var hash;
+//@ts-check
+import { onAuthStateChanged } from "firebase/auth";
+import { doc, onSnapshot } from "firebase/firestore";
+import { auth, db } from "./firebase";
+import { State } from "./state";
 
 var html = {
 	initApp: function () {
 		// console.log("initHTML");
-		[docId, hash] = (document.URL.split("?")[1] || "").split("#");
-		if (!docId)
+		if (!State.docId)
 			html.setContent("<h1>HTML IFrame</h1>");
 		else {
-			docId = docId.toLowerCase();
-			html.liveContent(docId);
+			html.liveContent(State.docId);
 			html.liveAuth();
 		}
 	},
@@ -26,9 +27,9 @@ var html = {
 	},
 
 	liveAuth: function () {
-		auth.onAuthStateChanged(function (user) {
+		onAuthStateChanged(auth, function (user) {
 			if (user) {
-				if (user.email.split("@")[0] === docId) {
+				if (user.email?.split("@")[0] === State.docId) {
 					console.log("Logged");
 				} else {
 					// console.log("Not logged");
@@ -40,12 +41,14 @@ var html = {
 	},
 
 	/** @type {() => void} */
+	// @ts-ignore
 	killLiveContent: null,
-	liveContent: function (doc, col = "docs") {
-		html.killLiveContent = collection.doc(doc).onSnapshot(
+	liveContent: function (docId, col = "docs") {
+		html.killLiveContent = onSnapshot(
+			doc(db, col, docId),
 			(res) => {
 				if (res.metadata.hasPendingWrites) return;
-				html.setContent(res.exists ? res.data().text : "");
+				html.setContent(res.exists() ? res.data().text : "");
 			},
 			(err) => {
 				console.error(err);
@@ -54,3 +57,5 @@ var html = {
 		);
 	},
 };
+
+html.initApp();

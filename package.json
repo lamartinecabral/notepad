@@ -1,15 +1,18 @@
 {
     "scripts": {
-        "build": "npx webpack --mode production",
+        "build": "npx webpack --mode=production",
+        "preview": "npx http-server dist -p 8000 -o",
         "start": "npx webpack server --mode=development --open --static=dist --port=8000",
         "deploy": "npm run build && npx firebase deploy --only hosting",
         "deploy:rules": "npx firebase deploy --only firestore:rules"
     },
     "dependencies": {
-        "firebase": "9.9.3"
+        "firebase": "9.9.3",
+        "marked": "4.2.2"
     },
     "devDependencies": {
         "firebase-tools": "11.9.0",
+        "http-server": "14.1.1",
         "webpack": "5.74.0",
         "webpack-cli": "4.10.0",
         "webpack-dev-server": "4.11.0"

@@ -1,21 +1,23 @@
-var docId;
+// @ts-check
+import { onAuthStateChanged } from "firebase/auth";
+import { deleteObject, getDownloadURL, listAll, ref, uploadBytes } from "firebase/storage";
+import { auth, storage } from "./firebase";
+import { State } from "./state";
 
 var drive = {
 	initApp: function () {
 		console.log("initDrive");
-		docId = (document.URL.split("?")[1] || "").split("#")[0];
-		if (!docId)
+		if (!State.docId)
 			drive.setContent("# Marked in browser\n\nRendered by **marked**.");
 		else {
-			docId = docId.toLowerCase();
 			drive.liveAuth();
 		}
 	},
 
 	liveAuth: function () {
-		auth.onAuthStateChanged(function (user) {
+		onAuthStateChanged(auth, function (user) {
 			if (user) {
-				if (user.email.split("@")[0] === docId) {
+				if (user.email?.split("@")[0] === State.docId) {
 					console.log("Logged");
 				} else {
 					console.log("Not logged");
@@ -29,10 +31,10 @@ var drive = {
 
 	listAll: function(){
 		drive.wait();
-		storageRef.child(docId).listAll().then((res) => {
+		listAll(ref(storage, State.docId)).then((res) => {
 			Promise.all(
 				res.items.sort((a,b)=>a.name < b.name ? -1 : 1)
-					.map(item=>item.getDownloadURL())
+					.map(item=>getDownloadURL(item))
 			).then(urls=>{
 				for(var i=0; i<urls.length; i++){
 					drive.addItem(res.items[i], urls[i]);
@@ -82,6 +84,7 @@ var drive = {
 		if(drive.waiting) return;
 		var input = document.createElement('input');
 		input.type = 'file';
+		// @ts-ignore
 		input.onchange = ()=>drive.upload(input.files[0]);
 		input.click();
 	},
@@ -89,9 +92,9 @@ var drive = {
 	upload: function(file){
 		if(!file) return;
 		if(file.size > 10 * 1024 * 1024) return drive.error('size limit exceeded');
-		var ref = storageRef.child(docId+'/'+file.name);
+		var storageRef = ref(storage, State.docId+'/'+file.name);
 		drive.wait();
-		ref.put(file).then((res) => {
+		uploadBytes(storageRef, file).then((res) => {
 			drive.listAll();
 		}).catch(drive.error);
 	},
@@ -99,7 +102,8 @@ var drive = {
 	delete: function(fullPath){
 		if(drive.waiting) return;
 		drive.wait();
-		storageRef.child(fullPath).delete().then(()=>{
+		deleteObject(ref(storage, fullPath)).then(()=>{
+			// @ts-ignore
 			document.getElementById(fullPath).remove();
 			drive.done();
 		}).catch(drive.error);
@@ -113,12 +117,18 @@ var drive = {
 	waiting: false,
 	wait: function(){
 		drive.waiting = true;
+		// @ts-ignore
 		document.getElementById('wait').hidden = false;
 	},
 
 	done: function(){
 		drive.waiting = false;
+		// @ts-ignore
 		document.getElementById('wait').hidden = true;
 	},
 
 };
+
+// @ts-ignore
+window.drive = drive;
+drive.initApp();

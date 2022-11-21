@@ -85,7 +85,6 @@ export const Server = {
     const docRef = doc(db, colId, docId);
     return await updateDoc(docRef, { text })
       .catch(() => setDoc(docRef, { text }))
-      .catch(console.error);
   },
 
   /** @param {string} password */

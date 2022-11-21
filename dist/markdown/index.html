@@ -1,44 +1,12 @@
 <html>
 	<head>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF-8">
-		<!-- <script>if('serviceWorker' in navigator){ navigator.serviceWorker.register('./sw.js', {scope: '/'}); };</script> -->
 		<link rel="icon" type="image/ico" href="../assets/favicon.ico">
-    <!-- <link rel="manifest" href="./manifest.webmanifest"> -->
-    <link href="../assets/prism/prism.css" rel="stylesheet" />
+    <link href="./prism.css" rel="stylesheet" />
+    <link href="./markdown.css" rel="stylesheet" />
   </head>
-  <style>
-    html {
-      --default-font: system-ui, Tahoma, monospace !important;
-    }
-    body{
-      font-family: var(--default-font);
-      margin: 0;
-    }
-    #content{
-      padding: 1em;
-      margin: 1em;
-      border: 1px solid;;
-    }
-    img{
-      max-width: 100%;
-    }
-  </style>
   <body>
-    <script>
-      function initApp(){
-        auth = firebase.auth();
-        firestore = firebase.firestore();
-        collection = firestore.collection('docs');
-        markdown.initApp();
-      }
-    </script>
-    <script src="../assets/firebase@8.2.4/firebase-app.js"></script>
-    <script src="../assets/firebase@8.2.4/firebase-auth.js"></script>
-    <script src="../assets/firebase@8.2.4/firebase-firestore.js"></script>
-    <script src="../assets/marked/marked.min.js"></script>
-    <script src="../assets/prism/prism.js"></script>
-    <script defer src="../assets/init-firebase.js"></script>
     <div id="content"></div>
-    <script src="./markdown.js"></script>
+    <script src="../js/markdown.js"></script>
   </body>
 </html>

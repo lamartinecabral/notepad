@@ -1,29 +1,38 @@
-var docId;
-var hash;
+// @ts-check
+import { onAuthStateChanged } from "firebase/auth";
+import { doc, onSnapshot } from "firebase/firestore";
+import { marked } from "marked";
+import Prism from "./prism"
+import { auth, db } from "./firebase";
+import { State } from "./state";
 
 var markdown = {
+  /** @type {(id: string) => HTMLElement} */
+  // @ts-ignore
+  elem: (id)=>document.getElementById(id),
+  content: ()=>markdown.elem("content"),
+
 	initApp: function () {
 		console.log("initMarkdown");
 		markdown.setMarkedOptions();
-		[docId, hash] = (document.URL.split("?")[1] || "").split("#");
-		if (!docId)
+		if (!State.docId)
 			markdown.setContent("# Marked in browser\n\nRendered by **marked**.");
 		else {
-			docId = docId.toLowerCase();
-			markdown.liveContent(docId);
+			markdown.liveContent(State.docId);
 			markdown.liveAuth();
 		}
 	},
 
 	/** @param {string} text */
 	setContent: function (text) {
-		document.getElementById("content").innerHTML = marked.parse(text);
+    
+		markdown.content().innerHTML = marked.parse(text);
 	},
 
 	liveAuth: function () {
-		auth.onAuthStateChanged(function (user) {
+		onAuthStateChanged(auth, function (user) {
 			if (user) {
-				if (user.email.split("@")[0] === docId) {
+				if (user.email?.split("@")[0] === State.docId) {
 					console.log("Logged");
 				} else {
 					console.log("Not logged");
@@ -35,13 +44,15 @@ var markdown = {
 	},
 
 	/** @type {() => void} */
+	// @ts-ignore
 	killLiveContent: null,
-	liveContent: function (doc, col = "docs") {
-		markdown.killLiveContent = collection.doc(doc).onSnapshot(
+	liveContent: function (docId, col = "docs") {
+		markdown.killLiveContent = onSnapshot(
+			doc(db, col, docId),
 			(res) => {
 				if (res.metadata.hasPendingWrites) return;
-				markdown.setContent(res.exists ? res.data().text : "");
-				if (hash) markdown.scrollToHash();
+				markdown.setContent(res.exists() ? res.data().text : "");
+				if (State.hash) markdown.scrollToHash();
 			},
 			(err) => {
 				console.error(err);
@@ -52,9 +63,9 @@ var markdown = {
 
 	scrollToHash: function () {
 		setTimeout(() => {
-			const y = document.getElementById(hash).offsetTop;
+			const y = markdown.elem(State.hash).offsetTop;
 			document.body.scrollTop = y;
-			hash = "";
+			State.hash = "";
 		}, 50);
 	},
 
@@ -67,3 +78,5 @@ var markdown = {
 		});
 	},
 };
+
+markdown.initApp();

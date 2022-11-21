@@ -1,5 +1,8 @@
-body{
+* {
     font-family: monospace;
+}
+
+body{
     --light: #fff;
     --dark: #000;
     --background: var(--light);
