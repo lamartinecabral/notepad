@@ -137,7 +137,8 @@ export const Server = {
   protect: function (flag = true) {
     if (flag) {
       Server._update(
-        { protected: Server.currentUser()?.uid || "" },
+				// @ts-ignore
+        { protected: Server.currentUser().uid || "" },
         "This doc is now protected"
       );
     } else {

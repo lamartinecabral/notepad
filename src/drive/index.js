@@ -17,7 +17,8 @@ var drive = {
 	liveAuth: function () {
 		onAuthStateChanged(auth, function (user) {
 			if (user) {
-				if (user.email?.split("@")[0] === State.docId) {
+				// @ts-ignore
+				if (user.email.split("@")[0] === State.docId) {
 					console.log("Logged");
 				} else {
 					console.log("Not logged");
