@@ -1,6 +1,6 @@
 {
     "scripts": {
-        "build": "npx webpack --mode=production",
+        "build": "node build-time set && npx webpack --mode=production && node build-time unset",
         "preview": "npx http-server dist -p 8000 -o",
         "start": "npx webpack server --mode=development --open --static=dist --port=8000",
         "deploy": "npm run build && npx firebase deploy --only hosting",
