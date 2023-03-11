@@ -1,10 +1,10 @@
 {
     "scripts": {
-        "build": "node build-time set && npx webpack --mode=production && node build-time unset",
-        "preview": "npx http-server dist -p 8000 -o",
-        "start": "npx webpack server --mode=development --open --static=dist --port=8000",
-        "deploy": "npm run build && npx firebase deploy --only hosting",
-        "deploy:rules": "npx firebase deploy --only firestore:rules"
+        "build": "node build-time set && webpack --mode=production && node build-time unset",
+        "preview": "http-server dist -p 8000 -o",
+        "start": "webpack server --mode=development --open --static=dist --port=8000",
+        "deploy": "npm run build && firebase deploy --only hosting",
+        "deploy:rules": "firebase deploy --only firestore:rules"
     },
     "dependencies": {
         "firebase": "9.9.3",
