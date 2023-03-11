@@ -1,0 +1,13 @@
+html {
+  --default-font: system-ui, Tahoma, monospace !important;
+}
+body{
+  font-family: var(--default-font);
+  margin: 0;
+}
+#content{
+  padding: 1em;
+}
+img{
+  max-width: 100%;
+}

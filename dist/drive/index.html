@@ -1,0 +1,25 @@
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF-8">
+		<!-- <script>if('serviceWorker' in navigator){ navigator.serviceWorker.register('./sw.js', {scope: '/'}); };</script> -->
+		<link rel="icon" type="image/ico" href="../assets/favicon.ico">
+    <!-- <link rel="manifest" href="./manifest.webmanifest"> -->
+  </head>
+  <style>
+    *{
+      font-family: monospace;
+    }
+    #wait{
+      position: absolute; background: white;
+    }
+  </style>
+  <body>
+    <div id="content"></div>
+    <script src="../js/drive.js"></script>
+    <div hidden id="wait">please wait...</div>
+    <button onclick="drive.selectFile()">upload</button>
+    <div>
+      <table></table>
+    </div>
+  </body>
+</html>

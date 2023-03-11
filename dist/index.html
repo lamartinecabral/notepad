@@ -1,0 +1,45 @@
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF-8">
+		<!-- <script>if('serviceWorker' in navigator){ navigator.serviceWorker.register('./sw.js', {scope: '/'}); };</script> -->
+		<link rel="icon" type="image/ico" href="./assets/favicon.ico">
+		<!-- <link rel="manifest" href="./manifest.webmanifest"> -->
+		<link rel="stylesheet" type="text/css" href="./main.css">
+		<title>Notepad Online</title>
+		<noscript><div id="noscript">This web app needs Javascript enabled.</div></noscript>
+	</head>
+	<body hidden>
+		<div id="status"><span>Carregando...</span></div>
+
+		<div id="buttons">
+			<a href="#" id="theme" onclick="View.Action.theme(true)">dark</a>
+			<a href="#" id="login" onclick="View.Action.password()" hidden>password</a>
+			<a href="#" id="options" onclick="View.Action.options()" hidden>options</a>
+		</div>
+
+		<div id="github">
+			<a href="https://github.com/lamartinecabral/notepad">
+				<img src="./assets/github.svg" alt="">
+			</a>
+		</div>
+
+		<div id="markdown" hidden>
+			<a href="#">markdown</a>
+		</div>
+		
+		<textarea
+			name="textarea"
+			id="textarea"
+			autofocus
+			autocomplete="off"
+			autocorrect="off"
+			autocapitalize="off"
+			spellcheck="false"
+			onkeydown="View.textArea.tabinput(event)"
+			oninput="View.Action.save(event)"
+			hidden
+		></textarea>
+
+		<script src="./js/main.js"></script>
+	</body>
+</html>
