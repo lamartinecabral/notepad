@@ -1,10 +1,15 @@
 // @ts-check
-import { onAuthStateChanged } from "firebase/auth";
-import { doc, onSnapshot } from "firebase/firestore";
 import { marked } from "marked";
 import Prism from "./prism"
 import { auth, db } from "./firebase";
 import { State } from "./state";
+
+/** @type {import('../firebase')['default']} */
+// @ts-ignore
+const firebase = window.firebase
+
+const { onAuthStateChanged } = firebase.auth;
+const { doc, onSnapshot } = firebase.firestore;
 
 var markdown = {
   /** @type {(id: string) => HTMLElement} */
