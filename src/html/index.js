@@ -1,8 +1,13 @@
 //@ts-check
-import { onAuthStateChanged } from "firebase/auth";
-import { doc, onSnapshot } from "firebase/firestore";
 import { auth, db } from "./firebase";
 import { State } from "./state";
+
+/** @type {import('../firebase')['default']} */
+// @ts-ignore
+const firebase = window.firebase
+
+const { onAuthStateChanged } = firebase.auth;
+const { doc, onSnapshot } = firebase.firestore;
 
 var html = {
 	initApp: function () {

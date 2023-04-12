@@ -1,8 +1,13 @@
 // @ts-check
-import { onAuthStateChanged } from "firebase/auth";
-import { deleteObject, getDownloadURL, listAll, ref, uploadBytes } from "firebase/storage";
 import { auth, storage } from "./firebase";
 import { State } from "./state";
+
+/** @type {import('../firebase')['default']} */
+// @ts-ignore
+const firebase = window.firebase
+
+const { onAuthStateChanged } = firebase.auth;
+const { deleteObject, getDownloadURL, listAll, ref, uploadBytes } = firebase.storage;
 
 var drive = {
 	initApp: function () {

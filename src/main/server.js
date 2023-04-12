@@ -2,20 +2,25 @@
 
 import { State } from "./state.js";
 import { View } from "./view.js";
-import {
+import { auth, db } from "./firebase.js";
+
+/** @type {import('../firebase')['default']} */
+// @ts-ignore
+const firebase = window.firebase
+
+const {
   deleteField,
   doc,
   onSnapshot,
   setDoc,
   updateDoc,
-} from "firebase/firestore";
-import {
+} = firebase.firestore;
+const {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signOut,
-} from "firebase/auth";
-import { auth, db } from "./firebase.js";
+} = firebase.auth;
 
 export const Server = {
   /** @type {import("firebase/auth").Unsubscribe} */
