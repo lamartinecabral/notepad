@@ -76,4 +76,4 @@ Service.startLiveDoc();
 Service.startLiveUser();
 
 document.body.hidden = false;
-document.body.addEventListener('keyup', handlers.handleKeyUp);
+document.body.addEventListener('keyup', handlers.handleKeyup);
