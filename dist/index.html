@@ -11,10 +11,10 @@
 	<body hidden>
 		<div id="status"><span>Loading...</span></div>
 
-		<div id="buttons">
-			<a href="#" id="theme" onclick="handleThemeClick()">dark</a>
-			<a href="#" id="password" onclick="handlePasswordClick()" hidden>password</a>
-			<a href="#" id="options" onclick="handleOptionsClick()" hidden>options</a>
+		<div id="menu">
+			<a href="#" id="theme-menu" onclick="handleThemeClick()">dark</a>
+			<a href="#" id="password-menu" onclick="handlePasswordClick()" hidden>password</a>
+			<a href="#" id="options-menu" onclick="handleOptionsClick()" hidden>options</a>
 		</div>
 
 		<div id="github">
@@ -47,7 +47,7 @@
 					<form onsubmit="handleSubmit(event)">
 						<input type="text" name="username" style="display: none;">
 						<label for="password">Password: </label>
-						<input type="password" name="password" id="password-input">
+						<input type="password" name="password" id="password">
 						<input type="submit">
 					</form>
 				</div>

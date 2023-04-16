@@ -70,24 +70,26 @@ State.isHidden.sub(function (value) {
 });
 
 State.isLogged.sub(function (value) {
-  Dom.get("password").hidden = value;
-  Dom.get("options").hidden = !value;
+  Dom.get("password-menu").hidden = value;
+  Dom.get("options-menu").hidden = !value;
 });
 
 State.nightMode.sub(function (value) {
   document.body.style.cssText =
     `--background: var(--${value ? "dark" : "light"}); ` +
     `--color: var(--${!value ? "dark" : "light"});`;
-  Dom.get("theme").innerText = value ? "light" : "dark";
+  Dom.get("theme-menu").innerText = value ? "light" : "dark";
   if (localStorage) localStorage.setItem("nightMode", "" + value);
 });
 
 State.showPassword.sub(function (value) {
   Dom.get("backdrop").hidden = !value;
   Dom.get("password-modal").hidden = !value;
+  Dom.get("password").focus();
 });
 
 State.showOptions.sub(function (value) {
   Dom.get("backdrop").hidden = !value;
   Dom.get("options-modal").hidden = !value;
+  Dom.get("protected").focus();
 });
