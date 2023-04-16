@@ -94,3 +94,11 @@ body{
     color: var(--color);
     border: 1px solid var(--color);
 }
+
+#options-modal > div:nth-child(2) {
+    margin: 0.5em 0 1em;
+}
+
+#options-modal > div:nth-child(3) {
+    text-align: center;
+}
