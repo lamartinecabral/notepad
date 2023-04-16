@@ -9,12 +9,12 @@
 		<noscript><div id="noscript">This web app needs Javascript enabled.</div></noscript>
 	</head>
 	<body hidden>
-		<div id="status"><span>Carregando...</span></div>
+		<div id="status"><span>Loading...</span></div>
 
 		<div id="buttons">
-			<a href="#" id="theme" onclick="View.Action.theme(true)">dark</a>
-			<a href="#" id="login" onclick="View.Action.password()" hidden>password</a>
-			<a href="#" id="options" onclick="View.Action.options()" hidden>options</a>
+			<a href="#" id="theme" onclick="handleThemeClick()">dark</a>
+			<a href="#" id="password" onclick="handlePasswordClick()" hidden>password</a>
+			<a href="#" id="options" onclick="handleOptionsClick()" hidden>options</a>
 		</div>
 
 		<div id="github">
@@ -27,6 +27,33 @@
 			<a href="#">markdown</a>
 		</div>
 		
+		<div id="backdrop" hidden
+			onclick="handleBackdropClick()">
+			<div onclick="handleModalClick(event)">
+				<div id="options-modal" hidden>
+					<div>
+						<input type="checkbox" name="protected" onchange="handleProtectedChange()" id="protected">
+						<label for="protected">Protected</label>
+					</div>
+					<div>
+						<input type="checkbox" name="public" onchange="handlePublicChange()" id="public">
+						<label for="public">Public</label>
+					</div>
+					<div>
+						<button onclick="handleLogoutClick()">Logout</button>
+					</div>
+				</div>
+				<div id="password-modal" hidden>
+					<form onsubmit="handleSubmit(event)">
+						<input type="text" name="username" style="display: none;">
+						<label for="password">Password: </label>
+						<input type="password" name="password" id="password-input">
+						<input type="submit">
+					</form>
+				</div>
+			</div>
+		</div>
+
 		<textarea
 			name="textarea"
 			id="textarea"
@@ -35,8 +62,8 @@
 			autocorrect="off"
 			autocapitalize="off"
 			spellcheck="false"
-			onkeydown="View.textArea.tabinput(event)"
-			oninput="View.Action.save(event)"
+			onkeydown="handleKeydown(event)"
+			oninput="handleInput(event)"
 			hidden
 		></textarea>
 
