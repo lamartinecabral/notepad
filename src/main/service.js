@@ -46,7 +46,6 @@ export const Service = class {
       doc(db, "docs", State.docId),
       function (res) {
         const data = res.data() || { text: "" };
-        console.log(data);
         if (res.exists()) {
           State.protected.pub(data.protected !== undefined);
           State.public.pub(data.public !== undefined);
@@ -74,14 +73,16 @@ export const Service = class {
         Service.startLiveDoc();
       })
       .catch((err) => {
+        if(err.code !== 'auth/user-not-found'){
+          alert(err.message);
+          throw err;
+        }
         return createUserWithEmailAndPassword(auth, email, password)
           .then(() => {
             console.log("User created");
             Service.startLiveDoc();
           })
-          .catch((err2) => {
-            console.error(err);
-            console.error(err2);
+          .catch((err) => {
             alert(err.message);
             throw err;
           });
