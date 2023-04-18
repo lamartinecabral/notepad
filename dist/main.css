@@ -84,7 +84,7 @@ body{
     z-index: 1;
 }
 
-#backdrop > div {
+#modal {
     background: var(--background);
     padding: 2em;
     position: absolute;

@@ -8,13 +8,13 @@
 		<title>Notepad Online</title>
 		<noscript><div id="noscript">This web app needs Javascript enabled.</div></noscript>
 	</head>
-	<body hidden>
+	<body hidden id="body">
 		<div id="status"><span>Loading...</span></div>
 
 		<div id="menu">
-			<a href="#" id="theme-menu" onclick="handleThemeClick()">dark</a>
-			<a href="#" id="password-menu" onclick="handlePasswordClick()" hidden>password</a>
-			<a href="#" id="options-menu" onclick="handleOptionsClick()" hidden>options</a>
+			<a href="#" id="theme-menu">dark</a>
+			<a href="#" id="password-menu" hidden>password</a>
+			<a href="#" id="options-menu" hidden>options</a>
 		</div>
 
 		<div id="github">
@@ -27,24 +27,23 @@
 			<a href="#">markdown</a>
 		</div>
 		
-		<div id="backdrop" hidden
-			onclick="handleBackdropClick()">
-			<div onclick="handleModalClick(event)">
+		<div id="backdrop" hidden>
+			<div id="modal">
 				<div id="options-modal" hidden>
 					<div>
-						<input type="checkbox" name="protected" onchange="handleProtectedChange()" id="protected">
+						<input type="checkbox" name="protected" id="protected">
 						<label for="protected">Protected</label>
 					</div>
 					<div>
-						<input type="checkbox" name="public" onchange="handlePublicChange()" id="public">
+						<input type="checkbox" name="public" id="public">
 						<label for="public">Public</label>
 					</div>
 					<div>
-						<button onclick="handleLogoutClick()">Logout</button>
+						<button id="logout">Logout</button>
 					</div>
 				</div>
 				<div id="password-modal" hidden>
-					<form onsubmit="handleSubmit(event)">
+					<form id="form">
 						<input type="text" name="username" style="display: none;">
 						<label for="password">Password: </label>
 						<input type="password" name="password" id="password">
@@ -62,8 +61,6 @@
 			autocorrect="off"
 			autocapitalize="off"
 			spellcheck="false"
-			onkeydown="handleKeydown(event)"
-			oninput="handleInput(event)"
 			hidden
 		></textarea>
 
