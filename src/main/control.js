@@ -53,6 +53,7 @@ State.protected.sub(function (value) {
 State.public.sub(function (value) {
   // @ts-ignore
   Dom.get("public").checked = value;
+  Dom.get("raw").hidden = !value;
 });
 
 State.status.sub(function (value) {
@@ -61,31 +62,34 @@ State.status.sub(function (value) {
 
 State.isHidden.sub(function (value) {
   Dom.get("textarea").hidden = value;
-  Dom.get("markdown").hidden = value;
+  Dom.get("footer").hidden = value;
   if (!value) {
     // @ts-ignore
-    Dom.getChild("markdown").href =
+    Dom.get("markdown").href =
       location.origin + "/markdown/?" + State.docId;
+    // @ts-ignore
+    Dom.getChild("raw").href =
+      "https://raw.notepade.repl.co/" + State.docId;
   }
 });
 
 State.isLogged.sub(function (value) {
-  Dom.get("password-menu").hidden = value;
-  Dom.get("options-menu").hidden = !value;
+  Dom.get("password").hidden = value;
+  Dom.get("options").hidden = !value;
 });
 
 State.nightMode.sub(function (value) {
   document.body.style.cssText =
     `--background: var(--${value ? "dark" : "light"}); ` +
     `--color: var(--${!value ? "dark" : "light"});`;
-  Dom.get("theme-menu").innerText = value ? "light" : "dark";
+  Dom.get("theme").innerText = value ? "light" : "dark";
   if (localStorage) localStorage.setItem("nightMode", "" + value);
 });
 
 State.showPassword.sub(function (value) {
   Dom.get("backdrop").hidden = !value;
   Dom.get("password-modal").hidden = !value;
-  Dom.get("password").focus();
+  Dom.get("password-input").focus();
 });
 
 State.showOptions.sub(function (value) {

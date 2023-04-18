@@ -40,10 +40,6 @@ body{
     left: calc(50% - 12px);
 }
 
-#markdown{
-    color: red;
-}
-
 #noscript{
     position: fixed;
     text-align: center;
@@ -51,23 +47,19 @@ body{
     top: calc(50% - 1em);
 }
 
-.updating{
-    box-shadow: 0 0 4px green;
-}
-
-#menu{
+#header{
     position: fixed;
     top: 0px;
     right: 3em;
 }
 
-#markdown{
+#footer{
     position: fixed;
     bottom: 2px;
     right: 3em;
 }
 
-#menu a,#markdown a{
+#header a,#footer a{
     text-decoration: underline;
     cursor: pointer;
     background: var(--background);
@@ -100,5 +92,10 @@ body{
 }
 
 #options-modal > div:nth-child(3) {
+    text-align: center;
+}
+
+#raw {
+    margin-top: 1em;
     text-align: center;
 }

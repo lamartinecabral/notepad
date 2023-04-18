@@ -11,10 +11,10 @@
 	<body hidden id="body">
 		<div id="status"><span>Loading...</span></div>
 
-		<div id="menu">
-			<a href="#" id="theme-menu">dark</a>
-			<a href="#" id="password-menu" hidden>password</a>
-			<a href="#" id="options-menu" hidden>options</a>
+		<div id="header">
+			<a href="#" id="theme">dark</a>
+			<a href="#" id="password" hidden>password</a>
+			<a href="#" id="options" hidden>options</a>
 		</div>
 
 		<div id="github">
@@ -23,8 +23,8 @@
 			</a>
 		</div>
 
-		<div id="markdown" hidden>
-			<a href="#">markdown</a>
+		<div id="footer" hidden>
+			<a href="#" id="markdown">markdown</a>
 		</div>
 		
 		<div id="backdrop" hidden>
@@ -41,12 +41,15 @@
 					<div>
 						<button id="logout">Logout</button>
 					</div>
+					<div id="raw" hidden>
+						<a href="#" target="_blank">raw</a>
+					</div>
 				</div>
 				<div id="password-modal" hidden>
 					<form id="form">
 						<input type="text" name="username" style="display: none;">
 						<label for="password">Password: </label>
-						<input type="password" name="password" id="password">
+						<input type="password" name="password" id="password-input">
 						<input type="submit">
 					</form>
 				</div>
