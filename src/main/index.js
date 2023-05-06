@@ -56,6 +56,7 @@ const handlers = [
     event: "change",
     handler: function () {
       Service.setProtected(!State.protected.value);
+      Dom.getParent('public').hidden = State.protected.value;
     },
   },
   {

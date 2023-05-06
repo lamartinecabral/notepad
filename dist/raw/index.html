@@ -1,0 +1,20 @@
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF-8">
+		<!-- <script>if('serviceWorker' in navigator){ navigator.serviceWorker.register('./sw.js', {scope: '/'}); };</script> -->
+		<link rel="icon" type="image/ico" href="../assets/favicon.ico">
+		<!-- <link rel="manifest" href="./manifest.webmanifest"> -->
+    </head>
+    <body>
+      <script>
+        try{
+          var docId = (document.URL.split("?")[1] || "").split("#")[0].toLocaleLowerCase();
+          var url = 'https://raw.notepade.repl.co/'+docId;
+          location.replace(url);
+        } catch(e){
+          console.error(e);
+          alert(e.message);
+        }
+      </script>
+    </body>
+</html>

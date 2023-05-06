@@ -88,14 +88,10 @@ body{
 }
 
 #options-modal > div:nth-child(2) {
-    margin: 0.5em 0 1em;
+    margin-top: 0.5em;
 }
 
 #options-modal > div:nth-child(3) {
-    text-align: center;
-}
-
-#raw {
     margin-top: 1em;
     text-align: center;
 }

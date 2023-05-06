@@ -29,6 +29,11 @@ export const Dom = class {
     // @ts-ignore
     return Dom.get(id).children[0];
   }
+  /** @type {(id: string)=>HTMLElement} */
+  static getParent(id) {
+    // @ts-ignore
+    return Dom.get(id).parentElement;
+  }
   /** @type {string} */
   static get text() {
     // @ts-ignore
@@ -48,12 +53,12 @@ export const Dom = class {
 State.protected.sub(function (value) {
   // @ts-ignore
   Dom.get("protected").checked = value;
+  Dom.getParent("public").hidden = !value;
 });
 
 State.public.sub(function (value) {
   // @ts-ignore
   Dom.get("public").checked = value;
-  Dom.get("raw").hidden = !value;
 });
 
 State.status.sub(function (value) {
@@ -67,9 +72,6 @@ State.isHidden.sub(function (value) {
     // @ts-ignore
     Dom.get("markdown").href =
       location.origin + "/markdown/?" + State.docId;
-    // @ts-ignore
-    Dom.getChild("raw").href =
-      "https://raw.notepade.repl.co/" + State.docId;
   }
 });
 
