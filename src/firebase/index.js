@@ -19,6 +19,7 @@ import {
 import {
   createUserWithEmailAndPassword,
   getAuth,
+  getIdToken,
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signOut,
@@ -45,6 +46,7 @@ const firestore = {
 const auth = {
   createUserWithEmailAndPassword,
   getAuth,
+  getIdToken,
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signOut,
@@ -61,4 +63,4 @@ const firebase = {
 
 // @ts-ignore
 window.firebase = firebase;
-export default firebase
+export default firebase;
