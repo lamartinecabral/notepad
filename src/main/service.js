@@ -1,6 +1,7 @@
 // @ts-check
 
-import { Dom, State } from "./control";
+import { State } from "./state";
+import { Html } from "./html";
 
 /** @type {import('../firebase')['default']} */ // @ts-ignore
 const firebase = window.firebase;
@@ -21,66 +22,68 @@ const {
 /** @type {any} */ let offSnapshot = null;
 /** @type {any} */ let offAuthStateChanged = null;
 
-export const Service = class {
-  static startLiveUser() {
-    if (offAuthStateChanged) offAuthStateChanged();
-    offAuthStateChanged = onAuthStateChanged(auth, function (user) {
-      if (user) {
-        // @ts-ignore
-        if (user.email.split("@")[0] === State.docId) {
-          console.log("user logged");
-          State.isLogged.pub(true);
-        } else {
-          console.log("user not logged");
-          State.isLogged.pub(false);
-        }
+export function initAuthListener() {
+  if (offAuthStateChanged) offAuthStateChanged();
+  offAuthStateChanged = onAuthStateChanged(auth, function (user) {
+    if (user) {
+      // @ts-ignore
+      if (user.email.split("@")[0] === State.docId) {
+        console.log("user logged");
+        State.isLogged.pub(true);
       } else {
-        console.log("no user");
+        console.log("user not logged");
         State.isLogged.pub(false);
       }
-    });
-  }
-  static startLiveDoc() {
-    if (offSnapshot) offSnapshot();
-    offSnapshot = onSnapshot(
-      doc(db, "docs", State.docId),
-      function (res) {
-        const data = res.data() || { text: "" };
-        if (res.exists()) {
-          State.protected.pub(data.protected !== undefined);
-          State.public.pub(data.public !== undefined);
-        } else {
-          State.protected.pub(false);
-          State.public.pub(false);
-        }
-        if (res.metadata.hasPendingWrites) return;
-        State.isHidden.pub(false);
-        State.status.pub("");
-        Dom.text = data.text;
-      },
-      function (err) {
-        console.error(err);
-        State.isHidden.pub(true);
-        State.status.pub("Protected");
+    } else {
+      console.log("no user");
+      State.isLogged.pub(false);
+    }
+  });
+}
+
+export function initDocListener() {
+  if (offSnapshot) offSnapshot();
+  offSnapshot = onSnapshot(
+    doc(db, "docs", State.docId),
+    function (res) {
+      const data = res.data() || { text: "" };
+      if (res.exists()) {
+        State.protected.pub(data.protected !== undefined);
+        State.public.pub(data.public !== undefined);
+      } else {
+        State.protected.pub(false);
+        State.public.pub(false);
       }
-    );
-  }
+      if (res.metadata.hasPendingWrites) return;
+      State.isHidden.pub(false);
+      State.status.pub("");
+      Html.text = data.text;
+    },
+    function (err) {
+      console.error(err);
+      State.isHidden.pub(true);
+      State.status.pub("Protected");
+    }
+  );
+}
+
+export const Service = class {
   static login(password) {
     const email = State.docId + "@notepade.web.app";
     return signInWithEmailAndPassword(auth, email, password)
       .then(() => {
         console.log("User signed in");
-        Service.startLiveDoc();
+        initDocListener();
       })
       .catch((err) => {
-        if(err.code !== 'auth/user-not-found'){
+        if (err.code !== "auth/user-not-found") {
           alert(err.message);
           throw err;
         }
         return createUserWithEmailAndPassword(auth, email, password)
           .then(() => {
             console.log("User created");
-            Service.startLiveDoc();
+            initDocListener();
           })
           .catch((err) => {
             alert(err.message);
@@ -88,18 +91,22 @@ export const Service = class {
           });
       });
   }
+
   static logout() {
     signOut(auth);
   }
+
   static save() {
     const docRef = doc(db, "docs", State.docId);
-    return updateDoc(docRef, { text: Dom.text }).catch(() =>
-      setDoc(docRef, { text: Dom.text })
+    return updateDoc(docRef, { text: Html.text }).catch(() =>
+      setDoc(docRef, { text: Html.text })
     );
   }
+
   static update(obj) {
     return updateDoc(doc(db, "docs", State.docId), obj);
   }
+
   static setProtected(value = true) {
     if (value) {
       // @ts-ignore

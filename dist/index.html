@@ -8,62 +8,7 @@
 		<title>Notepad Online</title>
 		<noscript><div id="noscript">This web app needs Javascript enabled.</div></noscript>
 	</head>
-	<body hidden id="body">
-		<div id="status"><span>Loading...</span></div>
-
-		<div id="header">
-			<a href="#" id="theme">dark</a>
-			<a href="#" id="password" hidden>password</a>
-			<a href="#" id="options" hidden>options</a>
-		</div>
-
-		<div id="github">
-			<a href="https://github.com/lamartinecabral/notepad">
-				<img src="./assets/github.svg" alt="">
-			</a>
-		</div>
-
-		<div id="footer" hidden>
-			<a href="#" id="markdown">markdown</a>
-		</div>
-		
-		<div id="backdrop" hidden>
-			<div id="modal">
-				<div id="options-modal" hidden>
-					<div>
-						<input type="checkbox" name="protected" id="protected">
-						<label for="protected" title="Only you can edit">Protected</label>
-					</div>
-					<div>
-						<input type="checkbox" name="public" id="public">
-						<label for="public" title="Everyone can read">Public</label>
-					</div>
-					<div>
-						<button id="logout">Logout</button>
-					</div>
-				</div>
-				<div id="password-modal" hidden>
-					<form id="form">
-						<input type="text" name="username" style="display: none;">
-						<label for="password">Password: </label>
-						<input type="password" name="password" id="password-input">
-						<input type="submit">
-					</form>
-				</div>
-			</div>
-		</div>
-
-		<textarea
-			name="textarea"
-			id="textarea"
-			autofocus
-			autocomplete="off"
-			autocorrect="off"
-			autocapitalize="off"
-			spellcheck="false"
-			hidden
-		></textarea>
-
+	<body>
 		<script src="./js/firebase.js"></script>
 		<script src="./js/main.js"></script>
 	</body>

@@ -2,7 +2,7 @@
     font-family: monospace;
 }
 
-body{
+#app{
     --light: #fff;
     --dark: #000;
     --background: var(--light);
@@ -51,6 +51,12 @@ body{
     position: fixed;
     top: 0px;
     right: 3em;
+    --margin: 4px;
+    margin: 0 calc(var(--margin) * -1);
+}
+
+#header > *{
+    margin: 0 var(--margin);
 }
 
 #footer{
@@ -87,11 +93,11 @@ body{
     border: 1px solid var(--color);
 }
 
-#options-modal > div:nth-child(2) {
+#optionsModal > div:nth-child(2) {
     margin-top: 0.5em;
 }
 
-#options-modal > div:nth-child(3) {
+#optionsModal > div:nth-child(3) {
     margin-top: 1em;
     text-align: center;
 }

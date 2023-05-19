@@ -1,101 +1,189 @@
 // @ts-check
 
-import { randomString, Subject } from "./utils";
+import { Service } from "./service";
+import { State } from "./state";
+import { Html } from "./html";
+import { debounce } from "./utils";
+import { Id } from "./enum";
 
-export const State = {
-  docId: (document.URL.split("?")[1] || "").split("#")[0],
-  public: new Subject(false),
-  protected: new Subject(false),
-  status: new Subject("loading..."),
-  isLogged: new Subject(false),
-  isHidden: new Subject(true),
-  nightMode: new Subject(
-    localStorage && localStorage.getItem("nightMode") === "true"
-  ),
-  showOptions: new Subject(false),
-  showPassword: new Subject(false),
-};
-if (!State.docId) location.replace("?" + randomString(6));
-else State.docId = State.docId.toLowerCase();
-
-export const Dom = class {
-  /** @type {(id: string)=>HTMLElement} */
-  static get(id) {
+export function initStateListeners() {
+  State.protected.sub(function (value) {
     // @ts-ignore
-    return document.getElementById(id);
-  }
-  /** @type {(id: string)=>HTMLElement} */
-  static getChild(id) {
+    Html.get(Id.protected).checked = value;
+    Html.getParent(Id.public).hidden = !value;
+  });
+
+  State.public.sub(function (value) {
     // @ts-ignore
-    return Dom.get(id).children[0];
-  }
-  /** @type {(id: string)=>HTMLElement} */
-  static getParent(id) {
-    // @ts-ignore
-    return Dom.get(id).parentElement;
-  }
-  /** @type {string} */
-  static get text() {
-    // @ts-ignore
-    return Dom.get("textarea").value;
-  }
-  static set text(text) {
-    /** @type {HTMLTextAreaElement} */ // @ts-ignore
-    const textarea = Dom.get("textarea");
-    const selectionStart = textarea.selectionStart;
-    const selectionEnd = textarea.selectionEnd;
-    textarea.value = text;
-    textarea.selectionStart = selectionStart;
-    textarea.selectionEnd = selectionEnd;
-  }
-};
+    Html.get(Id.public).checked = value;
+  });
 
-State.protected.sub(function (value) {
-  // @ts-ignore
-  Dom.get("protected").checked = value;
-  Dom.getParent("public").hidden = !value;
-});
+  State.status.sub(function (value) {
+    Html.getChild(Id.status).innerText = value;
+  });
 
-State.public.sub(function (value) {
-  // @ts-ignore
-  Dom.get("public").checked = value;
-});
+  State.isHidden.sub(function (value) {
+    Html.get(Id.textarea).hidden = value;
+    Html.get(Id.footer).hidden = value;
+    if (!value) {
+      // @ts-ignore
+      Html.get(Id.markdown).href =
+        location.origin + "/markdown/?" + State.docId;
+    }
+  });
 
-State.status.sub(function (value) {
-  Dom.getChild("status").innerText = value;
-});
+  State.isLogged.sub(function (value) {
+    Html.get(Id.password).hidden = value;
+    Html.get(Id.options).hidden = !value;
+  });
 
-State.isHidden.sub(function (value) {
-  Dom.get("textarea").hidden = value;
-  Dom.get("footer").hidden = value;
-  if (!value) {
-    // @ts-ignore
-    Dom.get("markdown").href =
-      location.origin + "/markdown/?" + State.docId;
-  }
-});
+  State.nightMode.sub(function (value) {
+    Html.get(Id.app).style.cssText =
+      `--background: var(--${value ? "dark" : "light"}); ` +
+      `--color: var(--${!value ? "dark" : "light"});`;
+    Html.get(Id.theme).innerText = value ? "light" : "dark";
+    if (localStorage) localStorage.setItem("nightMode", "" + value);
+  });
 
-State.isLogged.sub(function (value) {
-  Dom.get("password").hidden = value;
-  Dom.get("options").hidden = !value;
-});
+  State.showPassword.sub(function (value) {
+    Html.get(Id.backdrop).hidden = !value;
+    Html.get(Id.passwordModal).hidden = !value;
+    Html.get(Id.passwordInput).focus();
+  });
 
-State.nightMode.sub(function (value) {
-  document.body.style.cssText =
-    `--background: var(--${value ? "dark" : "light"}); ` +
-    `--color: var(--${!value ? "dark" : "light"});`;
-  Dom.get("theme").innerText = value ? "light" : "dark";
-  if (localStorage) localStorage.setItem("nightMode", "" + value);
-});
+  State.showOptions.sub(function (value) {
+    Html.get(Id.backdrop).hidden = !value;
+    Html.get(Id.optionsModal).hidden = !value;
+    Html.get(Id.protected).focus();
+  });
+}
 
-State.showPassword.sub(function (value) {
-  Dom.get("backdrop").hidden = !value;
-  Dom.get("password-modal").hidden = !value;
-  Dom.get("password-input").focus();
-});
+export function initEventListeners() {
+  /** @type {{elemId: Id, event: keyof HTMLElementEventMap, handler: any}[]} */
+  const eventHandlers = [
+    {
+      elemId: Id.app,
+      event: "keyup",
+      handler: function (ev) {
+        if (ev.key === "Escape" || ev.keyCode === 27) {
+          State.showPassword.pub(false);
+          State.showOptions.pub(false);
+        }
+      },
+    },
+    {
+      elemId: Id.theme,
+      event: "click",
+      handler: function () {
+        State.nightMode.pub(!State.nightMode.value);
+      },
+    },
+    {
+      elemId: Id.password,
+      event: "click",
+      handler: function () {
+        State.showPassword.pub(true);
+      },
+    },
+    {
+      elemId: Id.options,
+      event: "click",
+      handler: function () {
+        State.showOptions.pub(true);
+      },
+    },
+    {
+      elemId: Id.backdrop,
+      event: "click",
+      handler: function () {
+        State.showPassword.pub(false);
+        State.showOptions.pub(false);
+      },
+    },
+    {
+      elemId: Id.modal,
+      event: "click",
+      handler: function (ev) {
+        ev.stopPropagation();
+      },
+    },
+    {
+      elemId: Id.protected,
+      event: "change",
+      handler: function () {
+        Service.setProtected(!State.protected.value);
+        Html.getParent(Id.public).hidden = State.protected.value;
+      },
+    },
+    {
+      elemId: Id.public,
+      event: "change",
+      handler: function () {
+        Service.setPublic(!State.public.value);
+      },
+    },
+    {
+      elemId: Id.logout,
+      event: "click",
+      handler: function () {
+        Service.logout();
+        State.showOptions.pub(false);
+      },
+    },
+    {
+      elemId: Id.form,
+      event: "submit",
+      handler: function (ev) {
+        ev.preventDefault();
+        Service.login(ev.target[1].value);
+        State.showPassword.pub(false);
+        ev.target[1].value = "";
+      },
+    },
+    {
+      elemId: Id.textarea,
+      event: "keydown",
+      handler: function (ev) {
+        if (ev.ctrlKey || ev.shiftKey || ev.altKey) return;
+        if (ev.keyCode === 9 || ev.key === "Tab") {
+          ev.preventDefault();
+          return document.execCommand("insertText", false, "\t");
+        } else if (ev.keyCode === 13 || ev.key === "Enter") {
+          ev.preventDefault();
+          let ident = "";
+          for (let j = ev.target.selectionStart; j; ) {
+            let char = ev.target.value[--j];
+            if (char === "\n") break;
+            if (char === " " || char === "\t") ident = char + ident;
+            else ident = "";
+          }
+          return document.execCommand("insertText", false, "\n" + ident);
+        }
+      },
+    },
+    {
+      elemId: Id.textarea,
+      event: "input",
+      handler: debounce(function () {
+        State.status.pub("Saving...");
+        Service.save()
+          .then(() => {
+            State.status.pub("");
+          })
+          .catch((err) => {
+            console.error(err);
+            State.status.pub("Protected");
+          });
+      }, 500),
+    },
+  ];
 
-State.showOptions.sub(function (value) {
-  Dom.get("backdrop").hidden = !value;
-  Dom.get("options-modal").hidden = !value;
-  Dom.get("protected").focus();
-});
+  eventHandlers.forEach(function (entry) {
+    try {
+      Html.get(entry.elemId).addEventListener(entry.event, entry.handler);
+    } catch (err) {
+      console.log("unable to add event listener", entry);
+      throw err;
+    }
+  });
+}
