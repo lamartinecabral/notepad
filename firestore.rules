@@ -27,7 +27,9 @@ service cloud.firestore {
           )
         ) || (
           addedKeys() == ['protected'].toSet() &&
-          request.auth != null && request.auth.uid == request.resource.data.protected
+          request.auth != null &&
+          request.auth.uid == request.resource.data.protected &&
+          ( !hasOwner(docId) || isOwner(docId) )
         ) || (
           removedKeys() == ['protected'].toSet() &&
           request.auth.uid == resource.data.protected
@@ -37,9 +39,9 @@ service cloud.firestore {
         );
       allow get: if
         !exists(request.path) ||
-        !('protected' in resource.data.keys()) ||
+        !('protected' in resource.data) ||
         request.auth.uid == resource.data.protected ||
-        resource.data.public == true;
+        'public' in resource.data;
     }
     
     match /ownerships/{docId} {
@@ -47,10 +49,11 @@ service cloud.firestore {
         request.resource.data.keys() == ['owner'] &&
         request.auth != null &&
         request.auth.uid == request.resource.data.owner &&
-        request.auth.token.email_verified;
-      allow delete: if
-        request.auth != null &&
-        request.auth.uid == request.resource.data.owner;
+        request.auth.token.email_verified &&
+        exists(path(/docs/$(docId))) &&
+        !isProtected(docId);
+      allow get: if
+      	!hasOwner(docId);
     }
     
     function affectedKeys(){
@@ -64,6 +67,18 @@ service cloud.firestore {
     }
     function changedKeys(){
       return request.resource.data.diff(resource.data).changedKeys();
+    }
+    function path(docPath){
+    	return /databases/$(database)/documents/$(docPath);
+    }
+    function isProtected(docId){
+    	return 'protected' in get(path(/docs/$(docId))).data;
+    }
+    function hasOwner(docId){
+    	return exists(path(/ownerships/$(docId)));
+    }
+    function isOwner(docId){
+    	return request.auth.uid == get(path(/ownerships/$(docId))).data.owner;
     }
   }
 }
