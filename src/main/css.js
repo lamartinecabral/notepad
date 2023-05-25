@@ -28,6 +28,7 @@ const rules = [
     tabSize: 4,
     background: "var(--background)",
     color: "var(--color)",
+    overflowAnchor: "none", // it fixes chromium's scroll anchor bug https://bugs.chromium.org/p/chromium/issues/detail?id=997266
   }),
   css(`#${Id.github}`, {
     position: "fixed",
