@@ -48,15 +48,52 @@ export function debounce(handler, timeout) {
 }
 
 /**
- * @param {string} tag
- * @param {Partial<HTMLElement | HTMLInputElement | HTMLAnchorElement | {}>} [attributes]
- * @param {Array<HTMLElement | string>} [children]
- * @param {Array<{type: keyof HTMLElementEventMap, handler: (ev: Event)=>any}>} [listeners]
+ * @param {HTMLElement} element
+ * @param {Partial<CSSStyleDeclaration | {}>} style
+ */
+function setInlineStyle(element, style) {
+  for (var prop in style) {
+    if (prop in element.style) element.style[prop] = style[prop];
+    else element.style.setProperty(prop, style[prop]);
+  }
+}
+
+/**
+ * @typedef {'div' | 'img' | 'textarea' | 'a' | 'input'} SomeTags
+ * @typedef {HTMLElementTagNameMap[SomeTags]} SomeElements
+ */
+
+/**
+ * @param {keyof HTMLElementTagNameMap} tag
+ * @param {Partial<SomeElements | {}>} [attributes]
+ * @param {Array<string | HTMLElement>} [children]
+ * @typedef {keyof HTMLElementEventMap} EventType
+ * @param {Partial<Record<EventType, (ev: any) => any>>} [listenerMap]
  * */
-export function elem(tag, attributes = {}, children = [], listeners = []) {
+export function elem(tag, attributes = {}, children = [], listenerMap = {}) {
   var el = document.createElement(tag);
   for (var attr in attributes) el[attr] = attributes[attr];
+  // @ts-ignore
+  setInlineStyle(el, attributes.style);
   for (var child of children) el.append(child);
-  for (var entry of listeners) el.addEventListener(entry.type, entry.handler);
+  for (var type in listenerMap) el.addEventListener(type, listenerMap[type]);
   return el;
+}
+
+/**
+ * @param {string} selector
+ * @param {Partial<CSSStyleDeclaration | {}>} properties
+ */
+export function css(selector, properties) {
+  var el = document.createElement("span");
+  setInlineStyle(el, properties);
+  return selector + " {" + el.style.cssText + "}";
+}
+
+/** @returns {CSSStyleSheet} */
+export function createStyle() {
+  const style = document.createElement("style");
+  document.head.append(style);
+  // @ts-ignore
+  return style.sheet;
 }

@@ -1,12 +1,16 @@
 <html>
 	<head>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF-8">
-		<!-- <script>if('serviceWorker' in navigator){ navigator.serviceWorker.register('./sw.js', {scope: '/'}); };</script> -->
 		<link rel="icon" type="image/ico" href="./assets/favicon.ico">
-		<!-- <link rel="manifest" href="./manifest.webmanifest"> -->
-		<link rel="stylesheet" type="text/css" href="./main.css">
 		<title>Notepad Online</title>
-		<noscript><div id="noscript">This web app needs Javascript enabled.</div></noscript>
+		<noscript>
+			<div style="position: fixed;
+				text-align: center;
+				width: 100%;
+				top: calc(50% - 1em);">
+				This web app needs Javascript enabled.
+			</div>
+		</noscript>
 	</head>
 	<body>
 		<script src="./js/firebase.js"></script>

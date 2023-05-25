@@ -38,10 +38,9 @@ export function initStateListeners() {
   });
 
   State.nightMode.sub(function (value) {
-    Html.get(Id.app).style.cssText =
-      `--background: var(--${value ? "dark" : "light"}); ` +
-      `--color: var(--${!value ? "dark" : "light"});`;
-    Html.get(Id.theme).innerText = value ? "light" : "dark";
+    const theme = ["light", "dark"];
+    Html.get(Id.app).className = theme[+value];
+    Html.get(Id.theme).innerText = theme[+!value];
     if (localStorage) localStorage.setItem("nightMode", "" + value);
   });
 
@@ -64,7 +63,7 @@ export function initEventListeners() {
     {
       elemId: Id.app,
       event: "keyup",
-      handler: function (ev) {
+      handler: function (/** @type {HTMLElementEventMap['keyup']} */ ev) {
         if (ev.key === "Escape" || ev.keyCode === 27) {
           State.showPassword.pub(false);
           State.showOptions.pub(false);
@@ -133,8 +132,9 @@ export function initEventListeners() {
     {
       elemId: Id.form,
       event: "submit",
-      handler: function (ev) {
+      handler: function (/** @type {HTMLElementEventMap['submit']} */ ev) {
         ev.preventDefault();
+        if (!ev.target) return;
         Service.login(ev.target[1].value);
         State.showPassword.pub(false);
         ev.target[1].value = "";
@@ -143,7 +143,7 @@ export function initEventListeners() {
     {
       elemId: Id.textarea,
       event: "keydown",
-      handler: function (ev) {
+      handler: function (/** @type {HTMLElementEventMap['keydown']} */ ev) {
         if (ev.ctrlKey || ev.shiftKey || ev.altKey) return;
         if (ev.keyCode === 9 || ev.key === "Tab") {
           ev.preventDefault();
@@ -151,8 +151,10 @@ export function initEventListeners() {
         } else if (ev.keyCode === 13 || ev.key === "Enter") {
           ev.preventDefault();
           let ident = "";
-          for (let j = ev.target.selectionStart; j; ) {
-            let char = ev.target.value[--j];
+          /** @type {HTMLTextAreaElement} */ // @ts-ignore
+          const target = Html.get(Id.textarea);
+          for (let j = target.selectionStart; j; ) {
+            let char = target.value[--j];
             if (char === "\n") break;
             if (char === " " || char === "\t") ident = char + ident;
             else ident = "";
