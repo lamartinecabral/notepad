@@ -60,7 +60,7 @@ const components = [
     autocomplete: "off",
     autocorrect: "off",
     autocapitalize: "off",
-    spellcheck: "false",
+    spellcheck: false,
     hidden: true,
   }),
 ];
@@ -97,6 +97,9 @@ export const Html = class {
   }
 };
 
-document.body.id = Id.app;
-Html.get(Id.app).hidden = true;
-Html.get(Id.app).append(...components);
+export function initHtml() {
+  document.body.id = Id.app;
+  Html.get(Id.app).hidden = true;
+  Html.get(Id.app).className = "light";
+  Html.get(Id.app).append(...components);
+}
