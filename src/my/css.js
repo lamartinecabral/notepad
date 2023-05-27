@@ -1,13 +1,27 @@
 // @ts-check
 
 import { createStyle, css } from "../utils";
+import { Id } from "./enum";
 
 const rules = [
   css("*", {
     fontFamily: "monospace",
   }),
-  css("h1", {
-    color: "red",
+  css(".margin", {
+    margin: "1em",
+  }),
+  css(".center", {
+    textAlign: "center",
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+  }),
+  css(`#${Id.loginContainer}`, {
+    padding: "2em",
+  }),
+  css(`#${Id.content} table`, {
+    margin: "auto",
   }),
 ];
 
