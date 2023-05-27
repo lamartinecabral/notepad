@@ -47,6 +47,24 @@ export function debounce(handler, timeout) {
   };
 }
 
+export const Html = class {
+  /** @type {(id: string)=>HTMLElement} */
+  static get(id) {
+    // @ts-ignore
+    return document.getElementById(id);
+  }
+  /** @type {(id: string)=>HTMLElement} */
+  static getChild(id) {
+    // @ts-ignore
+    return Html.get(id).children[0];
+  }
+  /** @type {(id: string)=>HTMLElement} */
+  static getParent(id) {
+    // @ts-ignore
+    return Html.get(id).parentElement;
+  }
+};
+
 /**
  * @param {HTMLElement} element
  * @param {Partial<CSSStyleDeclaration | {}>} style

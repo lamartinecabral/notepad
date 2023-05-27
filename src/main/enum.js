@@ -18,6 +18,7 @@ const IdEnum = {
   /** @type {'logout'} */ logout: "logout",
   /** @type {'passwordModal'} */ passwordModal: "passwordModal",
   /** @type {'form'} */ form: "form",
+  /** @type {'emailInput'} */ emailInput: "emailInput",
   /** @type {'passwordInput'} */ passwordInput: "passwordInput",
   /** @type {'textarea'} */ textarea: "textarea",
 };

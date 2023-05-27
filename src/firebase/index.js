@@ -11,6 +11,8 @@ import {
 import {
   deleteField,
   doc,
+  getDoc,
+  getDocs,
   getFirestore,
   onSnapshot,
   setDoc,
@@ -38,6 +40,8 @@ const storage = {
 const firestore = {
   deleteField,
   doc,
+  getDoc,
+  getDocs,
   getFirestore,
   onSnapshot,
   setDoc,
