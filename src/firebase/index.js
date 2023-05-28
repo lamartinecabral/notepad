@@ -9,18 +9,26 @@ import {
   uploadBytes,
 } from "firebase/storage";
 import {
+  collection,
+  deleteDoc,
   deleteField,
   doc,
+  getDoc,
+  getDocs,
   getFirestore,
   onSnapshot,
+  query,
   setDoc,
   updateDoc,
+  where,
 } from "firebase/firestore";
 import {
   createUserWithEmailAndPassword,
   getAuth,
   getIdToken,
   onAuthStateChanged,
+  sendEmailVerification,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
@@ -36,18 +44,26 @@ const storage = {
   uploadBytes,
 };
 const firestore = {
+  collection,
+  deleteDoc,
   deleteField,
   doc,
+  getDoc,
+  getDocs,
   getFirestore,
   onSnapshot,
+  query,
   setDoc,
   updateDoc,
+  where,
 };
 const auth = {
   createUserWithEmailAndPassword,
   getAuth,
   getIdToken,
   onAuthStateChanged,
+  sendEmailVerification,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signOut,
 };

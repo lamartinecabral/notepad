@@ -1,6 +1,6 @@
 // @ts-check
 
-import { randomString, Subject } from "./utils";
+import { randomString, Subject } from "../utils";
 
 export const State = {
   docId: (document.URL.split("?")[1] || "").split("#")[0],
@@ -8,6 +8,7 @@ export const State = {
   protected: new Subject(false),
   status: new Subject("loading..."),
   isLogged: new Subject(false),
+  hasOwner: new Subject(false),
   isHidden: new Subject(true),
   nightMode: new Subject(
     localStorage && localStorage.getItem("nightMode") === "true"

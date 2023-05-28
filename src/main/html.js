@@ -1,7 +1,7 @@
 // @ts-check
 
 import { Id } from "./enum";
-import { elem } from "./utils";
+import { elem, Html as HtmlBase } from "../utils";
 
 const components = [
   elem("div", { id: Id.status }, [elem("span", {}, ["Loading..."])]),
@@ -41,8 +41,11 @@ const components = [
       ]),
       elem("div", { id: Id.passwordModal, hidden: true }, [
         elem("form", { id: Id.form }, [
-          elem("input", { type: "text", name: "username", hidden: true }),
-          elem("label", { for: "password" }, ["Password: "]),
+          elem("span", { id: Id.emailInput, hidden: true }, [
+            elem("label", { for: "username" }, [" E-mail: "]),
+            elem("input", { type: "text", name: "username" }),
+          ]),
+          elem("label", { for: "password" }, [" Password: "]),
           elem("input", {
             id: Id.passwordInput,
             type: "password",
@@ -65,22 +68,7 @@ const components = [
   }),
 ];
 
-export const Html = class {
-  /** @type {(id: Id)=>HTMLElement} */
-  static get(id) {
-    // @ts-ignore
-    return document.getElementById(id);
-  }
-  /** @type {(id: Id)=>HTMLElement} */
-  static getChild(id) {
-    // @ts-ignore
-    return Html.get(id).children[0];
-  }
-  /** @type {(id: Id)=>HTMLElement} */
-  static getParent(id) {
-    // @ts-ignore
-    return Html.get(id).parentElement;
-  }
+export class Html extends HtmlBase {
   /** @type {string} */
   static get text() {
     // @ts-ignore
@@ -95,7 +83,7 @@ export const Html = class {
     textarea.selectionStart = selectionStart;
     textarea.selectionEnd = selectionEnd;
   }
-};
+}
 
 export function initHtml() {
   document.body.id = Id.app;

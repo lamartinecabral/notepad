@@ -3,7 +3,7 @@
 import { Service } from "./service";
 import { State } from "./state";
 import { Html } from "./html";
-import { debounce } from "./utils";
+import { debounce } from "../utils";
 import { Id } from "./enum";
 
 export function initStateListeners() {
@@ -54,6 +54,10 @@ export function initStateListeners() {
     Html.get(Id.backdrop).hidden = !value;
     Html.get(Id.optionsModal).hidden = !value;
     Html.get(Id.protected).focus();
+  });
+
+  State.hasOwner.sub(function (value) {
+    Html.get(Id.emailInput).hidden = !value;
   });
 }
 
@@ -135,9 +139,14 @@ export function initEventListeners() {
       handler: function (/** @type {HTMLElementEventMap['submit']} */ ev) {
         ev.preventDefault();
         if (!ev.target) return;
-        Service.login(ev.target[1].value);
+        const email = State.hasOwner.value
+          ? ev.target[0].value
+          : State.docId + "@notepade.web.app";
+        const password = ev.target[1].value;
+        Service.login(email, password);
         State.showPassword.pub(false);
-        ev.target[1].value = "";
+        // @ts-ignore
+        ev.target.reset();
       },
     },
     {

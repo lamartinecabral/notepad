@@ -53,7 +53,7 @@ service cloud.firestore {
         exists(path(/docs/$(docId))) &&
         !isProtected(docId);
       allow get: if
-      	!hasOwner(docId);
+      	!hasOwner(docId) || isOwner(docId);
     }
     
     function affectedKeys(){
@@ -78,7 +78,7 @@ service cloud.firestore {
     	return exists(path(/ownerships/$(docId)));
     }
     function isOwner(docId){
-    	return request.auth.uid == get(path(/ownerships/$(docId))).data.owner;
+    	return request.auth != null && request.auth.uid == get(path(/ownerships/$(docId))).data.owner;
     }
   }
 }

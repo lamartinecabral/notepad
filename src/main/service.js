@@ -10,7 +10,8 @@ const app = firebase.app.initializeApp(firebase.config, State.docId || "");
 const auth = firebase.auth.getAuth(app);
 const db = firebase.firestore.getFirestore(app);
 
-const { doc, onSnapshot, updateDoc, setDoc, deleteField } = firebase.firestore;
+const { doc, getDoc, onSnapshot, updateDoc, setDoc, deleteField } =
+  firebase.firestore;
 
 const {
   onAuthStateChanged,
@@ -25,19 +26,10 @@ const {
 export function initAuthListener() {
   if (offAuthStateChanged) offAuthStateChanged();
   offAuthStateChanged = onAuthStateChanged(auth, function (user) {
-    if (user) {
-      // @ts-ignore
-      if (user.email.split("@")[0] === State.docId) {
-        console.log("user logged");
-        State.isLogged.pub(true);
-      } else {
-        console.log("user not logged");
-        State.isLogged.pub(false);
-      }
-    } else {
-      console.log("no user");
-      State.isLogged.pub(false);
-    }
+    Service.isLogged().then((value) => {
+      State.isLogged.pub(value);
+      console.log("user", !!user, "logged", value);
+    });
   });
 }
 
@@ -68,15 +60,15 @@ export function initDocListener() {
 }
 
 export const Service = class {
-  static login(password) {
-    const email = State.docId + "@notepade.web.app";
+  static login(email, password) {
+    const isOwnerLogin = email !== State.docId + "@notepade.web.app";
     return signInWithEmailAndPassword(auth, email, password)
       .then(() => {
         console.log("User signed in");
         initDocListener();
       })
       .catch((err) => {
-        if (err.code !== "auth/user-not-found") {
+        if (!isOwnerLogin || err.code !== "auth/user-not-found") {
           alert(err.message);
           throw err;
         }
@@ -123,5 +115,34 @@ export const Service = class {
     } else {
       return Service.update({ public: deleteField() });
     }
+  }
+
+  static checkOwnership() {
+    const docRef = doc(db, "ownerships", State.docId);
+    return getDoc(docRef)
+      .then((value) => {
+        const hasOwner = value.exists();
+        const isOwner =
+          hasOwner && value.data().owner === (auth.currentUser || {}).uid;
+        return { hasOwner, isOwner };
+      })
+      .catch(() => ({
+        hasOwner: true,
+        isOwner: false,
+      }))
+      .then((result) => {
+        State.hasOwner.pub(result.hasOwner);
+        return result;
+      });
+  }
+  static isLogged() {
+    return Service.checkOwnership().then((details) => {
+      const user = auth.currentUser;
+      if (user)
+        return details.hasOwner
+          ? details.isOwner
+          : (user.email || "").split("@")[0] === State.docId;
+      else return false;
+    });
   }
 };
