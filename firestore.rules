@@ -2,8 +2,6 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     match /docs/{docId} {
-      allow read, write: if
-        request.auth.uid == 'KP3btlGYJWOCUFUTzOPoQsRKhR93';
       allow create: if
         request.resource.data.keys() == ['text'] &&
         request.resource.data.text is string;
