@@ -1,6 +1,7 @@
 // @ts-check
 
-import { elem, Html } from "../utils";
+import { elem, Html, trunc } from "../utils";
+import { Control } from "./control";
 import { Id } from "./enum";
 import { Service } from "./service";
 
@@ -51,45 +52,72 @@ const components = [
     ]),
   ]),
   elem("div", { id: Id.content, className: "center", hidden: true }, [
-    elem("div", { id: Id.docList, className: "margin" }),
-    elem("div", { className: "margin" }, [
-      elem("label", { for: "docId" }, ["Note id: "]),
-      elem("input", { id: Id.claimInput, type: "text", name: "docId" }),
-      elem("button", { id: Id.claimButton }, ["claim"]),
+    elem("div", { id: Id.docList, className: "margin" }, [
+      elem("table", {}, [
+        elem("tr", {}, [
+          elem("th"),
+          elem("th", { title: "Only you can edit" }, ["Protected"]),
+          elem("th", { title: "Everyone can read", className: "hpadding" }, [
+            "Public",
+          ]),
+        ]),
+      ]),
     ]),
-    elem("button", { id: Id.logout, type: "button", className: "margin" }, [
-      "Logout",
+    elem("div", { className: "margin" }, [
+      elem("button", { id: Id.claimButton, className: "margin" }, ["claim"]),
+      elem("button", { id: Id.logout, type: "button", className: "margin" }, [
+        "Logout",
+      ]),
     ]),
   ]),
 ];
 
-/** @param {string[]} list */
-export function makeList(list) {
-  return elem("table", {}, [
-    elem("tr", {}, [elem("th", { colSpan: 2 }, ["My notes"])]),
-    ...(list.length
-      ? list.map((doc) =>
-          elem("tr", {}, [
-            elem("td", {}, [
-              elem("a", { href: location.origin + "/?" + doc }, [doc]),
-            ]),
-            elem("td", {}, [
-              elem(
-                "button",
-                {
-                  onclick: () =>
-                    Service.drop(doc).catch(() => {
-                      alert(
-                        "Remove the protection of the note then try again."
-                      );
-                    }),
-                },
-                ["drop"]
-              ),
-            ]),
-          ])
-        )
-      : ["you have not claimed any notes yet"]),
+/** @param {import("./state").Doc} doc */
+export function makeDoc(doc) {
+  return elem("tr", { id: "tr_" + doc.id }, [
+    elem("td", {}, [
+      elem(
+        "a",
+        {
+          id: "a_" + doc.id,
+          href: location.origin + "/?" + doc.id,
+          title: trunc(doc.text, 280),
+        },
+        [doc.id]
+      ),
+    ]),
+    elem("td", { className: "checkbox" }, [
+      elem("input", {
+        id: "cbprot_" + doc.id,
+        type: "checkbox",
+        checked: !!doc.protected,
+        onchange: (/** @type {any} */ ev) => {
+          Control.setProtected(doc.id, ev.target.checked);
+        },
+      }),
+    ]),
+    elem("td", { className: "checkbox" }, [
+      elem("input", {
+        id: "cbpubl_" + doc.id,
+        type: "checkbox",
+        disabled: !doc.protected,
+        checked: !!doc.public,
+        onchange: (/** @type {any} */ ev) => {
+          Control.setPublic(doc.id, ev.target.checked);
+        },
+      }),
+    ]),
+    elem("td", {}, [
+      elem(
+        "button",
+        {
+          id: "bt_" + doc.id,
+          disabled: !!doc.protected,
+          onclick: () => Control.removeDoc(doc),
+        },
+        ["drop"]
+      ),
+    ]),
   ]);
 }
 

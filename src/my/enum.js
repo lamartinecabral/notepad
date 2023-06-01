@@ -11,7 +11,6 @@ const IdEnum = {
   /** @type {'password2'} */ password2: "password2",
   /** @type {'logout'} */ logout: "logout",
   /** @type {'docList'} */ docList: "docList",
-  /** @type {'claimInput'} */ claimInput: "claimInput",
   /** @type {'claimButton'} */ claimButton: "claimButton",
   /** @type {'resetPassword'} */ resetPassword: "resetPassword",
 };

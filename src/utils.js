@@ -7,6 +7,13 @@ export function randomString(length) {
   return str;
 }
 
+/** @type {(str: string, maxLen: number)=>string} */
+export function trunc(str, maxLen) {
+  return String(str).length > maxLen
+    ? String(str).substring(0, maxLen - 1) + "…"
+    : str;
+}
+
 /** @template T */
 export class Subject {
   /** @param {T} [value] */
