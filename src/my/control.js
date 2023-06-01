@@ -2,7 +2,7 @@
 
 import { Html } from "../utils";
 import { Id } from "./enum";
-import { makeList } from "./html";
+import { makeDoc } from "./html";
 import { Service } from "./service";
 import { State } from "./state";
 
@@ -11,11 +11,6 @@ export function initStateListeners() {
     if (typeof value !== "boolean") return;
     Html.get(Id.loginContainer).hidden = value;
     Html.get(Id.content).hidden = !value;
-  });
-  State.docs.sub(function (value) {
-    const ul = Html.getChild(Id.docList);
-    if (ul) ul.remove();
-    Html.get(Id.docList).append(makeList(value));
   });
   State.signupMode.sub(function (value) {
     Html.get(Id.password2).hidden = !value;
@@ -27,6 +22,40 @@ export function initStateListeners() {
     // @ts-ignore
     Html.get(Id.loginForm).reset();
   });
+}
+
+export class Control {
+  static addDoc(doc) {
+    State.docs.push(doc);
+    Html.getChild(Id.docList).append(makeDoc(doc));
+  }
+  static removeDoc(doc) {
+    const message =
+      "Are you sure? The note will be available for another user to claim it.";
+    if (!confirm(message)) return;
+    State.docs = State.docs.filter((d) => d.id !== doc.id);
+    Html.get("tr_" + doc.id).remove();
+    Service.drop(doc.id);
+  }
+  static setProtected(id, value) {
+    /** @type {HTMLInputElement} */ // @ts-ignore
+    const publ = Html.get("cbpubl_" + id);
+    /** @type {HTMLButtonElement} */ // @ts-ignore
+    const drop = Html.get("bt_" + id);
+    if (!value) publ.checked = false;
+    publ.disabled = !value;
+    drop.disabled = value;
+    Service.setProtected(id, value);
+  }
+  static setPublic(id, value) {
+    Service.setPublic(id, value);
+  }
+  static clear() {
+    State.docs = [];
+    const list = Html.getChild(Id.docList);
+    for (let i = list.children.length - 1; i >= 1; --i)
+      list.children[i].remove();
+  }
 }
 
 export function initEventListeners() {
@@ -55,19 +84,15 @@ export function initEventListeners() {
       elemId: Id.claimButton,
       event: "click",
       handler: function () {
+        const docId = prompt("Note ID:");
+        if (!docId) return;
         /** @type {HTMLInputElement} */ // @ts-ignore
-        const input = Html.get(Id.claimInput);
-        const docId = input.value;
-        Service.claim(docId)
-          .then(() => {
-            input.value = "";
-          })
-          .catch((err) => {
-            console.error(err);
-            alert(
-              "Failed. The note already has owner or is protected or does not exist."
-            );
-          });
+        Service.claim(docId).catch((err) => {
+          console.error(err);
+          alert(
+            "Failed. The note already has owner or is protected or does not exist."
+          );
+        });
       },
     },
     {

@@ -10,12 +10,21 @@ const rules = [
   css(".margin", {
     margin: "1em",
   }),
+  css(".hpadding", {
+    padding: "0 1em",
+  }),
   css(".center", {
     textAlign: "center",
     position: "absolute",
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
+  }),
+  css("td.checkbox", {
+    textAlign: "center",
+  }),
+  css("a, a:visited", {
+    color: "blue",
   }),
   css(`#${Id.loginContainer}`, {
     padding: "2em",

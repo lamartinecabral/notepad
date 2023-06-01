@@ -1,5 +1,7 @@
 // @ts-check
 
+import { Html } from "../utils";
+import { Control } from "./control";
 import { State } from "./state";
 
 /** @type {import('../firebase')['default']} */ // @ts-ignore
@@ -9,8 +11,18 @@ const app = firebase.app.initializeApp(firebase.config);
 const auth = firebase.auth.getAuth(app);
 const db = firebase.firestore.getFirestore(app);
 
-const { collection, query, where, getDocs, setDoc, doc, deleteDoc } =
-  firebase.firestore;
+const {
+  collection,
+  deleteDoc,
+  deleteField,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  setDoc,
+  updateDoc,
+  where,
+} = firebase.firestore;
 
 const {
   createUserWithEmailAndPassword,
@@ -53,12 +65,14 @@ export function listDocs() {
     )
   )
     .then(function (res) {
-      if (res.metadata.hasPendingWrites) return;
-      State.docs.pub(res.docs.map((doc) => doc.id));
+      res.docs.forEach(({ id }) => {
+        Service.getDoc(id).then((doc) => {
+          Control.addDoc(doc);
+        });
+      });
     })
     .catch(function (err) {
       console.error(err);
-      State.docs.pub([]);
     });
 }
 
@@ -80,20 +94,56 @@ export class Service {
   }
 
   static logout() {
-    return signOut(auth);
+    return signOut(auth).then(() => Control.clear());
   }
 
   static claim(docId) {
     return setDoc(doc(db, "ownerships", docId), {
       owner: (auth.currentUser || {}).uid,
-    }).then(() => listDocs());
+    })
+      .then(() => Service.getDoc(docId))
+      .then((doc) => Control.addDoc(doc));
   }
 
   static drop(docId) {
-    return deleteDoc(doc(db, "ownerships", docId)).then(() => listDocs());
+    return deleteDoc(doc(db, "ownerships", docId));
   }
 
   static resetPassword(email) {
     return sendPasswordResetEmail(auth, email);
+  }
+
+  /** @returns {Promise<import("./state").Doc>} */
+  static getDoc(id) {
+    // @ts-ignore
+    return getDoc(doc(db, "docs", id)).then((snap) => ({ ...snap.data(), id }));
+  }
+
+  static update(docum, obj) {
+    return updateDoc(doc(db, "docs", docum), obj);
+  }
+
+  static setProtected(doc, value = true) {
+    if (value) {
+      return Service.update(doc, {
+        protected: (auth.currentUser || {}).uid,
+      });
+    } else {
+      return Service.update(doc, {
+        public: deleteField(),
+      }).then(() =>
+        Service.update(doc, {
+          protected: deleteField(),
+        })
+      );
+    }
+  }
+
+  static setPublic(doc, value = true) {
+    if (value) {
+      return Service.update(doc, { public: true });
+    } else {
+      return Service.update(doc, { public: deleteField() });
+    }
   }
 }
