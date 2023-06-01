@@ -18,7 +18,7 @@ const rules = [
     position: "absolute",
     top: "50%",
     left: "50%",
-    transform: "translate(-50%, -50%)",
+    transform: "translate(max(-50%, -50vw), max(-50%, -50vh))",
   }),
   css("td.checkbox", {
     textAlign: "center",
