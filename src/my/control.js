@@ -64,6 +64,23 @@ export class Control {
     for (let i = list.children.length - 1; i >= 1; --i)
       list.children[i].remove();
   }
+
+  static checkUrlParams() {
+    const url = new URL(location.href);
+    const docId = new URL(location.href).searchParams.get("claim");
+    if (!docId) return;
+    Service.claim(docId)
+      .catch((err) => {
+        console.error(err);
+        alert(
+          "Failed. The note already has owner or is protected or does not exist."
+        );
+      })
+      .then(() => {
+        url.searchParams.delete("claim");
+        history.replaceState({}, "", url.href);
+      });
+  }
 }
 
 export function initEventListeners() {

@@ -72,6 +72,7 @@ function listDocs() {
       });
       if (!res.docs.length)
         State.message.pub("You have not claimed any notes yet.");
+      Control.checkUrlParams();
     })
     .catch(function (err) {
       console.error(err);
