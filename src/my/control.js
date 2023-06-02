@@ -22,12 +22,18 @@ export function initStateListeners() {
     // @ts-ignore
     Html.get(Id.loginForm).reset();
   });
+  State.message.sub(function (value) {
+    Html.get(Id.message).innerText = value;
+    Html.get(Id.message).hidden = !value;
+    Html.getChild(Id.docList).hidden = !!value;
+  });
 }
 
 export class Control {
   static addDoc(doc) {
     State.docs.push(doc);
     Html.getChild(Id.docList).append(makeDoc(doc));
+    State.message.pub("");
   }
   static removeDoc(doc) {
     const message =
@@ -36,6 +42,8 @@ export class Control {
     State.docs = State.docs.filter((d) => d.id !== doc.id);
     Html.get("tr_" + doc.id).remove();
     Service.drop(doc.id);
+    if (!State.docs.length)
+      State.message.pub("You have not claimed any notes yet.");
   }
   static setProtected(id, value) {
     /** @type {HTMLInputElement} */ // @ts-ignore

@@ -62,6 +62,7 @@ const components = [
           ]),
         ]),
       ]),
+      elem("div", { id: Id.message }, ["Loading..."]),
     ]),
     elem("div", { className: "margin" }, [
       elem("button", { id: Id.claimButton, className: "margin" }, ["claim"]),

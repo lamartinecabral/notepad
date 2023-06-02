@@ -13,6 +13,7 @@ const IdEnum = {
   /** @type {'docList'} */ docList: "docList",
   /** @type {'claimButton'} */ claimButton: "claimButton",
   /** @type {'resetPassword'} */ resetPassword: "resetPassword",
+  /** @type {'emptyMessage'} */ message: "emptyMessage",
 };
 
 /** @enum {keyof typeof IdEnum} */

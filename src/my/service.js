@@ -57,19 +57,21 @@ export function initAuthListener() {
   });
 }
 
-export function listDocs() {
-  return getDocs(
-    query(
-      collection(db, "ownerships"),
-      where("owner", "==", (auth.currentUser || {}).uid)
-    )
-  )
+function listDocs() {
+  const filter = query(
+    collection(db, "ownerships"),
+    where("owner", "==", (auth.currentUser || {}).uid)
+  );
+  State.message.pub("Loading...");
+  return getDocs(filter)
     .then(function (res) {
       res.docs.forEach(({ id }) => {
         Service.getDoc(id).then((doc) => {
           Control.addDoc(doc);
         });
       });
+      if (!res.docs.length)
+        State.message.pub("You have not claimed any notes yet.");
     })
     .catch(function (err) {
       console.error(err);
