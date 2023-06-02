@@ -69,7 +69,7 @@ export const Service = class {
         initDocListener();
       })
       .catch((err) => {
-        if (!isOwnerLogin || err.code !== "auth/user-not-found") {
+        if (isOwnerLogin || err.code !== "auth/user-not-found") {
           alert(err.message);
           throw err;
         }
