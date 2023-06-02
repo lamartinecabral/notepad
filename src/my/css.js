@@ -1,6 +1,6 @@
 // @ts-check
 
-import { createStyle, css } from "../utils";
+import { createStyle, css } from "../iuai";
 import { Id } from "./enum";
 
 const rules = [

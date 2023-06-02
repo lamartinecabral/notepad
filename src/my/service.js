@@ -1,6 +1,5 @@
 // @ts-check
 
-import { Html } from "../utils";
 import { Control } from "./control";
 import { State } from "./state";
 
