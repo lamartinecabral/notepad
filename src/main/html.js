@@ -1,7 +1,7 @@
 // @ts-check
 
 import { Id } from "./enum";
-import { elem, Html as HtmlBase } from "../utils";
+import { elem, Html as HtmlBase } from "../iuai";
 
 const components = [
   elem("div", { id: Id.status }, [elem("span", {}, ["Loading..."])]),
@@ -27,13 +27,13 @@ const components = [
             type: "checkbox",
             name: "protected",
           }),
-          elem("label", { for: "protected", title: "Only you can edit" }, [
+          elem("label", { htmlFor: "protected", title: "Only you can edit" }, [
             "Protected",
           ]),
         ]),
         elem("div", {}, [
           elem("input", { id: Id.public, type: "checkbox", name: "public" }),
-          elem("label", { for: "public", title: "Everyone can read" }, [
+          elem("label", { htmlFor: "public", title: "Everyone can read" }, [
             "Public",
           ]),
         ]),
@@ -47,7 +47,7 @@ const components = [
           elem("table", {}, [
             elem("tr", { id: Id.email, hidden: true }, [
               elem("td", {}, [
-                elem("label", { for: "username" }, [" E-mail: "]),
+                elem("label", { htmlFor: "username" }, [" E-mail: "]),
               ]),
               elem("td", {}, [
                 elem("input", {
@@ -59,7 +59,7 @@ const components = [
             ]),
             elem("tr", {}, [
               elem("td", {}, [
-                elem("label", { for: "password" }, [" Password: "]),
+                elem("label", { htmlFor: "password" }, [" Password: "]),
               ]),
               elem("td", {}, [
                 elem("input", {
@@ -85,6 +85,7 @@ const components = [
     id: Id.textarea,
     autofocus: true,
     autocomplete: "off",
+    // @ts-ignore
     autocorrect: "off",
     autocapitalize: "off",
     spellcheck: false,

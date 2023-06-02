@@ -1,6 +1,6 @@
 // @ts-check
 
-import { createStyle, css } from "../utils";
+import { createStyle, css } from "../iuai";
 import { Id } from "./enum";
 
 const rules = [
@@ -15,7 +15,7 @@ const rules = [
     position: "fixed",
     textAlign: "center",
     width: "100%",
-    top: 0,
+    top: "0",
   }),
   css(`#${Id.status} span`, {
     background: "var(--background)",
@@ -25,7 +25,7 @@ const rules = [
     width: "100%",
     height: "100%",
     resize: "none",
-    tabSize: 4,
+    tabSize: "4",
     background: "var(--background)",
     color: "var(--color)",
     overflowAnchor: "none", // it fixes chromium's scroll anchor bug https://bugs.chromium.org/p/chromium/issues/detail?id=997266
@@ -67,7 +67,7 @@ const rules = [
     width: "100%",
     height: "100%",
     background: "rgba(0, 0, 0, 0.6)",
-    zIndex: 1,
+    zIndex: "1",
   }),
   css(`#${Id.modal}`, {
     background: "var(--background)",
