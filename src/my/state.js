@@ -8,8 +8,6 @@ export const State = {
   /** @type {Subject<boolean>} */ // @ts-ignore
   isLogged: new Subject(null),
   signupMode: new Subject(false),
-  /** @type {Doc[]} */ // @ts-ignore
-  docs: [],
-  /** @type {Subject<string>} */ // @ts-ignore
+  /** @type {Doc[]} */ docs: [],
   message: new Subject("Loading..."),
 };

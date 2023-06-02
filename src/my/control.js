@@ -1,6 +1,6 @@
 // @ts-check
 
-import { Html } from "../utils";
+import { Html } from "../iuai";
 import { Id } from "./enum";
 import { makeDoc } from "./html";
 import { Service } from "./service";

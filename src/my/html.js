@@ -1,20 +1,24 @@
 // @ts-check
 
-import { elem, Html, trunc } from "../utils";
+import { trunc } from "../utils";
 import { Control } from "./control";
 import { Id } from "./enum";
-import { Service } from "./service";
+import { elem, Html } from "../iuai";
 
 const components = [
   elem("div", { id: Id.loginContainer, className: "center", hidden: true }, [
     elem("form", { id: Id.loginForm }, [
       elem("table", {}, [
         elem("tr", {}, [
-          elem("td", {}, [elem("label", { for: "username" }, [" E-mail: "])]),
+          elem("td", {}, [
+            elem("label", { htmlFor: "username" }, [" E-mail: "]),
+          ]),
           elem("td", {}, [elem("input", { type: "text", name: "username" })]),
         ]),
         elem("tr", {}, [
-          elem("td", {}, [elem("label", { for: "password" }, [" Password: "])]),
+          elem("td", {}, [
+            elem("label", { htmlFor: "password" }, [" Password: "]),
+          ]),
           elem("td", {}, [
             elem("input", {
               type: "password",
@@ -24,7 +28,7 @@ const components = [
         ]),
         elem("tr", { id: Id.password2, hidden: true }, [
           elem("td", {}, [
-            elem("label", { for: "password2" }, [" Repeat the password: "]),
+            elem("label", { htmlFor: "password2" }, [" Repeat the password: "]),
           ]),
           elem("td", {}, [
             elem("input", {
