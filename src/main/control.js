@@ -11,6 +11,7 @@ export function initStateListeners() {
     // @ts-ignore
     Html.get(Id.protected).checked = value;
     Html.getParent(Id.public).hidden = !value;
+    Control.setClaimButton();
   });
 
   State.public.sub(function (value) {
@@ -58,7 +59,17 @@ export function initStateListeners() {
 
   State.hasOwner.sub(function (value) {
     Html.get(Id.emailInput).hidden = !value;
+    Control.setClaimButton();
   });
+}
+
+class Control {
+  static setClaimButton() {
+    Html.get(Id.claim).hidden = State.hasOwner.value || State.protected.value;
+    // @ts-ignore
+    Html.getChild(Id.claim).href =
+      location.origin + "/my/?claim=" + State.docId;
+  }
 }
 
 export function initEventListeners() {

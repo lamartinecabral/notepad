@@ -40,18 +40,37 @@ const components = [
         elem("div", {}, [elem("button", { id: Id.logout }, ["logout"])]),
       ]),
       elem("div", { id: Id.passwordModal, hidden: true }, [
+        elem("div", { id: Id.claim, hidden: true }, [
+          elem("a", {}, ["claim this note"]),
+        ]),
         elem("form", { id: Id.form }, [
-          elem("span", { id: Id.emailInput, hidden: true }, [
-            elem("label", { for: "username" }, [" E-mail: "]),
-            elem("input", { type: "text", name: "username" }),
+          elem("table", {}, [
+            elem("tr", { id: Id.emailInput, hidden: true }, [
+              elem("td", {}, [
+                elem("label", { for: "username" }, [" E-mail: "]),
+              ]),
+              elem("td", {}, [
+                elem("input", { type: "text", name: "username" }),
+              ]),
+            ]),
+            elem("tr", {}, [
+              elem("td", {}, [
+                elem("label", { for: "password" }, [" Password: "]),
+              ]),
+              elem("td", {}, [
+                elem("input", {
+                  id: Id.passwordInput,
+                  type: "password",
+                  name: "password",
+                }),
+              ]),
+            ]),
+            elem("tr", {}, [
+              elem("td", { colSpan: 2, style: { textAlign: "center" } }, [
+                elem("input", { type: "submit" }),
+              ]),
+            ]),
           ]),
-          elem("label", { for: "password" }, [" Password: "]),
-          elem("input", {
-            id: Id.passwordInput,
-            type: "password",
-            name: "password",
-          }),
-          elem("input", { type: "submit" }),
         ]),
       ]),
     ]),

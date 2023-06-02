@@ -21,6 +21,7 @@ const IdEnum = {
   /** @type {'emailInput'} */ emailInput: "emailInput",
   /** @type {'passwordInput'} */ passwordInput: "passwordInput",
   /** @type {'textarea'} */ textarea: "textarea",
+  /** @type {'claim'} */ claim: "claim",
 };
 
 /** @enum {keyof typeof IdEnum} */

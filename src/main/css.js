@@ -51,7 +51,7 @@ const rules = [
     bottom: "2px",
     right: "3em",
   }),
-  css(`#${Id.header} a, #${Id.footer} a`, {
+  css(`#${Id.header} a, #${Id.footer} a, #${Id.claim} a`, {
     textDecoration: "underline",
     cursor: "pointer",
     background: "var(--background)",
@@ -82,6 +82,10 @@ const rules = [
   css(`#${Id.optionsModal} > div:nth-child(3)`, {
     marginTop: "1em",
     textAlign: "center",
+  }),
+  css(`#${Id.claim}`, {
+    textAlign: "center",
+    marginBottom: "1em",
   }),
   css(":root", {
     "--light": "#fff",
