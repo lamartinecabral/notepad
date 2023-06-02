@@ -17,6 +17,7 @@ const {
   onAuthStateChanged,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
   signOut,
 } = firebase.auth;
 
@@ -144,5 +145,9 @@ export const Service = class {
           : (user.email || "").split("@")[0] === State.docId;
       else return false;
     });
+  }
+
+  static resetPassword(email) {
+    return sendPasswordResetEmail(auth, email);
   }
 };

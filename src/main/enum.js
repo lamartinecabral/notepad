@@ -18,10 +18,13 @@ const IdEnum = {
   /** @type {'logout'} */ logout: "logout",
   /** @type {'passwordModal'} */ passwordModal: "passwordModal",
   /** @type {'form'} */ form: "form",
+  /** @type {'email'} */ email: "email",
   /** @type {'emailInput'} */ emailInput: "emailInput",
   /** @type {'passwordInput'} */ passwordInput: "passwordInput",
+  /** @type {'submitButton'} */ submitButton: "submitButton",
   /** @type {'textarea'} */ textarea: "textarea",
   /** @type {'claim'} */ claim: "claim",
+  /** @type {'resetPassword'} */ resetPassword: "resetPassword",
 };
 
 /** @enum {keyof typeof IdEnum} */

@@ -45,12 +45,16 @@ const components = [
         ]),
         elem("form", { id: Id.form }, [
           elem("table", {}, [
-            elem("tr", { id: Id.emailInput, hidden: true }, [
+            elem("tr", { id: Id.email, hidden: true }, [
               elem("td", {}, [
                 elem("label", { for: "username" }, [" E-mail: "]),
               ]),
               elem("td", {}, [
-                elem("input", { type: "text", name: "username" }),
+                elem("input", {
+                  id: Id.emailInput,
+                  type: "text",
+                  name: "username",
+                }),
               ]),
             ]),
             elem("tr", {}, [
@@ -65,11 +69,12 @@ const components = [
                 }),
               ]),
             ]),
-            elem("tr", {}, [
-              elem("td", { colSpan: 2, style: { textAlign: "center" } }, [
-                elem("input", { type: "submit" }),
-              ]),
-            ]),
+          ]),
+          elem("div", { id: Id.submitButton }, [
+            elem("input", { type: "submit", value: "Submit" }),
+          ]),
+          elem("div", { id: Id.resetPassword, hidden: true }, [
+            elem("a", { href: "#" }, ["reset password"]),
           ]),
         ]),
       ]),

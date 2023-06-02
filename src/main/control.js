@@ -49,6 +49,7 @@ export function initStateListeners() {
     Html.get(Id.backdrop).hidden = !value;
     Html.get(Id.passwordModal).hidden = !value;
     Html.get(Id.passwordInput).focus();
+    Html.get(State.hasOwner.value ? Id.emailInput : Id.passwordInput).focus();
   });
 
   State.showOptions.sub(function (value) {
@@ -58,7 +59,8 @@ export function initStateListeners() {
   });
 
   State.hasOwner.sub(function (value) {
-    Html.get(Id.emailInput).hidden = !value;
+    Html.get(Id.email).hidden = !value;
+    Html.get(Id.resetPassword).hidden = !value;
     Control.setClaimButton();
   });
 }
@@ -158,6 +160,23 @@ export function initEventListeners() {
         State.showPassword.pub(false);
         // @ts-ignore
         ev.target.reset();
+      },
+    },
+    {
+      elemId: Id.resetPassword,
+      event: "click",
+      handler: () => {
+        const email = Html.get(Id.form)[0].value;
+        Service.resetPassword(email)
+          .then(() => {
+            alert(
+              "You will receive an e-mail with instructions to reset your password."
+            );
+          })
+          .catch((err) => {
+            console.error(err);
+            alert(err.message);
+          });
       },
     },
     {

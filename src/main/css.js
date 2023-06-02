@@ -51,12 +51,15 @@ const rules = [
     bottom: "2px",
     right: "3em",
   }),
-  css(`#${Id.header} a, #${Id.footer} a, #${Id.claim} a`, {
-    textDecoration: "underline",
-    cursor: "pointer",
-    background: "var(--background)",
-    color: "var(--color)",
-  }),
+  css(
+    `#${Id.header} a, #${Id.footer} a, #${Id.claim} a, #${Id.resetPassword} a`,
+    {
+      textDecoration: "underline",
+      cursor: "pointer",
+      background: "var(--background)",
+      color: "var(--color)",
+    }
+  ),
   css(`#${Id.backdrop}`, {
     position: "fixed",
     top: "0px",
@@ -86,6 +89,13 @@ const rules = [
   css(`#${Id.claim}`, {
     textAlign: "center",
     marginBottom: "1em",
+  }),
+  css(`#${Id.submitButton}`, {
+    textAlign: "center",
+  }),
+  css(`#${Id.resetPassword}`, {
+    textAlign: "center",
+    margin: "1em 0 -1em 0",
   }),
   css(":root", {
     "--light": "#fff",
