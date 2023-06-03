@@ -56,6 +56,7 @@ const components = [
     ]),
   ]),
   elem("div", { id: Id.content, className: "center", hidden: true }, [
+    elem("div", { id: Id.userEmail }),
     elem("div", { id: Id.docList, className: "margin" }, [
       elem("table", {}, [
         elem("tr", {}, [

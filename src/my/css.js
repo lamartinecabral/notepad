@@ -32,6 +32,9 @@ const rules = [
   css(`#${Id.content} table`, {
     margin: "auto",
   }),
+  css(`#${Id.userEmail}`, {
+    color: "#a9a9a9",
+  }),
 ];
 
 export function initCss() {

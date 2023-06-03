@@ -3,6 +3,7 @@
 const IdEnum = {
   /** @type {'app'} */ app: "app",
   /** @type {'content'} */ content: "content",
+  /** @type {'userEmail'} */ userEmail: "userEmail",
   /** @type {'loginContainer'} */ loginContainer: "loginContainer",
   /** @type {'loginForm'} */ loginForm: "loginForm",
   /** @type {'loginSubmit'} */ loginSubmit: "loginSubmit",

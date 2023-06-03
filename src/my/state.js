@@ -7,6 +7,7 @@ import { Subject } from "../utils";
 export const State = {
   /** @type {Subject<boolean>} */ // @ts-ignore
   isLogged: new Subject(null),
+  userEmail: new Subject(""),
   signupMode: new Subject(false),
   /** @type {Doc[]} */ docs: [],
   message: new Subject("Loading..."),

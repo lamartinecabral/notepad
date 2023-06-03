@@ -12,6 +12,9 @@ export function initStateListeners() {
     Html.get(Id.loginContainer).hidden = value;
     Html.get(Id.content).hidden = !value;
   });
+  State.userEmail.sub(function (value) {
+    Html.get(Id.userEmail).innerText = value;
+  });
   State.signupMode.sub(function (value) {
     Html.get(Id.password2).hidden = !value;
     Tag.get("button", Id.loginSubmit).value = value ? "Create" : "Login";

@@ -46,6 +46,7 @@ export function initAuthListener() {
         });
       } else {
         console.log("user signed in:", user.email);
+        State.userEmail.pub(user.email || "");
         State.isLogged.pub(true);
         listDocs();
       }
