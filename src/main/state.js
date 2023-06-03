@@ -3,7 +3,7 @@
 import { randomString, Subject } from "../utils";
 
 export const State = {
-  docId: (document.URL.split("?")[1] || "").split("#")[0],
+  docId: location.search.slice(1),
   public: new Subject(false),
   protected: new Subject(false),
   status: new Subject("loading..."),

@@ -32,7 +32,7 @@ export function initStateListeners() {
 export class Control {
   static addDoc(doc) {
     State.docs.push(doc);
-    Html.getChild(Id.docList).append(makeDoc(doc));
+    Html.getChild(Id.docList).append(docElem(doc));
     State.message.pub("");
   }
   static removeDoc(doc) {

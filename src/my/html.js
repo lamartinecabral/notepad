@@ -78,7 +78,7 @@ const components = [
 ];
 
 /** @param {import("./state").Doc} doc */
-export function makeDoc(doc) {
+export function docElem(doc) {
   return elem("tr", { id: "tr_" + doc.id }, [
     elem("td", {}, [
       elem(
