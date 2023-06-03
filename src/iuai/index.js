@@ -1,6 +1,6 @@
 "use strict";
 exports.__esModule = true;
-exports.createStyle = exports.css = exports.elem = exports.Html = void 0;
+exports.Events = exports.createStyle = exports.css = exports.elem = exports.Tag = exports.Html = void 0;
 var Html = /** @class */ (function () {
     function Html() {
     }
@@ -16,6 +16,21 @@ var Html = /** @class */ (function () {
     return Html;
 }());
 exports.Html = Html;
+var Tag = /** @class */ (function () {
+    function Tag() {
+    }
+    Tag.get = function (tag, id) {
+        return Html.get(id);
+    };
+    Tag.getChild = function (tag, id) {
+        return Html.get(id).children[0];
+    };
+    Tag.getParent = function (tag, id) {
+        return Html.get(id).parentElement;
+    };
+    return Tag;
+}());
+exports.Tag = Tag;
 function setInlineStyle(element, style) {
     for (var prop in style) {
         if (prop in element.style)
@@ -51,3 +66,13 @@ function createStyle() {
     return style.sheet;
 }
 exports.createStyle = createStyle;
+var Events = /** @class */ (function () {
+    function Events() {
+    }
+    Events.listen = function (element, eventType, handler) {
+        element.addEventListener(eventType, handler);
+        return function () { return element.removeEventListener(eventType, handler); };
+    };
+    return Events;
+}());
+exports.Events = Events;

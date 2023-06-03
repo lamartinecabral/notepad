@@ -1,5 +1,7 @@
 type Tags = keyof HTMLElementTagNameMap;
 type Elem<T extends Tags> = HTMLElementTagNameMap[T];
+type EvTypes = keyof HTMLElementEventMap;
+type Ev<T extends EvTypes> = HTMLElementEventMap[T];
 
 export class Html {
   static get<T extends Tags = "main">(id: string) {
@@ -9,6 +11,18 @@ export class Html {
     return Html.get(id).children[0] as Elem<T>;
   }
   static getParent<T extends Tags = "main">(id: string) {
+    return Html.get(id).parentElement as Elem<T>;
+  }
+}
+
+export class Tag {
+  static get<T extends Tags>(tag: T, id: string) {
+    return Html.get(id) as Elem<T>;
+  }
+  static getChild<T extends Tags>(tag: T, id: string) {
+    return Html.get(id).children[0] as Elem<T>;
+  }
+  static getParent<T extends Tags>(tag: T, id: string) {
     return Html.get(id).parentElement as Elem<T>;
   }
 }
@@ -48,4 +62,15 @@ export function createStyle() {
   const style = document.createElement("style");
   document.head.append(style);
   return style.sheet as CSSStyleSheet;
+}
+
+export class Events {
+  static listen<W extends HTMLElement, T extends EvTypes>(
+    element: W,
+    eventType: T,
+    handler: (ev: Ev<T>) => void
+  ) {
+    element.addEventListener(eventType, handler);
+    return () => element.removeEventListener(eventType, handler);
+  }
 }
