@@ -11,16 +11,23 @@ const components = [
       elem("table", {}, [
         elem("tr", {}, [
           elem("td", {}, [
-            elem("label", { htmlFor: "username" }, [" E-mail: "]),
-          ]),
-          elem("td", {}, [elem("input", { type: "text", name: "username" })]),
-        ]),
-        elem("tr", {}, [
-          elem("td", {}, [
-            elem("label", { htmlFor: "password" }, [" Password: "]),
+            elem("label", { htmlFor: Id.usernameInput }, [" E-mail: "]),
           ]),
           elem("td", {}, [
             elem("input", {
+              id: Id.usernameInput,
+              type: "text",
+              name: "username",
+            }),
+          ]),
+        ]),
+        elem("tr", {}, [
+          elem("td", {}, [
+            elem("label", { htmlFor: Id.passwordInput }, [" Password: "]),
+          ]),
+          elem("td", {}, [
+            elem("input", {
+              id: Id.passwordInput,
               type: "password",
               name: "password",
             }),
@@ -28,12 +35,14 @@ const components = [
         ]),
         elem("tr", { id: Id.password2, hidden: true }, [
           elem("td", {}, [
-            elem("label", { htmlFor: "password2" }, [" Repeat the password: "]),
+            elem("label", { htmlFor: Id.passwordInput2 }, [
+              " Repeat the password: ",
+            ]),
           ]),
           elem("td", {}, [
             elem("input", {
+              id: Id.passwordInput2,
               type: "password",
-              name: "password2",
             }),
           ]),
         ]),

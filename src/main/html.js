@@ -25,15 +25,14 @@ const components = [
           elem("input", {
             id: Id.protected,
             type: "checkbox",
-            name: "protected",
           }),
-          elem("label", { htmlFor: "protected", title: "Only you can edit" }, [
+          elem("label", { htmlFor: Id.protected, title: "Only you can edit" }, [
             "Protected",
           ]),
         ]),
         elem("div", {}, [
-          elem("input", { id: Id.public, type: "checkbox", name: "public" }),
-          elem("label", { htmlFor: "public", title: "Everyone can read" }, [
+          elem("input", { id: Id.public, type: "checkbox" }),
+          elem("label", { htmlFor: Id.public, title: "Everyone can read" }, [
             "Public",
           ]),
         ]),
@@ -47,19 +46,20 @@ const components = [
           elem("table", {}, [
             elem("tr", { id: Id.email, hidden: true }, [
               elem("td", {}, [
-                elem("label", { htmlFor: "username" }, [" E-mail: "]),
+                elem("label", { htmlFor: Id.emailInput }, [" E-mail: "]),
               ]),
               elem("td", {}, [
                 elem("input", {
                   id: Id.emailInput,
                   type: "text",
-                  name: "username",
+                  name: "email",
+                  autocomplete: "email",
                 }),
               ]),
             ]),
             elem("tr", {}, [
               elem("td", {}, [
-                elem("label", { htmlFor: "password" }, [" Password: "]),
+                elem("label", { htmlFor: Id.passwordInput }, [" Password: "]),
               ]),
               elem("td", {}, [
                 elem("input", {
@@ -81,7 +81,6 @@ const components = [
     ]),
   ]),
   elem("textarea", {
-    name: "textarea",
     id: Id.textarea,
     autofocus: true,
     autocomplete: "off",
