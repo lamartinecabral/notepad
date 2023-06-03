@@ -5,18 +5,17 @@ import { State } from "./state";
 import { Html } from "./html";
 import { debounce } from "../utils";
 import { Id } from "./enum";
+import { Events, Tag } from "../iuai";
 
 export function initStateListeners() {
   State.protected.sub(function (value) {
-    // @ts-ignore
-    Html.get(Id.protected).checked = value;
+    Tag.get("input", Id.protected).checked = value;
     Html.getParent(Id.public).hidden = !value;
     Control.setClaimButton();
   });
 
   State.public.sub(function (value) {
-    // @ts-ignore
-    Html.get(Id.public).checked = value;
+    Tag.get("input", Id.public).checked = value;
   });
 
   State.status.sub(function (value) {
@@ -27,8 +26,7 @@ export function initStateListeners() {
     Html.get(Id.textarea).hidden = value;
     Html.get(Id.footer).hidden = value;
     if (!value) {
-      // @ts-ignore
-      Html.get(Id.markdown).href =
+      Tag.get("a", Id.markdown).href =
         location.origin + "/markdown/?" + State.docId;
     }
   });
@@ -68,163 +66,113 @@ export function initStateListeners() {
 class Control {
   static setClaimButton() {
     Html.get(Id.claim).hidden = State.hasOwner.value || State.protected.value;
-    // @ts-ignore
-    Html.getChild(Id.claim).href =
+    Tag.getChild("a", Id.claim).href =
       location.origin + "/my/?claim=" + State.docId;
   }
 }
 
 export function initEventListeners() {
-  /** @type {{elemId: Id, event: keyof HTMLElementEventMap, handler: any}[]} */
-  const eventHandlers = [
-    {
-      elemId: Id.app,
-      event: "keyup",
-      handler: function (/** @type {HTMLElementEventMap['keyup']} */ ev) {
-        if (ev.key === "Escape" || ev.keyCode === 27) {
-          State.showPassword.pub(false);
-          State.showOptions.pub(false);
-        }
-      },
-    },
-    {
-      elemId: Id.theme,
-      event: "click",
-      handler: function () {
-        State.nightMode.pub(!State.nightMode.value);
-      },
-    },
-    {
-      elemId: Id.password,
-      event: "click",
-      handler: function () {
-        State.showPassword.pub(true);
-      },
-    },
-    {
-      elemId: Id.options,
-      event: "click",
-      handler: function () {
-        State.showOptions.pub(true);
-      },
-    },
-    {
-      elemId: Id.backdrop,
-      event: "click",
-      handler: function () {
-        State.showPassword.pub(false);
-        State.showOptions.pub(false);
-      },
-    },
-    {
-      elemId: Id.modal,
-      event: "click",
-      handler: function (ev) {
-        ev.stopPropagation();
-      },
-    },
-    {
-      elemId: Id.protected,
-      event: "change",
-      handler: function () {
-        Service.setProtected(!State.protected.value);
-        Html.getParent(Id.public).hidden = State.protected.value;
-      },
-    },
-    {
-      elemId: Id.public,
-      event: "change",
-      handler: function () {
-        Service.setPublic(!State.public.value);
-      },
-    },
-    {
-      elemId: Id.logout,
-      event: "click",
-      handler: function () {
-        Service.logout();
-        State.showOptions.pub(false);
-      },
-    },
-    {
-      elemId: Id.form,
-      event: "submit",
-      handler: function (/** @type {HTMLElementEventMap['submit']} */ ev) {
-        ev.preventDefault();
-        if (!ev.target) return;
-        const email = State.hasOwner.value
-          ? ev.target[0].value
-          : State.docId + "@notepade.web.app";
-        const password = ev.target[1].value;
-        Service.login(email, password);
-        State.showPassword.pub(false);
-        // @ts-ignore
-        ev.target.reset();
-      },
-    },
-    {
-      elemId: Id.resetPassword,
-      event: "click",
-      handler: () => {
-        const email = Html.get(Id.form)[0].value;
-        Service.resetPassword(email)
-          .then(() => {
-            alert(
-              "You will receive an e-mail with instructions to reset your password."
-            );
-          })
-          .catch((err) => {
-            console.error(err);
-            alert(err.message);
-          });
-      },
-    },
-    {
-      elemId: Id.textarea,
-      event: "keydown",
-      handler: function (/** @type {HTMLElementEventMap['keydown']} */ ev) {
-        if (ev.ctrlKey || ev.shiftKey || ev.altKey) return;
-        if (ev.keyCode === 9 || ev.key === "Tab") {
-          ev.preventDefault();
-          return document.execCommand("insertText", false, "\t");
-        } else if (ev.keyCode === 13 || ev.key === "Enter") {
-          ev.preventDefault();
-          let ident = "";
-          /** @type {HTMLTextAreaElement} */ // @ts-ignore
-          const target = Html.get(Id.textarea);
-          for (let j = target.selectionStart; j; ) {
-            let char = target.value[--j];
-            if (char === "\n") break;
-            if (char === " " || char === "\t") ident = char + ident;
-            else ident = "";
-          }
-          return document.execCommand("insertText", false, "\n" + ident);
-        }
-      },
-    },
-    {
-      elemId: Id.textarea,
-      event: "input",
-      handler: debounce(function () {
-        State.status.pub("Saving...");
-        Service.save()
-          .then(() => {
-            State.status.pub("");
-          })
-          .catch((err) => {
-            console.error(err);
-            State.status.pub("Protected");
-          });
-      }, 500),
-    },
-  ];
-
-  eventHandlers.forEach(function (entry) {
-    try {
-      Html.get(entry.elemId).addEventListener(entry.event, entry.handler);
-    } catch (err) {
-      console.log("unable to add event listener", entry);
-      throw err;
+  Events.listen(Html.get(Id.app), "keyup", (ev) => {
+    if (ev.key === "Escape" || ev.keyCode === 27) {
+      State.showPassword.pub(false);
+      State.showOptions.pub(false);
     }
   });
+
+  Events.listen(Html.get(Id.theme), "click", () => {
+    State.nightMode.pub(!State.nightMode.value);
+  });
+
+  Events.listen(Html.get(Id.password), "click", () => {
+    State.showPassword.pub(true);
+  });
+
+  Events.listen(Html.get(Id.options), "click", () => {
+    State.showOptions.pub(true);
+  });
+
+  Events.listen(Html.get(Id.backdrop), "click", () => {
+    State.showPassword.pub(false);
+    State.showOptions.pub(false);
+  });
+
+  Events.listen(Html.get(Id.modal), "click", (ev) => {
+    ev.stopPropagation();
+  });
+
+  Events.listen(Html.get(Id.protected), "change", () => {
+    Service.setProtected(!State.protected.value);
+    Html.getParent(Id.public).hidden = State.protected.value;
+  });
+
+  Events.listen(Html.get(Id.public), "change", () => {
+    Service.setPublic(!State.public.value);
+  });
+
+  Events.listen(Html.get(Id.logout), "click", () => {
+    Service.logout();
+    State.showOptions.pub(false);
+  });
+
+  Events.listen(Html.get(Id.form), "submit", (ev) => {
+    ev.preventDefault();
+    if (!ev.target) return;
+    const email = State.hasOwner.value
+      ? ev.target[0].value
+      : State.docId + "@notepade.web.app";
+    const password = ev.target[1].value;
+    Service.login(email, password);
+    State.showPassword.pub(false);
+    // @ts-ignore
+    ev.target.reset();
+  });
+
+  Events.listen(Html.get(Id.resetPassword), "click", () => {
+    const email = Html.get(Id.form)[0].value;
+    Service.resetPassword(email)
+      .then(() => {
+        alert(
+          "You will receive an e-mail with instructions to reset your password."
+        );
+      })
+      .catch((err) => {
+        console.error(err);
+        alert(err.message);
+      });
+  });
+
+  Events.listen(Html.get(Id.textarea), "keydown", (ev) => {
+    if (ev.ctrlKey || ev.shiftKey || ev.altKey) return;
+    if (ev.keyCode === 9 || ev.key === "Tab") {
+      ev.preventDefault();
+      return document.execCommand("insertText", false, "\t");
+    } else if (ev.keyCode === 13 || ev.key === "Enter") {
+      ev.preventDefault();
+      let ident = "";
+      const target = Tag.get("textarea", Id.textarea);
+      for (let j = target.selectionStart; j; ) {
+        let char = target.value[--j];
+        if (char === "\n") break;
+        if (char === " " || char === "\t") ident = char + ident;
+        else ident = "";
+      }
+      return document.execCommand("insertText", false, "\n" + ident);
+    }
+  });
+
+  Events.listen(
+    Html.get(Id.textarea),
+    "input",
+    debounce(function () {
+      State.status.pub("Saving...");
+      Service.save()
+        .then(() => {
+          State.status.pub("");
+        })
+        .catch((err) => {
+          console.error(err);
+          State.status.pub("Protected");
+        });
+    }, 500)
+  );
 }
