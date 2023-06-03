@@ -10,6 +10,10 @@ const rules = [
   css(`#${Id.app}`, {
     background: "var(--background)",
     color: "var(--color)",
+    margin: "0",
+    padding: "0",
+    overflow: "hidden",
+    height: "100vh",
   }),
   css(`#${Id.status}`, {
     position: "fixed",
@@ -22,8 +26,11 @@ const rules = [
     color: "var(--color)",
   }),
   css(`#${Id.textarea}`, {
-    width: "100%",
-    height: "100%",
+    width: "calc(100% - 22px)",
+    height: "calc(100% - 22px)",
+    margin: "8px",
+    padding: "2px",
+    border: "1px solid",
     resize: "none",
     tabSize: "4",
     background: "var(--background)",
