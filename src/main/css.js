@@ -1,31 +1,31 @@
 // @ts-check
 
-import { createStyle, css } from "../iuai";
+import { style } from "iuai";
 import { Id } from "./enum";
 
-const rules = [
-  css("*", {
+export function initCss() {
+  style("*", {
     fontFamily: "monospace",
-  }),
-  css(`#${Id.app}`, {
+  });
+  style(`#${Id.app}`, {
     background: "var(--background)",
     color: "var(--color)",
     margin: "0",
     padding: "0",
     overflow: "hidden",
     height: "100vh",
-  }),
-  css(`#${Id.status}`, {
+  });
+  style(`#${Id.status}`, {
     position: "fixed",
     textAlign: "center",
     width: "100%",
     top: "0",
-  }),
-  css(`#${Id.status} span`, {
+  });
+  style(`#${Id.status} span`, {
     background: "var(--background)",
     color: "var(--color)",
-  }),
-  css(`#${Id.textarea}`, {
+  });
+  style(`#${Id.textarea}`, {
     width: "calc(100% - 22px)",
     height: "calc(100% - 22px)",
     margin: "8px",
@@ -36,29 +36,29 @@ const rules = [
     background: "var(--background)",
     color: "var(--color)",
     overflowAnchor: "none", // it fixes chromium's scroll anchor bug https://bugs.chromium.org/p/chromium/issues/detail?id=997266
-  }),
-  css(`#${Id.github}`, {
+  });
+  style(`#${Id.github}`, {
     position: "fixed",
     background: "var(--light)",
     borderRadius: "50%",
     bottom: "3px",
     left: "calc(50% - 12px)",
-  }),
-  css(`#${Id.header}`, {
+  });
+  style(`#${Id.header}`, {
     position: "fixed",
     top: "0px",
     right: "3em",
     margin: "0 -4px",
-  }),
-  css(`#${Id.header} > *`, {
+  });
+  style(`#${Id.header} > *`, {
     margin: "0 4px",
-  }),
-  css(`#${Id.footer}`, {
+  });
+  style(`#${Id.footer}`, {
     position: "fixed",
     bottom: "2px",
     right: "3em",
-  }),
-  css(
+  });
+  style(
     `#${Id.header} a, #${Id.footer} a, #${Id.claim} a, #${Id.resetPassword} a`,
     {
       textDecoration: "underline",
@@ -67,16 +67,16 @@ const rules = [
       color: "var(--color)",
     }
   ),
-  css(`#${Id.backdrop}`, {
-    position: "fixed",
-    top: "0px",
-    left: "0px",
-    width: "100%",
-    height: "100%",
-    background: "rgba(0, 0, 0, 0.6)",
-    zIndex: "1",
-  }),
-  css(`#${Id.modal}`, {
+    style(`#${Id.backdrop}`, {
+      position: "fixed",
+      top: "0px",
+      left: "0px",
+      width: "100%",
+      height: "100%",
+      background: "rgba(0, 0, 0, 0.6)",
+      zIndex: "1",
+    });
+  style(`#${Id.modal}`, {
     background: "var(--background)",
     padding: "2em",
     position: "absolute",
@@ -85,40 +85,35 @@ const rules = [
     transform: "translate(50%, 50%)",
     color: "var(--color)",
     border: "1px solid var(--color)",
-  }),
-  css(`#${Id.optionsModal} > div:nth-child(2)`, {
+  });
+  style(`#${Id.optionsModal} > div:nth-child(2)`, {
     marginTop: "0.5em",
-  }),
-  css(`#${Id.optionsModal} > div:nth-child(3)`, {
+  });
+  style(`#${Id.optionsModal} > div:nth-child(3)`, {
     marginTop: "1em",
     textAlign: "center",
-  }),
-  css(`#${Id.claim}`, {
+  });
+  style(`#${Id.claim}`, {
     textAlign: "center",
     marginBottom: "1em",
-  }),
-  css(`#${Id.submitButton}`, {
+  });
+  style(`#${Id.submitButton}`, {
     textAlign: "center",
-  }),
-  css(`#${Id.resetPassword}`, {
+  });
+  style(`#${Id.resetPassword}`, {
     textAlign: "center",
     margin: "1em 0 -1em 0",
-  }),
-  css(":root", {
+  });
+  style(":root", {
     "--light": "#fff",
     "--dark": "#000",
-  }),
-  css(".light", {
+  });
+  style(".light", {
     "--background": "var(--light)",
     "--color": "var(--dark)",
-  }),
-  css(".dark", {
+  });
+  style(".dark", {
     "--background": "var(--dark)",
     "--color": "var(--light)",
-  }),
-];
-
-export function initCss() {
-  const style = createStyle();
-  rules.forEach((rule) => style.insertRule(rule));
+  });
 }

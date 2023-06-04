@@ -1,43 +1,38 @@
 // @ts-check
 
-import { createStyle, css } from "../iuai";
+import { style } from "iuai";
 import { Id } from "./enum";
 
-const rules = [
-  css("*", {
+export function initCss() {
+  style("*", {
     fontFamily: "monospace",
-  }),
-  css(".margin", {
+  });
+  style("th", {
+    minWidth: "9ch",
+  });
+  style(".margin", {
     margin: "1em",
-  }),
-  css(".hpadding", {
-    padding: "0 1em",
-  }),
-  css(".center", {
+  });
+  style(".center", {
     textAlign: "center",
     position: "absolute",
     top: "50%",
     left: "50%",
     transform: "translate(max(-50%, -50vw), max(-50%, -50vh))",
-  }),
-  css("td.checkbox", {
+  });
+  style("td.checkbox", {
     textAlign: "center",
-  }),
-  css("a, a:visited", {
+  });
+  style("a, a:visited", {
     color: "blue",
-  }),
-  css(`#${Id.loginContainer}`, {
+  });
+  style(`#${Id.loginContainer}`, {
     padding: "2em",
-  }),
-  css(`#${Id.content} table`, {
+  });
+  style(`#${Id.content} table`, {
     margin: "auto",
-  }),
-  css(`#${Id.userEmail}`, {
+  });
+  style(`#${Id.userEmail}`, {
     color: "#a9a9a9",
-  }),
-];
-
-export function initCss() {
-  const style = createStyle();
-  rules.forEach((rule) => style.insertRule(rule));
+  });
 }

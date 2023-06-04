@@ -3,29 +3,30 @@
 import { trunc } from "../utils";
 import { Control } from "./control";
 import { Id } from "./enum";
-import { elem, Html } from "../iuai";
+import { elem } from "iuai";
 
-const components = [
+const elements = [
   elem("div", { id: Id.loginContainer, className: "center", hidden: true }, [
     elem("form", { id: Id.loginForm }, [
-      elem("table", {}, [
-        elem("tr", {}, [
-          elem("td", {}, [
-            elem("label", { htmlFor: Id.usernameInput }, [" E-mail: "]),
+      elem("table", [
+        elem("tr", [
+          elem("td", [
+            elem("label", { htmlFor: Id.usernameInput }, " E-mail: "),
           ]),
-          elem("td", {}, [
+          elem("td", [
             elem("input", {
               id: Id.usernameInput,
               type: "text",
-              name: "username",
+              name: "email",
+              autocomplete: "email",
             }),
           ]),
         ]),
-        elem("tr", {}, [
-          elem("td", {}, [
-            elem("label", { htmlFor: Id.passwordInput }, [" Password: "]),
+        elem("tr", [
+          elem("td", [
+            elem("label", { htmlFor: Id.passwordInput }, " Password: "),
           ]),
-          elem("td", {}, [
+          elem("td", [
             elem("input", {
               id: Id.passwordInput,
               type: "password",
@@ -34,12 +35,14 @@ const components = [
           ]),
         ]),
         elem("tr", { id: Id.password2, hidden: true }, [
-          elem("td", {}, [
-            elem("label", { htmlFor: Id.passwordInput2 }, [
-              " Repeat the password: ",
-            ]),
+          elem("td", [
+            elem(
+              "label",
+              { htmlFor: Id.passwordInput2 },
+              " Repeat the password: "
+            ),
           ]),
-          elem("td", {}, [
+          elem("td", [
             elem("input", {
               id: Id.passwordInput2,
               type: "password",
@@ -55,34 +58,34 @@ const components = [
       }),
     ]),
     elem("div", { className: "margin", hidden: true }, [
-      elem("a", { id: Id.signinMode, href: "#" }, ["Log in"]),
+      elem("a", { id: Id.signinMode, href: "#" }, "Log in"),
     ]),
     elem("div", { className: "margin" }, [
-      elem("a", { id: Id.signupMode, href: "#" }, ["create account"]),
+      elem("a", { id: Id.signupMode, href: "#" }, "create account"),
     ]),
     elem("div", { className: "margin" }, [
-      elem("a", { id: Id.resetPassword, href: "#" }, ["reset password"]),
+      elem("a", { id: Id.resetPassword, href: "#" }, "reset password"),
     ]),
   ]),
   elem("div", { id: Id.content, className: "center", hidden: true }, [
     elem("div", { id: Id.userEmail }),
     elem("div", { id: Id.docList, className: "margin" }, [
-      elem("table", {}, [
-        elem("tr", {}, [
+      elem("table", [
+        elem("tr", [
           elem("th"),
-          elem("th", { title: "Only you can edit" }, ["Protected"]),
-          elem("th", { title: "Everyone can read", className: "hpadding" }, [
-            "Public",
-          ]),
+          elem("th", { title: "Only you can edit" }, "Protected"),
+          elem("th", { title: "Everyone can read" }, "Public"),
         ]),
       ]),
-      elem("div", { id: Id.message }, ["Loading..."]),
+      elem("div", { id: Id.message }, "Loading..."),
     ]),
     elem("div", { className: "margin" }, [
       elem("button", { id: Id.claimButton, className: "margin" }, ["claim"]),
-      elem("button", { id: Id.logout, type: "button", className: "margin" }, [
-        "Logout",
-      ]),
+      elem(
+        "button",
+        { id: Id.logout, type: "button", className: "margin" },
+        "Logout"
+      ),
     ]),
   ]),
 ];
@@ -90,7 +93,7 @@ const components = [
 /** @param {import("./state").Doc} doc */
 export function docElem(doc) {
   return elem("tr", { id: "tr_" + doc.id }, [
-    elem("td", {}, [
+    elem("td", [
       elem(
         "a",
         {
@@ -98,7 +101,7 @@ export function docElem(doc) {
           href: location.origin + "/?" + doc.id,
           title: trunc(doc.text, 280),
         },
-        [doc.id]
+        doc.id
       ),
     ]),
     elem("td", { className: "checkbox" }, [
@@ -122,7 +125,7 @@ export function docElem(doc) {
         },
       }),
     ]),
-    elem("td", {}, [
+    elem("td", [
       elem(
         "button",
         {
@@ -130,7 +133,7 @@ export function docElem(doc) {
           disabled: !!doc.protected,
           onclick: () => Control.removeDoc(doc),
         },
-        ["drop"]
+        "drop"
       ),
     ]),
   ]);
@@ -138,5 +141,5 @@ export function docElem(doc) {
 
 export function initHtml() {
   document.body.id = Id.app;
-  Html.get(Id.app).append(...components);
+  elem.get(Id.app).append(...elements);
 }
