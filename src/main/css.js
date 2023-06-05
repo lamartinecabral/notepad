@@ -116,4 +116,9 @@ export function initCss() {
     "--background": "var(--dark)",
     "--color": "var(--light)",
   });
+
+  const setHeight = () =>
+    (document.body.style.height = window.innerHeight + "px");
+  setHeight();
+  window.addEventListener("resize", setHeight);
 }
