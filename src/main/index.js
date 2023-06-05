@@ -3,7 +3,8 @@
 import { initEventListeners, initStateListeners } from "./control";
 import { initCss } from "./css";
 import { Id } from "./enum";
-import { Html, initHtml } from "./html";
+import { initHtml } from "./html";
+import { elem } from "iuai";
 import { initAuthListener, initDocListener } from "./service";
 
 initHtml();
@@ -13,4 +14,4 @@ initEventListeners();
 initDocListener();
 initAuthListener();
 
-Html.get(Id.app).hidden = false;
+elem.get(Id.app).hidden = false;

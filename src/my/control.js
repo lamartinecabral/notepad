@@ -1,6 +1,6 @@
 // @ts-check
 
-import { Events, Html, Tag } from "../iuai";
+import { elem, event } from "iuai";
 import { Id } from "./enum";
 import { docElem } from "./html";
 import { Service } from "./service";
@@ -9,31 +9,31 @@ import { State } from "./state";
 export function initStateListeners() {
   State.isLogged.sub(function (value) {
     if (typeof value !== "boolean") return;
-    Html.get(Id.loginContainer).hidden = value;
-    Html.get(Id.content).hidden = !value;
+    elem.get(Id.loginContainer).hidden = value;
+    elem.get(Id.content).hidden = !value;
   });
   State.userEmail.sub(function (value) {
-    Html.get(Id.userEmail).innerText = value;
+    elem.get(Id.userEmail).innerText = value;
   });
   State.signupMode.sub(function (value) {
-    Html.get(Id.password2).hidden = !value;
-    Tag.get("button", Id.loginSubmit).value = value ? "Create" : "Login";
-    Html.getParent(Id.signinMode).hidden = !value;
-    Html.getParent(Id.signupMode).hidden = value;
-    Html.getParent(Id.resetPassword).hidden = value;
-    Tag.get("form", Id.loginForm).reset();
+    elem.get(Id.password2).hidden = !value;
+    elem.get("input", Id.loginSubmit).value = value ? "Create" : "Login";
+    elem.getParent(Id.signinMode).hidden = !value;
+    elem.getParent(Id.signupMode).hidden = value;
+    elem.getParent(Id.resetPassword).hidden = value;
+    elem.get("form", Id.loginForm).reset();
   });
   State.message.sub(function (value) {
-    Html.get(Id.message).innerText = value;
-    Html.get(Id.message).hidden = !value;
-    Html.getChild(Id.docList).hidden = !!value;
+    elem.get(Id.message).innerText = value;
+    elem.get(Id.message).hidden = !value;
+    elem.getChild(Id.docList).hidden = !!value;
   });
 }
 
 export class Control {
   static addDoc(doc) {
     State.docs.push(doc);
-    Html.getChild(Id.docList).append(docElem(doc));
+    elem.getChild(Id.docList).append(docElem(doc));
     State.message.pub("");
   }
   static removeDoc(doc) {
@@ -41,14 +41,14 @@ export class Control {
       "Are you sure? The note will be available for another user to claim it.";
     if (!confirm(message)) return;
     State.docs = State.docs.filter((d) => d.id !== doc.id);
-    Html.get("tr_" + doc.id).remove();
+    elem.get("tr_" + doc.id).remove();
     Service.drop(doc.id);
     if (!State.docs.length)
       State.message.pub("You have not claimed any notes yet.");
   }
   static setProtected(id, value) {
-    const publ = Tag.get("input", "cbpubl_" + id);
-    const drop = Tag.get("button", "bt_" + id);
+    const publ = elem.get("input", "cbpubl_" + id);
+    const drop = elem.get("button", "bt_" + id);
     if (!value) publ.checked = false;
     publ.disabled = !value;
     drop.disabled = value;
@@ -59,7 +59,7 @@ export class Control {
   }
   static clear() {
     State.docs = [];
-    const list = Html.getChild(Id.docList);
+    const list = elem.getChild(Id.docList);
     for (let i = list.children.length - 1; i >= 1; --i)
       list.children[i].remove();
   }
@@ -83,7 +83,7 @@ export class Control {
 }
 
 export function initEventListeners() {
-  Events.listen(Html.get(Id.loginForm), "submit", (ev) => {
+  event(elem.get(Id.loginForm), "submit", (ev) => {
     ev.preventDefault();
     if (!ev.target) return;
     const email = ev.target[0].value;
@@ -99,7 +99,7 @@ export function initEventListeners() {
     });
   });
 
-  Events.listen(Html.get(Id.claimButton), "click", () => {
+  event(elem.get(Id.claimButton), "click", () => {
     const docId = prompt("Note ID:");
     if (!docId) return;
     Service.claim(docId).catch((err) => {
@@ -110,12 +110,12 @@ export function initEventListeners() {
     });
   });
 
-  Events.listen(Html.get(Id.logout), "click", () => {
+  event(elem.get(Id.logout), "click", () => {
     Service.logout();
   });
 
-  Events.listen(Html.get(Id.resetPassword), "click", () => {
-    const email = Html.get(Id.loginForm)[0].value;
+  event(elem.get(Id.resetPassword), "click", () => {
+    const email = elem.get(Id.loginForm)[0].value;
     Service.resetPassword(email)
       .then(() => {
         alert(
@@ -128,11 +128,11 @@ export function initEventListeners() {
       });
   });
 
-  Events.listen(Html.get(Id.signinMode), "click", () => {
+  event(elem.get(Id.signinMode), "click", () => {
     State.signupMode.pub(false);
   });
 
-  Events.listen(Html.get(Id.signupMode), "click", () => {
+  event(elem.get(Id.signupMode), "click", () => {
     State.signupMode.pub(true);
   });
 }

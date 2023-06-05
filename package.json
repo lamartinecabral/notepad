@@ -1,20 +1,19 @@
 {
     "scripts": {
-        "iuai": "tsc --declaration src/iuai/index.ts",
         "build": "node build-time set && webpack --mode=production && node build-time unset",
         "start": "webpack server --mode=development --open --static=dist --port=8000",
         "deploy": "npm run build && firebase deploy --only hosting",
         "deploy:rules": "firebase deploy --only firestore:rules"
     },
     "dependencies": {
-        "firebase": "9.9.3",
-        "marked": "4.2.2"
+        "firebase": "9.22.1",
+        "iuai": "github:lamartinecabral/iuai",
+        "marked": "5.0.4"
     },
     "devDependencies": {
-        "firebase-tools": "11.30.0",
-        "typescript": "4.8",
-        "webpack": "5.74.0",
-        "webpack-cli": "4.10.0",
-        "webpack-dev-server": "4.11.0"
+        "firebase-tools": "12.3.0",
+        "webpack": "5.85.0",
+        "webpack-cli": "5.1.3",
+        "webpack-dev-server": "4.15.0"
     }
 }
