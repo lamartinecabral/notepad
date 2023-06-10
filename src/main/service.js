@@ -29,7 +29,6 @@ export function initAuthListener() {
   offAuthStateChanged = onAuthStateChanged(auth, function (user) {
     Service.isLogged().then((value) => {
       State.isLogged.pub(value);
-      console.log("user", !!user, "logged", value);
     });
   });
 }
@@ -65,7 +64,6 @@ export const Service = class {
     const isOwnerLogin = email !== State.docId + "@notepade.web.app";
     return signInWithEmailAndPassword(auth, email, password)
       .then(() => {
-        console.log("User signed in");
         initDocListener();
       })
       .catch((err) => {
@@ -75,7 +73,6 @@ export const Service = class {
         }
         return createUserWithEmailAndPassword(auth, email, password)
           .then(() => {
-            console.log("User created");
             initDocListener();
           })
           .catch((err) => {

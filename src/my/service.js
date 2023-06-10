@@ -45,13 +45,11 @@ export function initAuthListener() {
           auth.signOut();
         });
       } else {
-        console.log("user signed in:", user.email);
         State.userEmail.pub(user.email || "");
         State.isLogged.pub(true);
         listDocs();
       }
     } else {
-      console.log("no user");
       State.isLogged.pub(false);
     }
   });

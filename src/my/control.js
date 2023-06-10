@@ -1,6 +1,6 @@
 // @ts-check
 
-import { elem, event } from "iuai";
+import { elem, handle } from "iuai";
 import { Id } from "./enum";
 import { docElem } from "./html";
 import { Service } from "./service";
@@ -83,7 +83,7 @@ export class Control {
 }
 
 export function initEventListeners() {
-  event(elem.get(Id.loginForm), "submit", (ev) => {
+  handle(elem.get(Id.loginForm), "submit", (ev) => {
     ev.preventDefault();
     if (!ev.target) return;
     const email = ev.target[0].value;
@@ -99,7 +99,7 @@ export function initEventListeners() {
     });
   });
 
-  event(elem.get(Id.claimButton), "click", () => {
+  handle(elem.get(Id.claimButton), "click", () => {
     const docId = prompt("Note ID:");
     if (!docId) return;
     Service.claim(docId).catch((err) => {
@@ -110,11 +110,11 @@ export function initEventListeners() {
     });
   });
 
-  event(elem.get(Id.logout), "click", () => {
+  handle(elem.get(Id.logout), "click", () => {
     Service.logout();
   });
 
-  event(elem.get(Id.resetPassword), "click", () => {
+  handle(elem.get(Id.resetPassword), "click", () => {
     const email = elem.get(Id.loginForm)[0].value;
     Service.resetPassword(email)
       .then(() => {
@@ -128,11 +128,11 @@ export function initEventListeners() {
       });
   });
 
-  event(elem.get(Id.signinMode), "click", () => {
+  handle(elem.get(Id.signinMode), "click", () => {
     State.signupMode.pub(false);
   });
 
-  event(elem.get(Id.signupMode), "click", () => {
+  handle(elem.get(Id.signupMode), "click", () => {
     State.signupMode.pub(true);
   });
 }

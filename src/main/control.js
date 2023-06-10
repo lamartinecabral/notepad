@@ -4,7 +4,7 @@ import { Service } from "./service";
 import { State } from "./state";
 import { debounce } from "../utils";
 import { Id } from "./enum";
-import { elem, event } from "iuai";
+import { elem, handle } from "iuai";
 
 export function initStateListeners() {
   State.protected.sub(function (value) {
@@ -71,49 +71,49 @@ class Control {
 }
 
 export function initEventListeners() {
-  event(elem.get(Id.app), "keyup", (ev) => {
+  handle(elem.get(Id.app), "keyup", (ev) => {
     if (ev.key === "Escape" || ev.keyCode === 27) {
       State.showPassword.pub(false);
       State.showOptions.pub(false);
     }
   });
 
-  event(elem.get(Id.theme), "click", () => {
+  handle(elem.get(Id.theme), "click", () => {
     State.nightMode.pub(!State.nightMode.value);
   });
 
-  event(elem.get(Id.password), "click", () => {
+  handle(elem.get(Id.password), "click", () => {
     State.showPassword.pub(true);
   });
 
-  event(elem.get(Id.options), "click", () => {
+  handle(elem.get(Id.options), "click", () => {
     State.showOptions.pub(true);
   });
 
-  event(elem.get(Id.backdrop), "click", () => {
+  handle(elem.get(Id.backdrop), "click", () => {
     State.showPassword.pub(false);
     State.showOptions.pub(false);
   });
 
-  event(elem.get(Id.modal), "click", (ev) => {
+  handle(elem.get(Id.modal), "click", (ev) => {
     ev.stopPropagation();
   });
 
-  event(elem.get(Id.protected), "change", () => {
+  handle(elem.get(Id.protected), "change", () => {
     Service.setProtected(!State.protected.value);
     elem.getParent(Id.public).hidden = State.protected.value;
   });
 
-  event(elem.get(Id.public), "change", () => {
+  handle(elem.get(Id.public), "change", () => {
     Service.setPublic(!State.public.value);
   });
 
-  event(elem.get(Id.logout), "click", () => {
+  handle(elem.get(Id.logout), "click", () => {
     Service.logout();
     State.showOptions.pub(false);
   });
 
-  event(elem.get(Id.form), "submit", (ev) => {
+  handle(elem.get(Id.form), "submit", (ev) => {
     ev.preventDefault();
     if (!ev.target) return;
     const email = State.hasOwner.value
@@ -126,7 +126,7 @@ export function initEventListeners() {
     ev.target.reset();
   });
 
-  event(elem.get(Id.resetPassword), "click", () => {
+  handle(elem.get(Id.resetPassword), "click", () => {
     const email = elem.get(Id.form)[0].value;
     Service.resetPassword(email)
       .then(() => {
@@ -140,7 +140,7 @@ export function initEventListeners() {
       });
   });
 
-  event(elem.get(Id.textarea), "keydown", (ev) => {
+  handle(elem.get(Id.textarea), "keydown", (ev) => {
     if (ev.ctrlKey || ev.shiftKey || ev.altKey) return;
     if (ev.keyCode === 9 || ev.key === "Tab") {
       ev.preventDefault();
@@ -159,7 +159,7 @@ export function initEventListeners() {
     }
   });
 
-  event(
+  handle(
     elem.get(Id.textarea),
     "input",
     debounce(function () {
