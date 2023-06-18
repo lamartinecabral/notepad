@@ -2,7 +2,7 @@
 
 import { initEventListeners, initStateListeners } from "./control";
 import { initCss } from "./css";
-import { Id } from "./enum";
+import { Id } from "./refs";
 import { initHtml } from "./html";
 import { elem } from "iuai";
 import { initAuthListener, initDocListener } from "./service";

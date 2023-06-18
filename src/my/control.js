@@ -1,7 +1,7 @@
 // @ts-check
 
 import { elem, handle } from "iuai";
-import { Id } from "./enum";
+import { Id } from "./refs";
 import { docElem } from "./html";
 import { Service } from "./service";
 import { State } from "./state";

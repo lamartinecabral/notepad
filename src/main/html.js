@@ -1,6 +1,6 @@
 // @ts-check
 
-import { Id } from "./enum";
+import { Id } from "./refs";
 import { elem } from "iuai";
 
 const elements = [

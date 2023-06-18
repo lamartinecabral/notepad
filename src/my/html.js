@@ -2,7 +2,7 @@
 
 import { trunc } from "../utils";
 import { Control } from "./control";
-import { Id } from "./enum";
+import { Id } from "./refs";
 import { elem } from "iuai";
 
 const elements = [

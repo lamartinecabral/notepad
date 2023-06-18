@@ -3,7 +3,7 @@
 import { Service } from "./service";
 import { State } from "./state";
 import { debounce } from "../utils";
-import { Id } from "./enum";
+import { Id } from "./refs";
 import { elem, handle } from "iuai";
 
 export function initStateListeners() {

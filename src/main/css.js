@@ -1,7 +1,7 @@
 // @ts-check
 
 import { style } from "iuai";
-import { Id } from "./enum";
+import { Id } from "./refs";
 
 export function initCss() {
   style("*", {
