@@ -53,3 +53,9 @@ export function debounce(handler, timeout) {
     }, timeout);
   };
 }
+
+const counter = {};
+export function ref(prefix = "") {
+  if (counter[prefix] === undefined) counter[prefix] = 0;
+  return prefix + (counter[prefix]++).toString(36);
+}
