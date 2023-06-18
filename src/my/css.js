@@ -29,8 +29,12 @@ export function initCss() {
   style(`#${Id.loginContainer}`, {
     padding: "2em",
   });
+  style(`#${Id.content}`, {
+    maxWidth: "100%",
+  });
   style(`#${Id.content} table`, {
     margin: "auto",
+    overflowX: "scroll",
   });
   style(`#${Id.userEmail}`, {
     color: "#a9a9a9",

@@ -7,6 +7,7 @@ const elements = [
   elem("div", { id: Id.status }, [elem("span", "Loading...")]),
   elem("div", { id: Id.header }, [
     elem("a", { id: Id.theme, href: "#" }, "dark"),
+    " ",
     elem("a", { id: Id.password, href: "#", hidden: true }, "password"),
     elem("a", { id: Id.options, href: "#", hidden: true }, "options"),
   ]),

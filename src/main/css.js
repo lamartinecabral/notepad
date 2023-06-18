@@ -48,10 +48,6 @@ export function initCss() {
     position: "fixed",
     top: "0px",
     right: "3em",
-    margin: "0 -4px",
-  });
-  style(`#${Id.header} > *`, {
-    margin: "0 4px",
   });
   style(`#${Id.footer}`, {
     position: "fixed",
