@@ -7,7 +7,7 @@
     },
     "dependencies": {
         "firebase": "9.22.1",
-        "iuai": "0.1.0",
+        "iuai": "0.3.0",
         "marked": "5.0.4"
     },
     "devDependencies": {

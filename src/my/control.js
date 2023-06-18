@@ -1,6 +1,6 @@
 // @ts-check
 
-import { elem, handle } from "iuai";
+import { elem } from "iuai";
 import { Id } from "./refs";
 import { docElem } from "./html";
 import { Service } from "./service";
@@ -17,11 +17,11 @@ export function initStateListeners() {
   });
   State.signupMode.sub(function (value) {
     elem.get(Id.password2).hidden = !value;
-    elem.get("input", Id.loginSubmit).value = value ? "Create" : "Login";
+    elem.get(Id.loginSubmit, "input").value = value ? "Create" : "Login";
     elem.getParent(Id.signinMode).hidden = !value;
     elem.getParent(Id.signupMode).hidden = value;
     elem.getParent(Id.resetPassword).hidden = value;
-    elem.get("form", Id.loginForm).reset();
+    elem.get(Id.loginForm, "form").reset();
   });
   State.message.sub(function (value) {
     elem.get(Id.message).innerText = value;
@@ -47,8 +47,8 @@ export class Control {
       State.message.pub("You have not claimed any notes yet.");
   }
   static setProtected(id, value) {
-    const publ = elem.get("input", "cbpubl_" + id);
-    const drop = elem.get("button", "bt_" + id);
+    const publ = elem.get("cbpubl_" + id, "input");
+    const drop = elem.get("bt_" + id, "button");
     if (!value) publ.checked = false;
     publ.disabled = !value;
     drop.disabled = value;
@@ -83,7 +83,7 @@ export class Control {
 }
 
 export function initEventListeners() {
-  handle(elem.get(Id.loginForm), "submit", (ev) => {
+  elem.get(Id.loginForm).addEventListener("submit", (ev) => {
     ev.preventDefault();
     if (!ev.target) return;
     const email = ev.target[0].value;
@@ -99,7 +99,7 @@ export function initEventListeners() {
     });
   });
 
-  handle(elem.get(Id.claimButton), "click", () => {
+  elem.get(Id.claimButton).addEventListener("click", () => {
     const docId = prompt("Note ID:");
     if (!docId) return;
     Service.claim(docId).catch((err) => {
@@ -110,11 +110,11 @@ export function initEventListeners() {
     });
   });
 
-  handle(elem.get(Id.logout), "click", () => {
+  elem.get(Id.logout).addEventListener("click", () => {
     Service.logout();
   });
 
-  handle(elem.get(Id.resetPassword), "click", () => {
+  elem.get(Id.resetPassword).addEventListener("click", () => {
     const email = elem.get(Id.loginForm)[0].value;
     Service.resetPassword(email)
       .then(() => {
@@ -128,11 +128,11 @@ export function initEventListeners() {
       });
   });
 
-  handle(elem.get(Id.signinMode), "click", () => {
+  elem.get(Id.signinMode).addEventListener("click", () => {
     State.signupMode.pub(false);
   });
 
-  handle(elem.get(Id.signupMode), "click", () => {
+  elem.get(Id.signupMode).addEventListener("click", () => {
     State.signupMode.pub(true);
   });
 }
