@@ -125,7 +125,11 @@ export function docElem(doc) {
         },
       }),
     ]),
-    elem("td", [
+    elem("td", { style: { whiteSpace: "nowrap" } }, [
+      elem("a", { href: location.origin + "/markdown/?" + doc.id }, "MD"),
+      " ",
+      elem("a", { href: location.origin + "/html/?" + doc.id }, "</>"),
+      " ",
       elem(
         "button",
         {
