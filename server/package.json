@@ -1,0 +1,16 @@
+{
+  "name": "notepade-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js",
+    "deploy": "supabase functions deploy notepade --project-ref nohvuuuxjqikdstnqcmo",
+    "start": "deno run --allow-net supabase/functions/notepade/index.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "supabase": "^1.68.6"
+  }
+}
