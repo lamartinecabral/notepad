@@ -1,7 +1,7 @@
 // @ts-check
 
 import { style } from "iuai";
-import { Id } from "./refs";
+import { loginContainer, content, userEmail } from "./refs";
 
 export function initCss() {
   style("*", {
@@ -26,17 +26,17 @@ export function initCss() {
   style("a, a:visited", {
     color: "blue",
   });
-  style(`#${Id.loginContainer}`, {
+  style(loginContainer, {
     padding: "2em",
   });
-  style(`#${Id.content}`, {
+  style(content, {
     maxWidth: "100%",
   });
-  style(`#${Id.content} table`, {
+  style(content + " table", {
     margin: "auto",
     overflowX: "scroll",
   });
-  style(`#${Id.userEmail}`, {
+  style(userEmail, {
     color: "#a9a9a9",
   });
 }
