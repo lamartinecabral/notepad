@@ -3,117 +3,138 @@
 import { Service } from "./service";
 import { State } from "./state";
 import { debounce } from "../utils";
-import { Id } from "./refs";
+import {
+  protectedInput,
+  publicInput,
+  status,
+  textarea,
+  footer,
+  markdown,
+  password,
+  options,
+  app,
+  theme,
+  backdrop,
+  passwordModal,
+  passwordInput,
+  emailInput,
+  optionsModal,
+  email,
+  resetPassword,
+  claim,
+  modal,
+  logout,
+  form,
+} from "./refs";
 import { elem } from "iuai";
 
 export function initStateListeners() {
   State.protected.sub(function (value) {
-    elem.get(Id.protected, "input").checked = value;
-    elem.getParent(Id.public).hidden = !value;
+    protectedInput().checked = value;
+    elem.getParent(publicInput.id).hidden = !value;
     Control.setClaimButton();
   });
 
   State.public.sub(function (value) {
-    elem.get(Id.public, "input").checked = value;
+    publicInput().checked = value;
   });
 
   State.status.sub(function (value) {
-    elem.getChild(Id.status).innerText = value;
+    elem.getChild(status.id).innerText = value;
   });
 
   State.isHidden.sub(function (value) {
-    elem.get(Id.textarea).hidden = value;
-    elem.get(Id.footer).hidden = value;
+    textarea().hidden = value;
+    footer().hidden = value;
     if (!value) {
-      elem.get(Id.markdown, "a").href =
-        location.origin + "/markdown/?" + State.docId;
+      markdown().href = location.origin + "/markdown/?" + State.docId;
     }
   });
 
   State.isLogged.sub(function (value) {
-    elem.get(Id.password).hidden = value;
-    elem.get(Id.options).hidden = !value;
+    password().hidden = value;
+    options().hidden = !value;
   });
 
   State.nightMode.sub(function (value) {
-    const theme = ["light", "dark"];
-    elem.get(Id.app).className = theme[+value];
-    elem.get(Id.theme).innerText = theme[+!value];
+    const themes = ["light", "dark"];
+    app().className = themes[+value];
+    theme().innerText = themes[+!value];
     if (localStorage) localStorage.setItem("nightMode", "" + value);
   });
 
   State.showPassword.sub(function (value) {
-    elem.get(Id.backdrop).hidden = !value;
-    elem.get(Id.passwordModal).hidden = !value;
-    elem.get(Id.passwordInput).focus();
-    elem.get(State.hasOwner.value ? Id.emailInput : Id.passwordInput).focus();
+    backdrop().hidden = !value;
+    passwordModal().hidden = !value;
+    passwordInput().focus();
+    (State.hasOwner.value ? emailInput() : passwordInput()).focus();
   });
 
   State.showOptions.sub(function (value) {
-    elem.get(Id.backdrop).hidden = !value;
-    elem.get(Id.optionsModal).hidden = !value;
-    elem.get(Id.protected).focus();
+    backdrop().hidden = !value;
+    optionsModal().hidden = !value;
+    protectedInput().focus();
   });
 
   State.hasOwner.sub(function (value) {
-    elem.get(Id.email).hidden = !value;
-    elem.get(Id.resetPassword).hidden = !value;
+    email().hidden = !value;
+    resetPassword().hidden = !value;
     Control.setClaimButton();
   });
 }
 
 class Control {
   static setClaimButton() {
-    elem.get(Id.claim).hidden = State.hasOwner.value || State.protected.value;
-    elem.getChild(Id.claim, "a").href =
+    claim().hidden = State.hasOwner.value || State.protected.value;
+    elem.getChild(claim.id, "a").href =
       location.origin + "/my/?claim=" + State.docId;
   }
 }
 
 export function initEventListeners() {
-  elem.get(Id.app).addEventListener("keyup", (ev) => {
+  app().addEventListener("keyup", (ev) => {
     if (ev.key === "Escape" || ev.keyCode === 27) {
       State.showPassword.pub(false);
       State.showOptions.pub(false);
     }
   });
 
-  elem.get(Id.theme).addEventListener("click", () => {
+  theme().addEventListener("click", () => {
     State.nightMode.pub(!State.nightMode.value);
   });
 
-  elem.get(Id.password).addEventListener("click", () => {
+  password().addEventListener("click", () => {
     State.showPassword.pub(true);
   });
 
-  elem.get(Id.options).addEventListener("click", () => {
+  options().addEventListener("click", () => {
     State.showOptions.pub(true);
   });
 
-  elem.get(Id.backdrop).addEventListener("click", () => {
+  backdrop().addEventListener("click", () => {
     State.showPassword.pub(false);
     State.showOptions.pub(false);
   });
 
-  elem.get(Id.modal).addEventListener("click", (ev) => {
+  modal().addEventListener("click", (ev) => {
     ev.stopPropagation();
   });
 
-  elem.get(Id.protected).addEventListener("change", () => {
+  protectedInput().addEventListener("change", () => {
     Service.setProtected(!State.protected.value);
-    elem.getParent(Id.public).hidden = State.protected.value;
+    elem.getParent(publicInput.id).hidden = State.protected.value;
   });
 
-  elem.get(Id.public).addEventListener("change", () => {
+  publicInput().addEventListener("change", () => {
     Service.setPublic(!State.public.value);
   });
 
-  elem.get(Id.logout).addEventListener("click", () => {
+  logout().addEventListener("click", () => {
     Service.logout();
     State.showOptions.pub(false);
   });
 
-  elem.get(Id.form).addEventListener("submit", (ev) => {
+  form().addEventListener("submit", (ev) => {
     ev.preventDefault();
     if (!ev.target) return;
     const email = State.hasOwner.value
@@ -126,8 +147,8 @@ export function initEventListeners() {
     ev.target.reset();
   });
 
-  elem.get(Id.resetPassword).addEventListener("click", () => {
-    const email = elem.get(Id.form)[0].value;
+  resetPassword().addEventListener("click", () => {
+    const email = elem.get(form.id)[0].value;
     Service.resetPassword(email)
       .then(() => {
         alert(
@@ -140,7 +161,7 @@ export function initEventListeners() {
       });
   });
 
-  elem.get(Id.textarea).addEventListener("keydown", (ev) => {
+  textarea().addEventListener("keydown", (ev) => {
     if (ev.ctrlKey || ev.shiftKey || ev.altKey) return;
     if (ev.keyCode === 9 || ev.key === "Tab") {
       ev.preventDefault();
@@ -148,7 +169,7 @@ export function initEventListeners() {
     } else if (ev.keyCode === 13 || ev.key === "Enter") {
       ev.preventDefault();
       let ident = "";
-      const target = elem.get(Id.textarea, "textarea");
+      const target = textarea();
       for (let j = target.selectionStart; j; ) {
         let char = target.value[--j];
         if (char === "\n") break;
@@ -159,7 +180,7 @@ export function initEventListeners() {
     }
   });
 
-  elem.get(Id.textarea).addEventListener(
+  textarea().addEventListener(
     "input",
     debounce(function () {
       State.status.pub("Saving...");

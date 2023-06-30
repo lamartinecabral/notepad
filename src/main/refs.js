@@ -1,30 +1,28 @@
 // @ts-check
 
-import { ref } from "../utils";
+import { elem } from "iuai";
 
-export const Id = {
-  app: ref("e"),
-  status: ref("e"),
-  header: ref("e"),
-  theme: ref("e"),
-  password: ref("e"),
-  options: ref("e"),
-  github: ref("e"),
-  footer: ref("e"),
-  markdown: ref("e"),
-  backdrop: ref("e"),
-  modal: ref("e"),
-  optionsModal: ref("e"),
-  protected: ref("e"),
-  public: ref("e"),
-  logout: ref("e"),
-  passwordModal: ref("e"),
-  form: ref("e"),
-  email: ref("e"),
-  emailInput: ref("e"),
-  passwordInput: ref("e"),
-  submitButton: ref("e"),
-  textarea: ref("e"),
-  claim: ref("e"),
-  resetPassword: ref("e"),
-};
+export const app = elem.ref("body");
+export const status = elem.ref("div");
+export const header = elem.ref("div");
+export const theme = elem.ref("a");
+export const password = elem.ref("a");
+export const options = elem.ref("a");
+export const github = elem.ref("div");
+export const footer = elem.ref("div");
+export const markdown = elem.ref("a");
+export const backdrop = elem.ref("div");
+export const modal = elem.ref("div");
+export const optionsModal = elem.ref("div");
+export const protectedInput = elem.ref("input");
+export const publicInput = elem.ref("input");
+export const logout = elem.ref("button");
+export const passwordModal = elem.ref("div");
+export const form = elem.ref("form");
+export const email = elem.ref("tr");
+export const emailInput = elem.ref("input");
+export const passwordInput = elem.ref("input");
+export const submitButton = elem.ref("div");
+export const textarea = elem.ref("textarea");
+export const claim = elem.ref("div");
+export const resetPassword = elem.ref("div");
