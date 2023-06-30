@@ -1,7 +1,21 @@
 // @ts-check
 
 import { elem } from "iuai";
-import { Id } from "./refs";
+import {
+  loginContainer,
+  content,
+  userEmail,
+  password2,
+  loginSubmit,
+  signinMode,
+  signupMode,
+  resetPassword,
+  loginForm,
+  message,
+  docList,
+  claimButton,
+  logout,
+} from "./refs";
 import { docElem } from "./html";
 import { Service } from "./service";
 import { State } from "./state";
@@ -9,31 +23,31 @@ import { State } from "./state";
 export function initStateListeners() {
   State.isLogged.sub(function (value) {
     if (typeof value !== "boolean") return;
-    elem.get(Id.loginContainer).hidden = value;
-    elem.get(Id.content).hidden = !value;
+    loginContainer().hidden = value;
+    content().hidden = !value;
   });
   State.userEmail.sub(function (value) {
-    elem.get(Id.userEmail).innerText = value;
+    userEmail().innerText = value;
   });
   State.signupMode.sub(function (value) {
-    elem.get(Id.password2).hidden = !value;
-    elem.get(Id.loginSubmit, "input").value = value ? "Create" : "Login";
-    elem.getParent(Id.signinMode).hidden = !value;
-    elem.getParent(Id.signupMode).hidden = value;
-    elem.getParent(Id.resetPassword).hidden = value;
-    elem.get(Id.loginForm, "form").reset();
+    password2().hidden = !value;
+    loginSubmit().value = value ? "Create" : "Login";
+    elem.getParent(signinMode.id).hidden = !value;
+    elem.getParent(signupMode.id).hidden = value;
+    elem.getParent(resetPassword.id).hidden = value;
+    loginForm().reset();
   });
   State.message.sub(function (value) {
-    elem.get(Id.message).innerText = value;
-    elem.get(Id.message).hidden = !value;
-    elem.getChild(Id.docList).hidden = !!value;
+    message().innerText = value;
+    message().hidden = !value;
+    elem.getChild(docList.id).hidden = !!value;
   });
 }
 
 export class Control {
   static addDoc(doc) {
     State.docs.push(doc);
-    elem.getChild(Id.docList).append(docElem(doc));
+    elem.getChild(docList.id).append(docElem(doc));
     State.message.pub("");
   }
   static removeDoc(doc) {
@@ -59,7 +73,7 @@ export class Control {
   }
   static clear() {
     State.docs = [];
-    const list = elem.getChild(Id.docList);
+    const list = elem.getChild(docList.id);
     for (let i = list.children.length - 1; i >= 1; --i)
       list.children[i].remove();
   }
@@ -83,7 +97,7 @@ export class Control {
 }
 
 export function initEventListeners() {
-  elem.get(Id.loginForm).addEventListener("submit", (ev) => {
+  elem.get(loginForm.id).addEventListener("submit", (ev) => {
     ev.preventDefault();
     if (!ev.target) return;
     const email = ev.target[0].value;
@@ -99,7 +113,7 @@ export function initEventListeners() {
     });
   });
 
-  elem.get(Id.claimButton).addEventListener("click", () => {
+  elem.get(claimButton.id).addEventListener("click", () => {
     const docId = prompt("Note ID:");
     if (!docId) return;
     Service.claim(docId).catch((err) => {
@@ -110,12 +124,12 @@ export function initEventListeners() {
     });
   });
 
-  elem.get(Id.logout).addEventListener("click", () => {
+  elem.get(logout.id).addEventListener("click", () => {
     Service.logout();
   });
 
-  elem.get(Id.resetPassword).addEventListener("click", () => {
-    const email = elem.get(Id.loginForm)[0].value;
+  elem.get(resetPassword.id).addEventListener("click", () => {
+    const email = elem.get(loginForm.id)[0].value;
     Service.resetPassword(email)
       .then(() => {
         alert(
@@ -128,11 +142,11 @@ export function initEventListeners() {
       });
   });
 
-  elem.get(Id.signinMode).addEventListener("click", () => {
+  elem.get(signinMode.id).addEventListener("click", () => {
     State.signupMode.pub(false);
   });
 
-  elem.get(Id.signupMode).addEventListener("click", () => {
+  elem.get(signupMode.id).addEventListener("click", () => {
     State.signupMode.pub(true);
   });
 }

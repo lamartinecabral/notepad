@@ -2,20 +2,37 @@
 
 import { trunc } from "../utils";
 import { Control } from "./control";
-import { Id } from "./refs";
+import {
+  loginContainer,
+  loginForm,
+  usernameInput,
+  passwordInput,
+  password2,
+  passwordInput2,
+  loginSubmit,
+  signinMode,
+  signupMode,
+  resetPassword,
+  content,
+  userEmail,
+  docList,
+  message,
+  claimButton,
+  logout,
+  app,
+} from "./refs";
 import { elem } from "iuai";
 
 const elements = [
-  elem("div", { id: Id.loginContainer, className: "center", hidden: true }, [
-    elem("form", { id: Id.loginForm }, [
+  elem(loginContainer, { className: "center", hidden: true }, [
+    elem(loginForm, [
       elem("table", [
         elem("tr", [
           elem("td", [
-            elem("label", { htmlFor: Id.usernameInput }, " E-mail: "),
+            elem("label", { htmlFor: usernameInput.id }, " E-mail: "),
           ]),
           elem("td", [
-            elem("input", {
-              id: Id.usernameInput,
+            elem(usernameInput, {
               type: "text",
               name: "email",
               autocomplete: "email",
@@ -24,52 +41,49 @@ const elements = [
         ]),
         elem("tr", [
           elem("td", [
-            elem("label", { htmlFor: Id.passwordInput }, " Password: "),
+            elem("label", { htmlFor: passwordInput.id }, " Password: "),
           ]),
           elem("td", [
-            elem("input", {
-              id: Id.passwordInput,
+            elem(passwordInput, {
               type: "password",
               name: "password",
             }),
           ]),
         ]),
-        elem("tr", { id: Id.password2, hidden: true }, [
+        elem(password2, { hidden: true }, [
           elem("td", [
             elem(
               "label",
-              { htmlFor: Id.passwordInput2 },
+              { htmlFor: passwordInput2.id },
               " Repeat the password: "
             ),
           ]),
           elem("td", [
-            elem("input", {
-              id: Id.passwordInput2,
+            elem(passwordInput2, {
               type: "password",
             }),
           ]),
         ]),
       ]),
-      elem("input", {
-        id: Id.loginSubmit,
+      elem(loginSubmit, {
         type: "submit",
         className: "margin",
         value: "Login",
       }),
     ]),
     elem("div", { className: "margin", hidden: true }, [
-      elem("a", { id: Id.signinMode, href: "#" }, "Log in"),
+      elem(signinMode, { href: "#" }, "Log in"),
     ]),
     elem("div", { className: "margin" }, [
-      elem("a", { id: Id.signupMode, href: "#" }, "create account"),
+      elem(signupMode, { href: "#" }, "create account"),
     ]),
     elem("div", { className: "margin" }, [
-      elem("a", { id: Id.resetPassword, href: "#" }, "reset password"),
+      elem(resetPassword, { href: "#" }, "reset password"),
     ]),
   ]),
-  elem("div", { id: Id.content, className: "center", hidden: true }, [
-    elem("div", { id: Id.userEmail }),
-    elem("div", { id: Id.docList, className: "margin" }, [
+  elem(content, { className: "center", hidden: true }, [
+    elem(userEmail),
+    elem(docList, { className: "margin" }, [
       elem("table", [
         elem("tr", [
           elem("th"),
@@ -77,15 +91,11 @@ const elements = [
           elem("th", { title: "Everyone can read" }, "Public"),
         ]),
       ]),
-      elem("div", { id: Id.message }, "Loading..."),
+      elem(message, "Loading..."),
     ]),
     elem("div", { className: "margin" }, [
-      elem("button", { id: Id.claimButton, className: "margin" }, ["claim"]),
-      elem(
-        "button",
-        { id: Id.logout, type: "button", className: "margin" },
-        "Logout"
-      ),
+      elem(claimButton, { className: "margin" }, ["claim"]),
+      elem(logout, { type: "button", className: "margin" }, "Logout"),
     ]),
   ]),
 ];
@@ -144,6 +154,6 @@ export function docElem(doc) {
 }
 
 export function initHtml() {
-  document.body.id = Id.app;
-  elem.get(Id.app).append(...elements);
+  document.body.id = app.id;
+  app().append(...elements);
 }
