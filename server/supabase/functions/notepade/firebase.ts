@@ -33,7 +33,10 @@ const db = getFirestore(app);
 
 export function put(id: string, text: string) {
   const docRef = doc(db, "docs", id);
-  return updateDoc(docRef, { text }).catch(() => setDoc(docRef, { text }));
+  return updateDoc(docRef, { text }).catch((err) => {
+    if (err.code === "not-found") return setDoc(docRef, { text });
+    throw err;
+  });
 }
 
 export function get(id: string) {

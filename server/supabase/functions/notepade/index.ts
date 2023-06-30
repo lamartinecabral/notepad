@@ -3,9 +3,20 @@ import { get, put } from "./firebase.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
 };
+
+const firestoreStatus = {
+  "not-found": 404,
+  "permission-denied": 403,
+};
+
+// deno-lint-ignore no-explicit-any
+function errorResponse(err: any) {
+  return new Response(err?.code || err?.message || "" + err, {
+    headers: corsHeaders,
+    status: firestoreStatus[err?.code as keyof typeof firestoreStatus] || 500,
+  });
+}
 
 serve(async (req) => {
   // This is needed if you're planning to invoke your function from a browser.
@@ -15,16 +26,24 @@ serve(async (req) => {
 
   if (req.method === "GET") {
     const id = new URL(req.url).search.substring(1);
-    const text = await get(id);
-    return new Response(text, { headers: corsHeaders });
+    try {
+      const text = await get(id);
+      return new Response(text, { headers: corsHeaders });
+    } catch (err) {
+      return errorResponse(err);
+    }
   }
 
   if (req.method === "POST") {
     const id = new URL(req.url).search.substring(1);
     const text = await req.text();
-    await put(id, text);
-    return new Response("ok", { headers: corsHeaders });
+    try {
+      await put(id, text);
+      return new Response("ok", { headers: corsHeaders });
+    } catch (err) {
+      return errorResponse(err);
+    }
   }
 
-  throw new Error("invalid method");
+  return errorResponse("invalid method");
 });
