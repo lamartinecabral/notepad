@@ -141,6 +141,12 @@ export function docElem(doc) {
       elem("a", { href: location.origin + "/html/?" + doc.id }, "</>"),
       " ",
       elem(
+        "a",
+        { href: "https://notepade-api.netlify.app/?id=" + doc.id },
+        "raw"
+      ),
+      " ",
+      elem(
         "button",
         {
           id: "bt_" + doc.id,
