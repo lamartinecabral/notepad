@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF-8">
+  <link rel="icon" type="image/ico" href="../assets/favicon.ico">
+  <style>
+    body {
+      margin: 0;
+      height: calc(100vh - 4px);
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+  </style>
+  <script src="../js/firebase.js"></script>
+</head>
+
+<body>
+  <script>
+
+    let [docId, hash] = (document.URL.split("?")[1] || "").split("#");
+    docId = docId.toLowerCase()
+
+    let docHtml = '';
+    function setContent(text) {
+      docHtml = text;
+      let iframe = document.querySelector('iframe');
+      if (iframe) iframe.remove();
+      iframe = document.createElement('iframe');
+      iframe.src = './iframe.html?' + docId;
+      document.body.append(iframe);
+    }
+    window.addEventListener("message", ({ data }) => {
+      if (data === "ready") document.querySelector('iframe').contentWindow.postMessage(docHtml);
+    });
+
+    const { initializeApp } = firebase.app;
+    const { getFirestore, doc, onSnapshot } = firebase.firestore;
+    const firebaseConfig = firebase.config;
+    const app = initializeApp(firebaseConfig, docId || '');
+    const db = getFirestore(app);
+
+    let killLiveContent = null
+    function liveContent(docId, col = "docs") {
+      killLiveContent = onSnapshot(
+        doc(db, col, docId),
+        (res) => {
+          if (res.metadata.hasPendingWrites) return;
+          setContent(res.exists() ? res.data().text : "");
+        },
+        (err) => {
+          console.error(err);
+          setContent(err.message);
+        }
+      );
+    }
+
+    if (!docId)
+      setContent("<h1>HTML IFrame</h1>");
+    else {
+      liveContent(docId);
+    }
+
+  </script>
+</body>
+
+</html>
