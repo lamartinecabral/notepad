@@ -3,75 +3,46 @@
 
 <head>
   <script>
-    const scriptQueue = [];
-    function emptyQueue() {
-      if (!scriptQueue.length) return;
-      const obj = scriptQueue[0];
-      const listener = () => {
-        obj.child.removeEventListener("load", listener);
-        scriptQueue.shift();
-        emptyQueue();
-      };
-      obj.child.addEventListener("load", listener);
-      obj.parent.appendChild(obj.child);
-    }
-    function pushToQueue(obj) {
-      scriptQueue.push(obj);
-      if (scriptQueue.length === 1) emptyQueue();
-    }
-
-    function setHTML(parent, html) {
-      const dummy = parent.cloneNode(false);
-      dummy.innerHTML = html;
-
-      if (dummy.children.length === 0) {
-        parent.innerHTML = html;
-      } else {
-        for (const child of dummy.childNodes) {
-          if (child.nodeType == Node.TEXT_NODE) {
-            parent.appendChild(document.createTextNode(child.textContent));
-            continue;
+    function fixScript(child) {
+      return new Promise((resolve) => {
+        const clone = document.createElement('script');
+        clone.innerHTML = child.innerHTML;
+        for (const { nodeName, nodeValue } of child.attributes) {
+          try {
+            clone.setAttribute(nodeName, nodeValue);
+          } catch (e) {
+            console.error(e);
           }
-          if (child.nodeType !== Node.ELEMENT_NODE) {
-            continue;
-          }
-
-          const namespaceURI = child.namespaceURI;
-
-          const clone =
-            namespaceURI !== "http://www.w3.org/1999/xhtml"
-              ? document.createElementNS(namespaceURI, child.nodeName)
-              : document.createElement(child.nodeName);
-
-          for (const { nodeName, nodeValue } of child.attributes) {
-            try {
-              clone.setAttribute(nodeName, nodeValue);
-            } catch (e) {
-              console.error(e);
-            }
-          }
-
-          if (child.children.length === 0) {
-            if (child.nodeName === "SCRIPT") {
-              if (child.text) {
-                clone.text = child.text;
-              }
-            } else {
-              if (child.innerHTML) {
-                clone.innerHTML = child.innerHTML;
-              }
-            }
-          } else {
-            setHTML(clone, child.innerHTML);
-          }
-          if (child.nodeName === "SCRIPT") pushToQueue({ parent, child: clone });
-          else parent.appendChild(clone);
         }
+        if (clone.src) {
+          const listener = () => {
+            clone.removeEventListener("load", listener);
+            resolve();
+          };
+          clone.addEventListener("load", listener);
+          child.parentElement.replaceChild(clone, child);
+        } else {
+          child.parentElement.replaceChild(clone, child);
+          resolve();
+        }
+      })
+    }
+
+    async function fixScripts() {
+      const scripts = [...document.getElementsByTagName('script')];
+      for (const scr of scripts) {
+        await fixScript(scr);
       }
     }
 
+    function setHTML(html) {
+      const doc = (new DOMParser()).parseFromString(html, 'text/html');
+      document.replaceChild(doc.documentElement, document.documentElement);
+      fixScripts();
+    }
+
     window.addEventListener("message", (event) => {
-      setHTML(document.body, event.data);
+      setHTML(event.data);
     });
 
     window.addEventListener("DOMContentLoaded", () => {
