@@ -6,6 +6,8 @@
         "deploy:rules": "firebase deploy --only firestore:rules"
     },
     "dependencies": {
+        "@codemirror/lang-html": "6.4.5",
+        "codemirror": "6.0.1",
         "firebase": "9.22.1",
         "iuai": "0.4.1",
         "marked": "5.0.4"
