@@ -47,7 +47,7 @@ export function initStateListeners() {
 
   State.isHidden.sub(function (value) {
     editor().hidden = value;
-    play().hidden = value;
+    play().hidden = value || State.language.value !== "html";
     langSelect().hidden = value;
     if (!value) {
       play().href = location.origin + "/play/?" + State.docId;
@@ -79,6 +79,8 @@ export function initStateListeners() {
   });
 
   State.language.sub(function (value) {
+    location.hash = value;
+    play().hidden = State.language.value !== "html";
     setLanguage(value);
     /** @type {HTMLOptionElement[]} */ // @ts-ignore
     const options = [...langSelect().children];
