@@ -2,10 +2,9 @@
 
 import { style } from "iuai";
 import {
+  app,
   status,
-  github,
   header,
-  footer,
   claim,
   resetPassword,
   backdrop,
@@ -18,6 +17,10 @@ export function initCss() {
   style("*", {
     fontFamily: "monospace",
   });
+  style(app, {
+    marginTop: "0",
+    paddingTop: "0",
+  });
   style(status, {
     position: "fixed",
     textAlign: "center",
@@ -28,25 +31,10 @@ export function initCss() {
     background: "var(--background)",
     color: "var(--color)",
   });
-  style(github, {
-    position: "fixed",
-    background: "var(--light)",
-    borderRadius: "50%",
-    bottom: "3px",
-    left: "calc(50% - 12px)",
-    height: "24px",
-  });
   style(header, {
-    position: "fixed",
-    top: "0px",
-    right: "3em",
+    textAlign: "end",
   });
-  style(footer, {
-    position: "fixed",
-    bottom: "2px",
-    right: "3em",
-  });
-  style(`${header} a, ${footer} a, ${claim} a, ${resetPassword} a`, {
+  style(`${header} a, ${claim} a, ${resetPassword} a`, {
     textDecoration: "underline",
     cursor: "pointer",
     background: "var(--background)",

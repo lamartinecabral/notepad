@@ -6,6 +6,7 @@ module.exports = {
     "js/html": "./src/html/index.js",
     "js/drive": "./src/drive/index.js",
     "js/code": "./src/code/index.js",
+    "js/codemirror": "./src/codemirror/index.js",
     "js/firebase": "./src/firebase/index.js",
   },
 };

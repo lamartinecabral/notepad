@@ -7,8 +7,7 @@ import {
   protectedInput,
   publicInput,
   status,
-  footer,
-  markdown,
+  play,
   password,
   options,
   app,
@@ -23,9 +22,12 @@ import {
   modal,
   logout,
   form,
+  editor,
 } from "./refs";
 import { elem } from "iuai";
-import { onChange } from "./editor";
+
+/** @type {import('../codemirror')['default']} */ // @ts-ignore
+const { onChange } = window.codemirror;
 
 export function initStateListeners() {
   State.protected.sub(function (value) {
@@ -43,9 +45,10 @@ export function initStateListeners() {
   });
 
   State.isHidden.sub(function (value) {
-    footer().hidden = value;
+    editor().hidden = value;
+    play().hidden = value;
     if (!value) {
-      markdown().href = location.origin + "/markdown/?" + State.docId;
+      play().href = location.origin + "/play/?" + State.docId;
     }
   });
 

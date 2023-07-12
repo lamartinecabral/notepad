@@ -5,9 +5,7 @@ import {
   header,
   password,
   options,
-  github,
-  footer,
-  markdown,
+  play,
   backdrop,
   modal,
   optionsModal,
@@ -23,22 +21,21 @@ import {
   submitButton,
   resetPassword,
   app,
+  editor,
 } from "./refs";
 import { elem } from "iuai";
-import { getText, setText } from "./editor";
+
+/** @type {import('../codemirror')['default']} */ // @ts-ignore
+const { getValue, setValue, initEditor } = window.codemirror;
 
 const elements = [
   elem(status, [elem("span", "Loading...")]),
   elem(header, [
+    elem(play, { href: "#" }, "play"),
+    " ",
     elem(password, { href: "#", hidden: true }, "password"),
     elem(options, { href: "#", hidden: true }, "options"),
   ]),
-  elem(github, [
-    elem("a", { href: "https://github.com/lamartinecabral/notepad" }, [
-      elem("img", { src: "../assets/github.svg" }),
-    ]),
-  ]),
-  elem(footer, { hidden: true }, [elem(markdown, { href: "#" }, "markdown")]),
   elem(backdrop, { hidden: true }, [
     elem(modal, [
       elem(optionsModal, { hidden: true }, [
@@ -100,14 +97,15 @@ const elements = [
       ]),
     ]),
   ]),
+  elem(editor),
 ];
 
 export class Html {
   static get text() {
-    return getText();
+    return getValue();
   }
   static set text(text) {
-    setText(text);
+    setValue(text);
   }
 }
 
@@ -116,4 +114,5 @@ export function initHtml() {
   app().hidden = true;
   app().className = "light";
   app().append(...elements);
+  initEditor(editor());
 }
