@@ -23,11 +23,12 @@ import {
   logout,
   form,
   editor,
+  langSelect,
 } from "./refs";
 import { elem } from "iuai";
 
 /** @type {import('../codemirror')['default']} */ // @ts-ignore
-const { onChange } = window.codemirror;
+const { onChange, setLanguage } = window.codemirror;
 
 export function initStateListeners() {
   State.protected.sub(function (value) {
@@ -47,6 +48,7 @@ export function initStateListeners() {
   State.isHidden.sub(function (value) {
     editor().hidden = value;
     play().hidden = value;
+    langSelect().hidden = value;
     if (!value) {
       play().href = location.origin + "/play/?" + State.docId;
     }
@@ -74,6 +76,16 @@ export function initStateListeners() {
     email().hidden = !value;
     resetPassword().hidden = !value;
     Control.setClaimButton();
+  });
+
+  State.language.sub(function (value) {
+    setLanguage(value);
+    /** @type {HTMLOptionElement[]} */ // @ts-ignore
+    const options = [...langSelect().children];
+    options.forEach((option) => {
+      option.selected = option.value === value;
+    });
+    localStorage && localStorage.setItem(State.docId + "_lang", value);
   });
 }
 
@@ -149,6 +161,10 @@ export function initEventListeners() {
         console.error(err);
         alert(err.message);
       });
+  });
+
+  langSelect().addEventListener("change", () => {
+    State.language.pub(langSelect().value);
   });
 
   onChange(

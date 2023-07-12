@@ -11,6 +11,7 @@ import {
   modal,
   optionsModal,
   submitButton,
+  langSelect,
 } from "./refs";
 
 export function initCss() {
@@ -76,6 +77,9 @@ export function initCss() {
   style(resetPassword, {
     textAlign: "center",
     margin: "1em 0 -1em 0",
+  });
+  style(langSelect, {
+    fontSize: "0.9rem",
   });
   style(":root", {
     "--light": "#fff",

@@ -23,3 +23,4 @@ export const submitButton = elem.ref("div");
 export const editor = elem.ref("div");
 export const claim = elem.ref("div");
 export const resetPassword = elem.ref("div");
+export const langSelect = elem.ref("select");

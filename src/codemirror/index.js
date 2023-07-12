@@ -4,6 +4,8 @@ import { EditorView, keymap } from "@codemirror/view";
 import { indentWithTab } from "@codemirror/commands";
 import { EditorState } from "@codemirror/state";
 import { html } from "@codemirror/lang-html";
+import { javascript } from "@codemirror/lang-javascript";
+import { css } from "@codemirror/lang-css";
 
 let changeHandler;
 
@@ -17,6 +19,16 @@ const changeListener = EditorView.updateListener.of((update) => {
     changeHandler(update.state.doc.toString());
 });
 
+let currentLang = "html";
+
+const getLanguage = () => {
+  return {
+    html: () => html(),
+    javascript: () => javascript(),
+    css: () => css(),
+  }[currentLang]();
+};
+
 /** @type {EditorView} */
 let editor;
 
@@ -29,7 +41,7 @@ const state = (text) => {
       changeListener,
       basicSetup,
       keymap.of([indentWithTab]),
-      html(),
+      getLanguage(),
     ],
   });
 };
@@ -54,11 +66,20 @@ const setValue = (text) => {
   editor && editor.setState(state(text));
 };
 
+/** @param {string} lang */
+const setLanguage = (lang) => {
+  if (currentLang !== lang) {
+    currentLang = lang;
+    editor && editor.setState(state(getValue()));
+  }
+};
+
 const codemirror = {
   onChange,
   initEditor,
   getValue,
   setValue,
+  setLanguage,
 };
 
 // @ts-ignore

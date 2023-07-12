@@ -12,6 +12,11 @@ export const State = {
   isHidden: new Subject(true),
   showOptions: new Subject(false),
   showPassword: new Subject(false),
+  language: new Subject("html"),
 };
 if (!State.docId) location.replace("?" + randomString(6));
-else State.docId = State.docId.toLowerCase();
+else {
+  State.docId = State.docId.toLowerCase();
+  const language = localStorage && localStorage.getItem(State.docId + "_lang");
+  if (language) State.language.pub(language);
+}

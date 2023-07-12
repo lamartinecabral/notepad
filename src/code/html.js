@@ -22,15 +22,22 @@ import {
   resetPassword,
   app,
   editor,
+  langSelect,
 } from "./refs";
 import { elem } from "iuai";
 
 /** @type {import('../codemirror')['default']} */ // @ts-ignore
-const { getValue, setValue, initEditor } = window.codemirror;
+const { getValue, setValue, initEditor, setLanguage } = window.codemirror;
 
 const elements = [
   elem(status, [elem("span", "Loading...")]),
   elem(header, [
+    elem(langSelect, [
+      elem("option", { value: "html", selected: true }, "html"),
+      elem("option", { value: "css" }, "css"),
+      elem("option", { value: "javascript" }, "javascript"),
+    ]),
+    " ",
     elem(play, { href: "#" }, "play"),
     " ",
     elem(password, { href: "#", hidden: true }, "password"),
