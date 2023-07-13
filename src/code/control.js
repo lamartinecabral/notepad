@@ -80,7 +80,7 @@ export function initStateListeners() {
 
   State.language.sub(function (value) {
     location.hash = value;
-    play().hidden = State.language.value !== "html";
+    play().hidden = State.isHidden.value || value !== "html";
     setLanguage(value);
     /** @type {HTMLOptionElement[]} */ // @ts-ignore
     const options = [...langSelect().children];
@@ -180,6 +180,6 @@ export function initEventListeners() {
           console.error(err);
           State.status.pub("Protected");
         });
-    }, 500)
+    }, 2000)
   );
 }
