@@ -39,9 +39,11 @@
     });
 
     const { initializeApp } = firebase.app;
+    const { getAuth } = firebase.auth;
     const { getFirestore, doc, onSnapshot } = firebase.firestore;
     const firebaseConfig = firebase.config;
     const app = initializeApp(firebaseConfig, docId || '');
+    const auth = getAuth(app);
     const db = getFirestore(app);
 
     let killLiveContent = null
