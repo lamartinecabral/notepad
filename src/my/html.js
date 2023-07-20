@@ -142,7 +142,7 @@ export function docElem(doc) {
       " ",
       elem(
         "a",
-        { href: "https://notepade-api.netlify.app/?id=" + doc.id },
+        { href: "https://notepadi.netlify.app/api/?id=" + doc.id },
         "raw"
       ),
       " ",
