@@ -138,13 +138,15 @@ export function docElem(doc) {
     elem("td", { style: { whiteSpace: "nowrap" } }, [
       elem("a", { href: location.origin + "/markdown/?" + doc.id }, "MD"),
       " ",
-      elem("a", { href: location.origin + "/play/?" + doc.id }, "</>"),
-      " ",
       elem(
         "a",
         { href: "https://notepadi.netlify.app/api/?id=" + doc.id },
         "raw"
       ),
+      " ",
+      elem("a", { href: location.origin + "/code/?" + doc.id }, "</>"),
+      " ",
+      elem("a", { href: location.origin + "/play/?" + doc.id }, "▶"),
       " ",
       elem(
         "button",
