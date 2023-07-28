@@ -146,7 +146,18 @@ export function docElem(doc) {
       " ",
       elem("a", { href: location.origin + "/code/?" + doc.id }, "</>"),
       " ",
-      elem("a", { href: location.origin + "/play/?" + doc.id }, "▶"),
+      elem(
+        "a",
+        {
+          href: location.origin + "/play/?" + doc.id,
+          style: {
+            display: "inline-block",
+            transform: "rotate(90deg)",
+            textDecoration: "unset",
+          },
+        },
+        "🔼"
+      ),
       " ",
       elem(
         "button",
