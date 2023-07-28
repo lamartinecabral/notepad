@@ -34,6 +34,7 @@ export function initCss() {
   });
   style(header, {
     textAlign: "end",
+    position: "relative",
   });
   style(`${header} a, ${claim} a, ${resetPassword} a`, {
     textDecoration: "underline",
