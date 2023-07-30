@@ -1,6 +1,6 @@
 // @ts-check
 
-import { elem } from "iuai";
+import { getChild, getElem, getParent } from "iuai";
 import {
   loginContainer,
   content,
@@ -32,22 +32,22 @@ export function initStateListeners() {
   State.signupMode.sub(function (value) {
     password2().hidden = !value;
     loginSubmit().value = value ? "Create" : "Login";
-    elem.getParent(signinMode.id).hidden = !value;
-    elem.getParent(signupMode.id).hidden = value;
-    elem.getParent(resetPassword.id).hidden = value;
+    getParent(signinMode.id).hidden = !value;
+    getParent(signupMode.id).hidden = value;
+    getParent(resetPassword.id).hidden = value;
     loginForm().reset();
   });
   State.message.sub(function (value) {
     message().innerText = value;
     message().hidden = !value;
-    elem.getChild(docList.id).hidden = !!value;
+    getChild(docList.id).hidden = !!value;
   });
 }
 
 export class Control {
   static addDoc(doc) {
     State.docs.push(doc);
-    elem.getChild(docList.id).append(docElem(doc));
+    getChild(docList.id).append(docElem(doc));
     State.message.pub("");
   }
   static removeDoc(doc) {
@@ -55,14 +55,14 @@ export class Control {
       "Are you sure? The note will be available for another user to claim it.";
     if (!confirm(message)) return;
     State.docs = State.docs.filter((d) => d.id !== doc.id);
-    elem.get("tr_" + doc.id).remove();
+    getElem("tr_" + doc.id).remove();
     Service.drop(doc.id);
     if (!State.docs.length)
       State.message.pub("You have not claimed any notes yet.");
   }
   static setProtected(id, value) {
-    const publ = elem.get("cbpubl_" + id, "input");
-    const drop = elem.get("bt_" + id, "button");
+    const publ = getElem("cbpubl_" + id, "input");
+    const drop = getElem("bt_" + id, "button");
     if (!value) publ.checked = false;
     publ.disabled = !value;
     drop.disabled = value;
@@ -73,7 +73,7 @@ export class Control {
   }
   static clear() {
     State.docs = [];
-    const list = elem.getChild(docList.id);
+    const list = getChild(docList.id);
     for (let i = list.children.length - 1; i >= 1; --i)
       list.children[i].remove();
   }
@@ -97,7 +97,7 @@ export class Control {
 }
 
 export function initEventListeners() {
-  elem.get(loginForm.id).addEventListener("submit", (ev) => {
+  getElem(loginForm.id).addEventListener("submit", (ev) => {
     ev.preventDefault();
     if (!ev.target) return;
     const email = ev.target[0].value;
@@ -113,7 +113,7 @@ export function initEventListeners() {
     });
   });
 
-  elem.get(claimButton.id).addEventListener("click", () => {
+  getElem(claimButton.id).addEventListener("click", () => {
     const docId = prompt("Note ID:");
     if (!docId) return;
     Service.claim(docId).catch((err) => {
@@ -124,12 +124,12 @@ export function initEventListeners() {
     });
   });
 
-  elem.get(logout.id).addEventListener("click", () => {
+  getElem(logout.id).addEventListener("click", () => {
     Service.logout();
   });
 
-  elem.get(resetPassword.id).addEventListener("click", () => {
-    const email = elem.get(loginForm.id)[0].value;
+  getElem(resetPassword.id).addEventListener("click", () => {
+    const email = getElem(loginForm.id)[0].value;
     Service.resetPassword(email)
       .then(() => {
         alert(
@@ -142,11 +142,11 @@ export function initEventListeners() {
       });
   });
 
-  elem.get(signinMode.id).addEventListener("click", () => {
+  getElem(signinMode.id).addEventListener("click", () => {
     State.signupMode.pub(false);
   });
 
-  elem.get(signupMode.id).addEventListener("click", () => {
+  getElem(signupMode.id).addEventListener("click", () => {
     State.signupMode.pub(true);
   });
 }

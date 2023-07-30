@@ -26,12 +26,12 @@ import {
   logout,
   form,
 } from "./refs";
-import { elem } from "iuai";
+import { getElem, getChild, getParent } from "iuai";
 
 export function initStateListeners() {
   State.protected.sub(function (value) {
     protectedInput().checked = value;
-    elem.getParent(publicInput.id).hidden = !value;
+    getParent(publicInput.id).hidden = !value;
     Control.setClaimButton();
   });
 
@@ -40,7 +40,7 @@ export function initStateListeners() {
   });
 
   State.status.sub(function (value) {
-    elem.getChild(status.id).innerText = value;
+    getChild(status.id).innerText = value;
   });
 
   State.isHidden.sub(function (value) {
@@ -86,7 +86,7 @@ export function initStateListeners() {
 class Control {
   static setClaimButton() {
     claim().hidden = State.hasOwner.value || State.protected.value;
-    elem.getChild(claim.id, "a").href =
+    getChild(claim.id, "a").href =
       location.origin + "/my/?claim=" + State.docId;
   }
 }
@@ -122,7 +122,7 @@ export function initEventListeners() {
 
   protectedInput().addEventListener("change", () => {
     Service.setProtected(!State.protected.value);
-    elem.getParent(publicInput.id).hidden = State.protected.value;
+    getParent(publicInput.id).hidden = State.protected.value;
   });
 
   publicInput().addEventListener("change", () => {
@@ -148,7 +148,7 @@ export function initEventListeners() {
   });
 
   resetPassword().addEventListener("click", () => {
-    const email = elem.get(form.id)[0].value;
+    const email = getElem(form.id)[0].value;
     Service.resetPassword(email)
       .then(() => {
         alert(
