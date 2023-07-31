@@ -38,7 +38,14 @@
     function setHTML(html) {
       const doc = (new DOMParser()).parseFromString(html, 'text/html');
       document.replaceChild(doc.documentElement, document.documentElement);
+      document.head.append(base());
       fixScripts();
+    }
+
+    function base() {
+      const b = document.createElement('base');
+      b.target = '_parent';
+      return b;
     }
 
     window.addEventListener("message", (event) => {
