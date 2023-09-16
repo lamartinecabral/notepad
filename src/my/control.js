@@ -1,6 +1,6 @@
 // @ts-check
 
-import { getChild, getElem, getParent } from "iuai";
+import { getChild, getElem, getParent } from "../iuai";
 import {
   loginContainer,
   content,

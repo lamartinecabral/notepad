@@ -1,6 +1,6 @@
 // @ts-check
 
-import { style } from "iuai";
+import { style } from "../iuai";
 import { loginContainer, content, userEmail } from "./refs";
 
 export function initCss() {

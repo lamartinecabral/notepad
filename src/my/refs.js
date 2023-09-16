@@ -1,6 +1,6 @@
 // @ts-check
 
-import { refElem } from "iuai";
+import { refElem } from "../iuai";
 
 export const app = refElem("body");
 export const content = refElem("div");
