@@ -26,7 +26,7 @@ import {
   logout,
   form,
 } from "./refs";
-import { getElem, getChild, getParent } from "iuai";
+import { getElem, getChild, getParent } from "../iuai";
 
 export function initStateListeners() {
   State.protected.sub(function (value) {
@@ -170,7 +170,7 @@ export function initEventListeners() {
       ev.preventDefault();
       let ident = "";
       const target = textarea();
-      for (let j = target.selectionStart; j; ) {
+      for (let j = target.selectionStart; j;) {
         let char = target.value[--j];
         if (char === "\n") break;
         if (char === " " || char === "\t") ident = char + ident;
