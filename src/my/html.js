@@ -21,7 +21,7 @@ import {
   logout,
   app,
 } from "./refs";
-import { elem } from "iuai";
+import { elem } from "../iuai";
 
 const elements = [
   elem(loginContainer, { className: "center", hidden: true }, [
@@ -138,26 +138,11 @@ export function docElem(doc) {
     elem("td", { style: { whiteSpace: "nowrap" } }, [
       elem("a", { href: location.origin + "/markdown/?" + doc.id }, "MD"),
       " ",
-      elem(
-        "a",
-        { href: "https://notepadi.netlify.app/api/?id=" + doc.id },
-        "raw"
-      ),
+      elem("a", { href: "https://notepadi.netlify.app/api/?id=" + doc.id }, "raw"),
       " ",
       elem("a", { href: location.origin + "/code/?" + doc.id }, "</>"),
       " ",
-      elem(
-        "a",
-        {
-          href: location.origin + "/play/?" + doc.id,
-          style: {
-            display: "inline-block",
-            transform: "rotate(90deg)",
-            textDecoration: "unset",
-          },
-        },
-        "🔼"
-      ),
+      elem("a", { href: location.origin + "/play/?" + doc.id }, "▶"),
       " ",
       elem(
         "button",

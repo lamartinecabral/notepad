@@ -26,7 +26,7 @@ import {
   textarea,
   app,
 } from "./refs";
-import { elem } from "iuai";
+import { elem } from "../iuai";
 
 const elements = [
   elem(status, [elem("span", "Loading...")]),
