@@ -7,6 +7,7 @@ import { html } from "@codemirror/lang-html";
 import { javascript } from "@codemirror/lang-javascript";
 import { css } from "@codemirror/lang-css";
 import { cpp } from "@codemirror/lang-cpp";
+import { markdown } from "@codemirror/lang-markdown";
 import { python } from "@codemirror/lang-python";
 import { java } from "@codemirror/lang-java";
 
@@ -32,6 +33,10 @@ const getLanguage = () => {
     cpp: () => cpp(),
     python: () => python(),
     java: () => java(),
+    markdown: () =>
+      markdown({
+        defaultCodeLanguage: javascript(),
+      }),
   }[currentLang]();
 };
 

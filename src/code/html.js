@@ -36,11 +36,7 @@ const btn = (() => {
   });
   return (attributes, children) => {
     const className = "btn " + (attributes.className || "");
-    return elem(
-      "span",
-      { ...attributes, className, style, tabindex: "0" },
-      children
-    );
+    return elem("span", { ...attributes, className, tabindex: "0" }, children);
   };
 })();
 
@@ -53,6 +49,7 @@ const elements = [
       elem("option", { value: "html" }, "html"),
       elem("option", { value: "java" }, "java"),
       elem("option", { value: "javascript" }, "javascript"),
+      elem("option", { value: "markdown" }, "markdown"),
       elem("option", { value: "python" }, "python"),
     ]),
     " ",
