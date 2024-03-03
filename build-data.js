@@ -9,6 +9,7 @@ function run() {
   fileContent += `buildTime: ${new Date().toISOString()}\n`;
   fileContent += `GITHUB_SHA: ${process.env.GITHUB_SHA}\n`;
   fileContent += `GITHUB_WORKFLOW_SHA: ${process.env.GITHUB_WORKFLOW_SHA}\n`;
+  fileContent += `GITHUB_REF: ${process.env.GITHUB_REF}\n`;
   fileContent += "-->\n";
 
   fs.writeFileSync(filepath, fileContent);
