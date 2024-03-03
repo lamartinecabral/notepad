@@ -11,7 +11,6 @@
   ],
   "compilerOptions": {
     "allowJs": true,
-    "noEmitOnError": false,
     "outDir": "dist/js/",
     "target": "ES5",
     "module": "NodeNext"
