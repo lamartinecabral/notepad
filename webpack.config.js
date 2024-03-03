@@ -9,4 +9,13 @@ module.exports = {
     "js/codemirror": "./src/codemirror/index.js",
     "js/firebase": "./src/firebase/index.js",
   },
+  module: {
+    rules: [
+      {
+        test: /\.[mc]?[jt]s$/,
+        use: "ts-loader",
+      },
+    ],
+  },
+  target: ["es5", "web"],
 };

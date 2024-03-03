@@ -16,9 +16,34 @@
 </head>
 
 <body>
-	<script src="https://cdn.jsdelivr.net/npm/iuai@0.5.4/iuai.js"></script>
-	<script src="../js/firebase.js"></script>
-	<script src="../js/my.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/iuai@0.5.5/iuai.js"></script>
+	<script>
+		var addScripts = function() {
+			var scripts = arguments[0];
+			var index = arguments[1] || 0;
+			if(index >= scripts.length) return;
+			var url = scripts[index].url;
+			var test = scripts[index].test;
+			if(!test || test()) {
+				document.body.appendChild(iuai.elem('script', {
+					src: url,
+					onload: function() { addScripts(scripts, index + 1); },
+				}));
+			} else addScripts(scripts, index + 1);
+		}
+		addScripts([
+			{
+				url: 'https://cdn.jsdelivr.net/npm/core-js-bundle@3.32.2/minified.min.js',
+				test: function() { return ![].find },
+			},
+			{
+				url: 'https://cdn.jsdelivr.net/npm/whatwg-fetch@3.6.19/dist/fetch.umd.min.js',
+				test: function() { return !window.fetch },
+			},
+			{ url: '../js/firebase.js' },
+			{ url: '../js/my.js' },
+		]);
+	</script>
 </body>
 
 </html>
