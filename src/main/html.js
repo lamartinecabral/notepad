@@ -132,5 +132,5 @@ export function initHtml() {
   document.body.id = app.id;
   app().hidden = true;
   app().className = "light";
-  app().append(...elements);
+  for (const element of elements) app().appendChild(element);
 }

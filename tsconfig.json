@@ -1,0 +1,18 @@
+{
+  "files": [
+    "src/main/index.js",
+    "src/my/index.js",
+    "src/markdown/index.js",
+    "src/html/index.js",
+    "src/drive/index.js",
+    "src/code/index.js",
+    "src/codemirror/index.js",
+    "src/firebase/index.js",
+  ],
+  "compilerOptions": {
+    "allowJs": true,
+    "outDir": "dist/js/",
+    "target": "ES5",
+    "module": "NodeNext"
+  }
+}

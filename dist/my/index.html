@@ -16,9 +16,22 @@
 </head>
 
 <body>
-	<script src="https://cdn.jsdelivr.net/npm/iuai@0.5.4/iuai.js"></script>
-	<script src="../js/firebase.js"></script>
-	<script src="../js/my.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/iuai@0.5.5/iuai.js"></script>
+	<script src="../addScripts.js"></script>
+	<script>
+		addScripts([
+			{
+				url: 'https://www.unpkg.com/core-js-bundle@3.36.0/minified.js',
+				test: function() { return ![].find },
+			},
+			{
+				url: 'https://cdn.jsdelivr.net/npm/cross-fetch/dist/cross-fetch.js',
+				test: function() { return !window.fetch },
+			},
+			{ url: '../js/firebase.js' },
+			{ url: '../js/my.js' },
+		]);
+	</script>
 </body>
 
 </html>
