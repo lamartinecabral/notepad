@@ -17,20 +17,8 @@
 
 <body>
 	<script src="https://cdn.jsdelivr.net/npm/iuai@0.5.5/iuai.js"></script>
+	<script src="./addScripts.js"></script>
 	<script>
-		var addScripts = function() {
-			var scripts = arguments[0];
-			var index = arguments[1] || 0;
-			if(index >= scripts.length) return;
-			var url = scripts[index].url;
-			var test = scripts[index].test;
-			if(!test || test()) {
-				document.body.appendChild(iuai.elem('script', {
-					src: url,
-					onload: function() { addScripts(scripts, index + 1); },
-				}));
-			} else addScripts(scripts, index + 1);
-		}
 		addScripts([
 			{
 				url: 'https://www.unpkg.com/core-js-bundle@3.36.0/minified.js',

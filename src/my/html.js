@@ -138,7 +138,11 @@ export function docElem(doc) {
     elem("td", { style: { whiteSpace: "nowrap" } }, [
       elem("a", { href: location.origin + "/markdown/?" + doc.id }, "MD"),
       " ",
-      elem("a", { href: "https://notepadi.netlify.app/api/?id=" + doc.id }, "raw"),
+      elem(
+        "a",
+        { href: "https://notepadi.netlify.app/api/?id=" + doc.id },
+        "raw"
+      ),
       " ",
       elem("a", { href: location.origin + "/code/?" + doc.id }, "</>"),
       " ",
@@ -159,5 +163,5 @@ export function docElem(doc) {
 
 export function initHtml() {
   document.body.id = app.id;
-  app().append(...elements);
+  for (const element of elements) app().appendChild(element);
 }
