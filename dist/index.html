@@ -33,11 +33,11 @@
 		}
 		addScripts([
 			{
-				url: 'https://cdn.jsdelivr.net/npm/core-js-bundle@3.32.2/minified.min.js',
+				url: 'https://www.unpkg.com/core-js-bundle@3.36.0/minified.js',
 				test: function() { return ![].find },
 			},
 			{
-				url: 'https://cdn.jsdelivr.net/npm/whatwg-fetch@3.6.19/dist/fetch.umd.min.js',
+				url: 'https://cdn.jsdelivr.net/npm/cross-fetch/dist/cross-fetch.js',
 				test: function() { return !window.fetch },
 			},
 			{ url: './js/firebase.js' },
