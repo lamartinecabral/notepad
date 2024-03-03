@@ -16,21 +16,13 @@
 </head>
 
 <body>
-	<script src="https://cdn.jsdelivr.net/npm/iuai@0.5.5/iuai.js"></script>
-	<script src="./addScripts.js"></script>
+	<script src="./loadscript.js"></script>
 	<script>
-		addScripts([
-			{
-				url: 'https://www.unpkg.com/core-js-bundle@3.36.0/minified.js',
-				test: function() { return ![].find },
-			},
-			{
-				url: 'https://cdn.jsdelivr.net/npm/cross-fetch/dist/cross-fetch.js',
-				test: function() { return !window.fetch },
-			},
-			{ url: './js/firebase.js' },
-			{ url: './js/main.js' },
-		]);
+		![].find && loadscript('https://www.unpkg.com/core-js-bundle@3.36.0/minified.js');
+		!window.fetch && loadscript('https://cdn.jsdelivr.net/npm/cross-fetch/dist/cross-fetch.js');
+		loadscript('https://cdn.jsdelivr.net/npm/iuai@0.5.5/iuai.js');
+		loadscript('./js/firebase.js');
+		loadscript('./js/main.js');
 	</script>
 </body>
 
