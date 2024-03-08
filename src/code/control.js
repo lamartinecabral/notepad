@@ -27,7 +27,7 @@ import {
 } from "./refs";
 import { getElem, getChild, getParent } from "iuai";
 
-/** @type {import('../codemirror')['default']} */ // @ts-ignore
+/** @type {import('../codemirror/codemirror')} */ // @ts-ignore
 const { onChange, setLanguage } = window.codemirror;
 
 export function initStateListeners() {

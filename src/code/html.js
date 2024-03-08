@@ -26,7 +26,7 @@ import {
 } from "./refs";
 import { elem, style } from "iuai";
 
-/** @type {import('../codemirror')['default']} */ // @ts-ignore
+/** @type {import('../codemirror/codemirror')} */ // @ts-ignore
 const { getValue, setValue, initEditor, setLanguage } = window.codemirror;
 
 const btn = (() => {
