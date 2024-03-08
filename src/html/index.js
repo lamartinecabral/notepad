@@ -2,7 +2,7 @@
 import { auth, db } from "./firebase";
 import { State } from "./state";
 
-/** @type {import('../firebase')['default']} */
+/** @type {import('../firebase/firebase')} */
 // @ts-ignore
 const firebase = window.firebase
 
