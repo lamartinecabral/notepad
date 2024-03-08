@@ -3,7 +3,7 @@
 import { Control } from "./control";
 import { State } from "./state";
 
-/** @type {import('../firebase')['default']} */ // @ts-ignore
+/** @type {import('../firebase/firebase')} */ // @ts-ignore
 const firebase = window.firebase;
 
 const app = firebase.app.initializeApp(firebase.config);

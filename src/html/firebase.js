@@ -2,9 +2,9 @@
 
 import { State } from "./state";
 
-/** @type {import('../firebase')['default']} */
+/** @type {import('../firebase/firebase')} */
 // @ts-ignore
-const firebase = window.firebase
+const firebase = window.firebase;
 
 const { initializeApp } = firebase.app;
 const { getFirestore } = firebase.firestore;
@@ -14,7 +14,7 @@ const firebaseConfig = firebase.config;
 // Initialize Firebase
 console.log(`init firebase (${State.docId})`);
 
-const app = initializeApp(firebaseConfig, State.docId || '');
+const app = initializeApp(firebaseConfig, State.docId || "");
 
 export const auth = getAuth(app);
 

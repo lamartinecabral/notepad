@@ -3,7 +3,7 @@
 import { State } from "./state";
 import { Html } from "./html";
 
-/** @type {import('../firebase')['default']} */ // @ts-ignore
+/** @type {import('../firebase/firebase')} */ // @ts-ignore
 const firebase = window.firebase;
 
 const app = firebase.app.initializeApp(firebase.config, State.docId || "");
