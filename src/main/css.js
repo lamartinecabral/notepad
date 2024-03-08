@@ -14,15 +14,21 @@ import {
   modal,
   optionsModal,
   submitButton,
+  theme,
 } from "./refs";
 
 export function initCss() {
+  const supportCssVar = !!CSS.supports?.("color: var(--x)");
+  const [background, color] = supportCssVar
+    ? ["var(--background)", "var(--color)"]
+    : ["white", "black"];
+
   style("*", {
     fontFamily: "monospace",
   });
   const appRule = style(app, {
-    background: "var(--background)",
-    color: "var(--color)",
+    background,
+    color,
     margin: "0",
     padding: "0",
     overflow: "hidden",
@@ -35,8 +41,8 @@ export function initCss() {
     top: "0",
   });
   style(status + " span", {
-    background: "var(--background)",
-    color: "var(--color)",
+    background,
+    color,
   });
   style(textarea, {
     width: "calc(100% - 22px)",
@@ -46,13 +52,13 @@ export function initCss() {
     border: "1px solid",
     resize: "none",
     tabSize: "4",
-    background: "var(--background)",
-    color: "var(--color)",
+    background,
+    color,
     overflowAnchor: "none", // it fixes chromium's scroll anchor bug https://bugs.chromium.org/p/chromium/issues/detail?id=997266
   });
   style(github, {
     position: "fixed",
-    background: "var(--light)",
+    background: "#fff",
     borderRadius: "50%",
     bottom: "3px",
     left: "calc(50% - 12px)",
@@ -71,8 +77,8 @@ export function initCss() {
   style(`${header} a, ${footer} a, ${claim} a, ${resetPassword} a`, {
     textDecoration: "underline",
     cursor: "pointer",
-    background: "var(--background)",
-    color: "var(--color)",
+    background,
+    color,
   });
   style(backdrop, {
     position: "fixed",
@@ -84,14 +90,14 @@ export function initCss() {
     zIndex: "1",
   });
   style(modal, {
-    background: "var(--background)",
+    background,
     padding: "2em",
     position: "absolute",
     bottom: "50%",
     right: "50%",
     transform: "translate(50%, 50%)",
-    color: "var(--color)",
-    border: "1px solid var(--color)",
+    color,
+    border: `1px solid ${color}`,
   });
   style(optionsModal + " > div:nth-child(2)", {
     marginTop: "0.5em",
@@ -123,6 +129,10 @@ export function initCss() {
     "--background": "var(--dark)",
     "--color": "var(--light)",
   });
+  !supportCssVar &&
+    style(theme, {
+      display: "none",
+    });
 
   const setHeight = () => (appRule.style.height = window.innerHeight + "px");
   setHeight();
