@@ -3,6 +3,7 @@
 import { randomString, Subject } from "../utils";
 
 export const State = {
+  isIE: !!navigator.userAgent.match(/(msie |rv:)(\d+(\.?_?\d+)+)/i),
   docId: location.search.slice(1),
   public: new Subject(false),
   protected: new Subject(false),

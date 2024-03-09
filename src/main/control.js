@@ -162,7 +162,7 @@ export function initEventListeners() {
   });
 
   textarea().addEventListener("keydown", (ev) => {
-    if (ev.ctrlKey || ev.shiftKey || ev.altKey) return;
+    if (State.isIE || ev.ctrlKey || ev.shiftKey || ev.altKey) return;
     if (ev.keyCode === 9 || ev.key === "Tab") {
       ev.preventDefault();
       return document.execCommand("insertText", false, "\t");
@@ -170,7 +170,7 @@ export function initEventListeners() {
       ev.preventDefault();
       let ident = "";
       const target = textarea();
-      for (let j = target.selectionStart; j;) {
+      for (let j = target.selectionStart; j; ) {
         let char = target.value[--j];
         if (char === "\n") break;
         if (char === " " || char === "\t") ident = char + ident;
