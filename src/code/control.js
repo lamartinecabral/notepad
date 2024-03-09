@@ -25,7 +25,7 @@ import {
   editor,
   langSelect,
 } from "./refs";
-import { getElem, getChild, getParent } from "iuai";
+import { getElem, getChild, getParent } from "../iuai";
 
 /** @type {import('../codemirror/codemirror')} */ // @ts-ignore
 const { onChange, setLanguage } = window.codemirror;

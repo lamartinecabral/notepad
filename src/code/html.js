@@ -24,7 +24,7 @@ import {
   editor,
   langSelect,
 } from "./refs";
-import { elem, style } from "iuai";
+import { elem, style } from "../iuai";
 
 /** @type {import('../codemirror/codemirror')} */ // @ts-ignore
 const { getValue, setValue, initEditor, setLanguage } = window.codemirror;
