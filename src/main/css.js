@@ -18,7 +18,7 @@ import {
 } from "./refs";
 
 export function initCss() {
-  const supportCssVar = !!CSS.supports?.("color: var(--x)");
+  const supportCssVar = !!window.CSS?.supports?.("color: var(--x)");
   const [background, color] = supportCssVar
     ? ["var(--background)", "var(--color)"]
     : ["white", "black"];
