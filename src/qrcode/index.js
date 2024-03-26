@@ -27,10 +27,18 @@ var qrcode = {
 
   /** @param {string} text */
   setContent: function (text) {
-    QRCode.toDataURL(text)
-      .then((url) => {
+    const width = Math.min(screen.height, screen.width);
+
+    QRCode.toDataURL(text, { errorCorrectionLevel: "H", width })
+      .catch((_) =>
+        QRCode.toDataURL(text, {
+          errorCorrectionLevel: "L",
+          width,
+        })
+      )
+      .then((dataUrl) => {
         const img = document.createElement("img");
-        img.src = url;
+        img.src = dataUrl;
         img.style.width = "100%";
         qrcode.content().innerHTML = img.outerHTML;
       })
