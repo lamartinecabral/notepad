@@ -94,4 +94,16 @@ export function initCss() {
     "--background": "var(--dark)",
     "--color": "var(--light)",
   });
+  style(".side-by-side", {
+    "float": "left",
+    "height": "100%",
+    "width": "60%"
+  }),
+  style(".side-by-side + iframe", {
+    "position": "fixed",
+    "height": "100vh",
+    "width": "38%",
+    "top": "20px",
+    "right": "0"
+  })
 }

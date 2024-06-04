@@ -24,6 +24,8 @@ import {
   form,
   editor,
   langSelect,
+  show_preview,
+  preview,
 } from "./refs";
 import { getElem, getChild, getParent } from "../iuai";
 
@@ -88,6 +90,16 @@ export function initStateListeners() {
       option.selected = option.value === value;
     });
     localStorage && localStorage.setItem(State.docId + "_lang", value);
+    
+    State.show_preview.pub(State.show_preview.value);  
+  });
+  
+  State.show_preview.sub(function (checked) {
+    preview().hidden = !checked;
+    editor().classList.toggle("side-by-side", checked);
+    
+    const render = {'html': 'play', 'markdown': 'markdown', 'qrcode':'qrcode'}[State.language.value];
+    preview().src = `https://notepade.web.app/${render}?` + State.docId;
   });
 }
 
@@ -169,6 +181,11 @@ export function initEventListeners() {
     State.language.pub(langSelect().value);
   });
 
+  show_preview().addEventListener("change", (e) => {
+    if ('checked' in e.target) {
+      State.show_preview.pub(!!e.target.checked);
+    }
+  });
   onChange(
     debounce(function () {
       State.status.pub("Saving...");
