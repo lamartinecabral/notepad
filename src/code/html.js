@@ -23,11 +23,13 @@ import {
   app,
   editor,
   langSelect,
+  preview,
+  show_preview,
 } from "./refs";
 import { elem, style } from "../iuai";
 
 /** @type {import('../codemirror/codemirror')} */ // @ts-ignore
-const { getValue, setValue, initEditor, setLanguage } = window.codemirror;
+const { getValue, setValue, initEditor } = window.codemirror;
 
 const btn = (() => {
   style(".btn", {
@@ -43,6 +45,12 @@ const btn = (() => {
 const elements = [
   elem(status, [elem("span", "Loading...")]),
   elem(header, [
+    " ",
+    elem("label", [
+      "preview: ",
+      elem(show_preview, {type: 'checkbox', checked: true}),
+    ]),
+    " ",
     elem(langSelect, [
       elem("option", { value: "cpp" }, "c++"),
       elem("option", { value: "css" }, "css"),
@@ -118,6 +126,7 @@ const elements = [
     ]),
   ]),
   elem(editor),
+  elem(preview)
 ];
 
 export class Html {
@@ -135,4 +144,6 @@ export function initHtml() {
   app().className = "light";
   app().append(...elements);
   initEditor(editor());
+  
+
 }

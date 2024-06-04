@@ -24,3 +24,5 @@ export const editor = refElem("div");
 export const claim = refElem("div");
 export const resetPassword = refElem("div");
 export const langSelect = refElem("select");
+export const show_preview = refElem("input")
+export const preview = refElem('iframe');
