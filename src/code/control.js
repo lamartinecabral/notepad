@@ -24,7 +24,7 @@ import {
   form,
   editor,
   langSelect,
-  show_preview,
+  showPreview,
   preview,
 } from "./refs";
 import { getElem, getChild, getParent } from "../iuai";
@@ -50,6 +50,9 @@ export function initStateListeners() {
   State.isHidden.sub(function (value) {
     editor().hidden = value;
     play().hidden = value || State.language.value !== "html";
+    getParent(showPreview.id).hidden =
+      value ||
+      (State.language.value !== "html" && State.language.value !== "markdown");
     langSelect().hidden = value;
     if (!value) {
       play().href = location.origin + "/play/?" + State.docId;
@@ -83,6 +86,8 @@ export function initStateListeners() {
   State.language.sub(function (value) {
     location.hash = value;
     play().hidden = State.isHidden.value || value !== "html";
+    getParent(showPreview.id).hidden =
+      State.isHidden.value || (value !== "html" && value !== "markdown");
     setLanguage(value);
     /** @type {HTMLOptionElement[]} */ // @ts-ignore
     const options = [...langSelect().children];
@@ -90,16 +95,20 @@ export function initStateListeners() {
       option.selected = option.value === value;
     });
     localStorage && localStorage.setItem(State.docId + "_lang", value);
-    
-    State.show_preview.pub(State.show_preview.value);  
+
+    State.showPreview.pub(false);
   });
-  
-  State.show_preview.sub(function (checked) {
+
+  State.showPreview.sub(function (checked) {
+    showPreview().checked = checked;
     preview().hidden = !checked;
     editor().classList.toggle("side-by-side", checked);
-    
-    const render = {'html': 'play', 'markdown': 'markdown', 'qrcode':'qrcode'}[State.language.value];
-    preview().src = `https://notepade.web.app/${render}?` + State.docId;
+
+    const render =
+      { html: "play", markdown: "markdown" }[checked && State.language.value] ||
+      "";
+    preview().src =
+      render && `https://notepade.web.app/${render}/?${State.docId}`;
   });
 }
 
@@ -181,11 +190,10 @@ export function initEventListeners() {
     State.language.pub(langSelect().value);
   });
 
-  show_preview().addEventListener("change", (e) => {
-    if ('checked' in e.target) {
-      State.show_preview.pub(!!e.target.checked);
-    }
+  showPreview().addEventListener("change", () => {
+    State.showPreview.pub(!State.showPreview.value);
   });
+
   onChange(
     debounce(function () {
       State.status.pub("Saving...");

@@ -24,7 +24,7 @@ import {
   editor,
   langSelect,
   preview,
-  show_preview,
+  showPreview,
 } from "./refs";
 import { elem, style } from "../iuai";
 
@@ -46,10 +46,7 @@ const elements = [
   elem(status, [elem("span", "Loading...")]),
   elem(header, [
     " ",
-    elem("label", [
-      "preview: ",
-      elem(show_preview, {type: 'checkbox', checked: true}),
-    ]),
+    elem("label", [elem(showPreview, { type: "checkbox" }), "preview"]),
     " ",
     elem(langSelect, [
       elem("option", { value: "cpp" }, "c++"),
@@ -126,7 +123,7 @@ const elements = [
     ]),
   ]),
   elem(editor),
-  elem(preview)
+  elem(preview),
 ];
 
 export class Html {
@@ -144,6 +141,4 @@ export function initHtml() {
   app().className = "light";
   app().append(...elements);
   initEditor(editor());
-  
-
 }

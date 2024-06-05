@@ -21,7 +21,7 @@ export const State = {
   showOptions: new Subject(false),
   showPassword: new Subject(false),
   language: new Subject(language(location.hash.slice(1))),
-  show_preview: new Subject(true),
+  showPreview: new Subject(false),
 };
 if (!State.docId) location.replace("?" + randomString(6));
 else {
