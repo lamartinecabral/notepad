@@ -27,6 +27,7 @@ export function initCss() {
     textAlign: "center",
     width: "100%",
     top: "0",
+    zIndex: "1",
   });
   style(status + " span", {
     background: "var(--background)",
