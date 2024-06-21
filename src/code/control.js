@@ -198,16 +198,22 @@ export function initEventListeners() {
   });
 
   onChange(
-    debounce(function () {
-      State.status.pub("Saving...");
-      Service.save()
-        .then(() => {
-          State.status.pub("");
-        })
-        .catch((err) => {
-          console.error(err);
-          State.status.pub("Protected");
-        });
-    }, 2000)
+    (() => {
+      const save = () => {
+        State.status.pub("Saving...");
+        Service.save()
+          .then(() => {
+            State.status.pub("");
+          })
+          .catch((err) => {
+            console.error(err);
+            State.status.pub("Protected");
+          });
+      };
+      const shortDebounced = debounce(save, 500);
+      const longDebounced = debounce(save, 2000);
+      return () =>
+        State.showPreview.value ? shortDebounced() : longDebounced();
+    })()
   );
 }
