@@ -34,7 +34,35 @@ import {
 } from "firebase/auth";
 import { firebaseConfig } from "./config.js";
 
-export const app = { initializeApp };
+/**
+ * @overload
+ * @param {import('firebase/app').FirebaseOptions} [options]
+ * @param {string} [name]
+ * @return {import('firebase/app').FirebaseApp}
+ */
+
+/**
+ * @overload
+ * @param {import('firebase/app').FirebaseOptions} [options]
+ * @param {import('firebase/app').FirebaseAppSettings} [settings]
+ * @return {import('firebase/app').FirebaseApp}
+ */
+
+/**
+ * @overload
+ * @param {string} [name]
+ * @return {import('firebase/app').FirebaseApp}
+ */
+
+function initApp(...args) {
+  if (args.length === 0) return initializeApp(firebaseConfig);
+  if (typeof args[0] === "string")
+    return initializeApp(firebaseConfig, args[0]);
+  // @ts-ignore
+  return initializeApp(...args);
+}
+
+export const app = { initializeApp: initApp };
 export const storage = {
   deleteObject,
   getDownloadURL,
@@ -67,4 +95,3 @@ export const auth = {
   signInWithEmailAndPassword,
   signOut,
 };
-export const config = firebaseConfig;

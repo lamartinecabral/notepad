@@ -6,7 +6,7 @@ import { Html } from "./html";
 /** @type {import('../firebase/firebase')} */ // @ts-ignore
 const firebase = window.firebase;
 
-const app = firebase.app.initializeApp(firebase.config, State.docId || "");
+const app = firebase.app.initializeApp(State.docId || "");
 const auth = firebase.auth.getAuth(app);
 const db = firebase.firestore.getFirestore(app);
 
