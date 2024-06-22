@@ -95,15 +95,10 @@ export function initStateListeners() {
     State.showPreview.pub(false);
   });
 
-  State.showPreview.sub(function (checked) {
-    preview().hidden = !checked;
-    getParent(editor.id).classList.toggle("sideBySide", checked);
-
-    const render =
-      { html: "play", markdown: "markdown" }[checked && State.language.value] ||
-      "";
-    preview().src =
-      render && `https://notepade.web.app/${render}/?${State.docId}`;
+  State.showPreview.sub(function (value) {
+    preview().hidden = !value;
+    getParent(editor.id).classList.toggle("sideBySide", value);
+    preview().src = value ? play().href : "";
   });
 }
 

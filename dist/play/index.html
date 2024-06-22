@@ -33,13 +33,8 @@
       if (data === "ready") document.querySelector('iframe').contentWindow.postMessage(docHtml);
     });
 
-    const { initializeApp } = firebase.app;
-    const { getAuth } = firebase.auth;
-    const { getFirestore, doc, onSnapshot } = firebase.firestore;
-    const firebaseConfig = firebase.config;
-    const app = initializeApp(firebaseConfig, docId || '');
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+    const { auth, db } = firebase.initApp(docId || '');
+    const { doc, onSnapshot } = firebase.firestore;
 
     let killLiveContent = null
     function liveContent(docId, col = "docs") {

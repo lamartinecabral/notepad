@@ -6,9 +6,7 @@ import { State } from "./state";
 /** @type {import('../firebase/firebase')} */ // @ts-ignore
 const firebase = window.firebase;
 
-const app = firebase.app.initializeApp();
-const auth = firebase.auth.getAuth(app);
-const db = firebase.firestore.getFirestore(app);
+const { auth, db } = firebase.initApp();
 
 const {
   collection,

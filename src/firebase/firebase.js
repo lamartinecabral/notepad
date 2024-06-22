@@ -35,38 +35,26 @@ import {
 import { firebaseConfig } from "./config.js";
 
 /**
- * @overload
- * @param {import('firebase/app').FirebaseOptions} [options]
  * @param {string} [name]
- * @return {import('firebase/app').FirebaseApp}
  */
+export const initApp = (name) => {
+  const app = initializeApp(firebaseConfig, name);
+  return {
+    get db() {
+      return getFirestore(app);
+    },
+    get auth() {
+      return getAuth(app);
+    },
+    get storage() {
+      return getStorage(app);
+    },
+  };
+};
 
-/**
- * @overload
- * @param {import('firebase/app').FirebaseOptions} [options]
- * @param {import('firebase/app').FirebaseAppSettings} [settings]
- * @return {import('firebase/app').FirebaseApp}
- */
-
-/**
- * @overload
- * @param {string} [name]
- * @return {import('firebase/app').FirebaseApp}
- */
-
-function initApp(...args) {
-  if (args.length === 0) return initializeApp(firebaseConfig);
-  if (typeof args[0] === "string")
-    return initializeApp(firebaseConfig, args[0]);
-  // @ts-ignore
-  return initializeApp(...args);
-}
-
-export const app = { initializeApp: initApp };
 export const storage = {
   deleteObject,
   getDownloadURL,
-  getStorage,
   listAll,
   ref,
   uploadBytes,
@@ -78,7 +66,6 @@ export const firestore = {
   doc,
   getDoc,
   getDocs,
-  getFirestore,
   onSnapshot,
   query,
   setDoc,
@@ -87,7 +74,6 @@ export const firestore = {
 };
 export const auth = {
   createUserWithEmailAndPassword,
-  getAuth,
   getIdToken,
   onAuthStateChanged,
   sendEmailVerification,
