@@ -14,7 +14,7 @@
   <script src="../js/firebase.js"></script>
 </head>
 
-<body style="margin: 0;">
+<body style="margin: 0; overflow: hidden;">
   <script>
 
     let [docId, hash] = (document.URL.split("?")[1] || "").split("#");
@@ -57,9 +57,9 @@
       liveContent(docId);
     }
 
-    window.addEventListener("resize", (function(){
-      function setHeight(){document.body.style.height = window.innerHeight + "px"};
-      return (setHeight(),setHeight);
+    window.addEventListener("resize", (function () {
+      function setHeight() { document.body.style.height = window.innerHeight + "px" };
+      return (setHeight(), setHeight);
     })());
   </script>
 </body>
