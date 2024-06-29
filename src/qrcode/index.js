@@ -1,12 +1,9 @@
 // @ts-check
 import { QRCode } from "./qrcode";
-import { auth, db } from "./firebase";
 import { State } from "./state";
+import * as firebase from "../firebase";
 
-/** @type {import('../firebase/firebase')} */
-// @ts-ignore
-const firebase = window.firebase;
-
+const { auth, db } = firebase.initApp(State.docId || "");
 const { onAuthStateChanged } = firebase.auth;
 const { doc, onSnapshot } = firebase.firestore;
 

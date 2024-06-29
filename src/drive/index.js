@@ -1,11 +1,8 @@
 // @ts-check
-import { auth, storage } from "./firebase";
 import { State } from "./state";
+import * as firebase from "../firebase";
 
-/** @type {import('../firebase/firebase')} */
-// @ts-ignore
-const firebase = window.firebase
-
+const { auth, storage } = firebase.initApp(State.docId || "");
 const { onAuthStateChanged } = firebase.auth;
 const { deleteObject, getDownloadURL, listAll, ref, uploadBytes } = firebase.storage;
 

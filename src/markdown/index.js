@@ -1,13 +1,10 @@
 // @ts-check
 import { marked } from "marked";
 import Prism from "./prism";
-import { auth, db } from "./firebase";
 import { State } from "./state";
+import * as firebase from "../firebase";
 
-/** @type {import('../firebase/firebase')} */
-// @ts-ignore
-const firebase = window.firebase;
-
+const { auth, db } = firebase.initApp(State.docId || "");
 const { onAuthStateChanged } = firebase.auth;
 const { doc, onSnapshot } = firebase.firestore;
 
@@ -63,7 +60,9 @@ var markdown = {
 
   scrollToHash: function () {
     setTimeout(() => {
-      const y = markdown.elem(State.hash).offsetTop;
+      const elem = markdown.elem(State.hash);
+      if (!elem) return;
+      const y = elem.offsetTop;
       document.body.scrollTop = y;
       State.hash = "";
     }, 50);

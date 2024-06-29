@@ -2,9 +2,7 @@
 
 import { Control } from "./control";
 import { State } from "./state";
-
-/** @type {import('../firebase/firebase')} */ // @ts-ignore
-const firebase = window.firebase;
+import * as firebase from "../firebase";
 
 const { auth, db } = firebase.initApp();
 
