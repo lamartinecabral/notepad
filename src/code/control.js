@@ -48,11 +48,8 @@ export function initStateListeners() {
 
   State.isHidden.sub(function (value) {
     editor().hidden = value;
-    play().hidden =
-      value ||
-      (State.language.value !== "html" && State.language.value !== "markdown");
     langSelect().hidden = value;
-    if (!value) Control.setPlayHref();
+    Control.setPlayButton();
   });
 
   State.isLogged.sub(function (value) {
@@ -81,9 +78,7 @@ export function initStateListeners() {
 
   State.language.sub(function (value) {
     location.hash = value;
-    play().hidden =
-      State.isHidden.value || (value !== "html" && value !== "markdown");
-    Control.setPlayHref();
+    Control.setPlayButton();
     setLanguage(value);
     /** @type {HTMLOptionElement[]} */ // @ts-ignore
     const options = [...langSelect().children];
@@ -109,10 +104,24 @@ class Control {
       location.origin + "/my/?claim=" + State.docId;
   }
 
-  static setPlayHref() {
+  static setPlayButton() {
+    const language = State.language.value;
+    const isHidden = State.isHidden.value;
+
+    play().hidden =
+      isHidden ||
+      (language !== "html" &&
+        language !== "markdown" &&
+        language !== "javascript");
+
     const path =
-      State.language.value === "markdown" ? "/markdown/?" : "/play/?";
-    play().href = location.origin + path + State.docId;
+      language === "markdown"
+        ? "/markdown/?"
+        : language === "javascript"
+        ? "/script/?"
+        : "/play/?";
+
+    if (!isHidden) play().href = location.origin + path + State.docId;
   }
 }
 
