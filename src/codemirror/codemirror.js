@@ -60,16 +60,23 @@ let editor;
 
 /** @param {string} text */
 const state = (text) => {
-  return EditorState.create({
+  const stateProps = {
     doc: text,
-    selection: editor && editor.state.selection,
     extensions: [
       changeListener,
       basicSetup,
       keymap.of([indentWithTab, modS]),
       getLanguage(),
     ],
-  });
+  };
+  try {
+    return EditorState.create({
+      ...stateProps,
+      selection: editor && editor.state.selection,
+    });
+  } catch (_) {
+    return EditorState.create(stateProps);
+  }
 };
 
 /**
