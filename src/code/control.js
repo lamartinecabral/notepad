@@ -29,15 +29,10 @@ import {
 import { getElem, getChild, getParent } from "../iuai";
 import { Html } from "./html";
 import { parseLanguage as lang } from "./model";
+import { format } from "./formatter";
 
 /** @type {import('../codemirror/codemirror')} */ // @ts-ignore
 const { onChange, setLanguage, onModS } = window.codemirror;
-
-/** @type {import('prettier')} */ // @ts-ignore
-const prettier = window.prettier;
-
-/** @type {{estree: import('prettier/plugins/estree.js'), babel: import('prettier/plugins/babel.js'), html: import('prettier/plugins/html.js'), markdown: import('prettier/plugins/markdown.js')}} */ //@ts-ignore
-const prettierPlugins = window.prettierPlugins;
 
 export function initStateListeners() {
   State.protected.sub(function (value) {
@@ -226,31 +221,7 @@ export function initEventListeners() {
   onChange(() => (State.showPreview.value ? delaySave(500) : delaySave(2000)));
 
   onModS(() => {
-    const formatOptions = (() => {
-      switch (State.language.value) {
-        case "javascript":
-          return {
-            parser: "babel",
-            plugins: [prettierPlugins.estree, prettierPlugins.babel],
-          };
-        case "html":
-          return {
-            parser: "html",
-            plugins: [prettierPlugins.html],
-          };
-        case "markdown":
-          return {
-            parser: "markdown",
-            plugins: [prettierPlugins.markdown],
-          };
-        default:
-          return null;
-      }
-    })();
-
-    if (!formatOptions) return;
-
-    prettier.format(Html.text, formatOptions).then((res) => {
+    format(Html.text, State.language.value).then((res) => {
       if (res === Html.text) return;
       Html.text = res;
       delaySave(0);
