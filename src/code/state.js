@@ -1,14 +1,7 @@
 // @ts-check
 
 import { randomString, Subject } from "../utils";
-
-function language(code) {
-  return (
-    ["cpp", "css", "html", "java", "javascript", "python"].find(
-      (lang) => lang === code
-    ) || "html"
-  );
-}
+import { parseLanguage as lang } from "./model";
 
 export const State = {
   docId: location.search.slice(1),
@@ -20,7 +13,7 @@ export const State = {
   isHidden: new Subject(true),
   showOptions: new Subject(false),
   showPassword: new Subject(false),
-  language: new Subject(language(location.hash.slice(1))),
+  language: new Subject(lang(location.hash.slice(1))),
   showPreview: new Subject(false),
 };
 if (!State.docId) location.replace("?" + randomString(6));
@@ -29,6 +22,6 @@ else {
   if (!location.hash.slice(1)) {
     const language =
       localStorage && localStorage.getItem(State.docId + "_lang");
-    if (language) State.language.pub(language);
+    if (language) State.language.pub(lang(language));
   }
 }

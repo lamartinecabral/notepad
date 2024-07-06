@@ -54,6 +54,21 @@ export function debounce(handler, timeout) {
   };
 }
 
+/**
+ * @template T
+ * @param {T extends Function ? T : never} handler
+ * @returns {(timeout: number, ...a: Parameters<T>)=>void}
+ * */
+export function delayLatest(handler) {
+  let id;
+  return (timeout, ...args) => {
+    clearTimeout(id);
+    id = setTimeout(() => {
+      handler(...args);
+    }, timeout);
+  };
+}
+
 const counter = {};
 export function ref(prefix = "") {
   if (counter[prefix] === undefined) counter[prefix] = 0;

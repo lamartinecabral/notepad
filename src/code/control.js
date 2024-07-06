@@ -2,7 +2,7 @@
 
 import { Service } from "./service";
 import { State } from "./state";
-import { debounce } from "../utils";
+import { delayLatest } from "../utils";
 import {
   protectedInput,
   publicInput,
@@ -27,9 +27,17 @@ import {
   preview,
 } from "./refs";
 import { getElem, getChild, getParent } from "../iuai";
+import { Html } from "./html";
+import { parseLanguage as lang } from "./model";
 
 /** @type {import('../codemirror/codemirror')} */ // @ts-ignore
-const { onChange, setLanguage } = window.codemirror;
+const { onChange, setLanguage, onModS } = window.codemirror;
+
+/** @type {import('prettier')} */ // @ts-ignore
+const prettier = window.prettier;
+
+/** @type {{estree: import('prettier/plugins/estree.js'), babel: import('prettier/plugins/babel.js'), html: import('prettier/plugins/html.js'), markdown: import('prettier/plugins/markdown.js')}} */ //@ts-ignore
+const prettierPlugins = window.prettierPlugins;
 
 export function initStateListeners() {
   State.protected.sub(function (value) {
@@ -118,10 +126,22 @@ class Control {
       language === "markdown"
         ? "/markdown/?"
         : language === "javascript"
-        ? "/script/?"
-        : "/play/?";
+          ? "/script/?"
+          : "/play/?";
 
     if (!isHidden) play().href = location.origin + path + State.docId;
+  }
+
+  static save() {
+    State.status.pub("Saving...");
+    Service.save()
+      .then(() => {
+        State.status.pub("");
+      })
+      .catch((err) => {
+        console.error(err);
+        State.status.pub("Protected");
+      });
   }
 }
 
@@ -182,7 +202,7 @@ export function initEventListeners() {
     Service.resetPassword(email)
       .then(() => {
         alert(
-          "You will receive an e-mail with instructions to reset your password."
+          "You will receive an e-mail with instructions to reset your password.",
         );
       })
       .catch((err) => {
@@ -192,7 +212,7 @@ export function initEventListeners() {
   });
 
   langSelect().addEventListener("change", () => {
-    State.language.pub(langSelect().value);
+    State.language.pub(lang(langSelect().value));
   });
 
   play().addEventListener("click", (ev) => {
@@ -201,23 +221,39 @@ export function initEventListeners() {
     State.showPreview.pub(!State.showPreview.value);
   });
 
-  onChange(
-    (() => {
-      const save = () => {
-        State.status.pub("Saving...");
-        Service.save()
-          .then(() => {
-            State.status.pub("");
-          })
-          .catch((err) => {
-            console.error(err);
-            State.status.pub("Protected");
-          });
-      };
-      const shortDebounced = debounce(save, 500);
-      const longDebounced = debounce(save, 2000);
-      return () =>
-        State.showPreview.value ? shortDebounced() : longDebounced();
-    })()
-  );
+  const delaySave = delayLatest(Control.save);
+
+  onChange(() => (State.showPreview.value ? delaySave(500) : delaySave(2000)));
+
+  onModS(() => {
+    const formatOptions = (() => {
+      switch (State.language.value) {
+        case "javascript":
+          return {
+            parser: "babel",
+            plugins: [prettierPlugins.estree, prettierPlugins.babel],
+          };
+        case "html":
+          return {
+            parser: "html",
+            plugins: [prettierPlugins.html],
+          };
+        case "markdown":
+          return {
+            parser: "markdown",
+            plugins: [prettierPlugins.markdown],
+          };
+        default:
+          return null;
+      }
+    })();
+
+    if (!formatOptions) return;
+
+    prettier.format(Html.text, formatOptions).then((res) => {
+      if (res === Html.text) return;
+      Html.text = res;
+      delaySave(0);
+    });
+  });
 }

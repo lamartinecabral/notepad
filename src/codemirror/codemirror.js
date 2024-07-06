@@ -18,6 +18,21 @@ export const onChange = (func) => {
   changeHandler = func;
 };
 
+let modSHandler;
+
+/** @param {() => void} func */
+export const onModS = (func) => {
+  modSHandler = func;
+};
+
+const handleModS = (_, ev) => {
+  if (!modSHandler) return;
+  ev.preventDefault();
+  modSHandler();
+};
+
+const modS = { key: "Mod-s", run: handleModS };
+
 const changeListener = EditorView.updateListener.of((update) => {
   if (update.docChanged && changeHandler)
     changeHandler(update.state.doc.toString());
@@ -51,7 +66,7 @@ const state = (text) => {
     extensions: [
       changeListener,
       basicSetup,
-      keymap.of([indentWithTab]),
+      keymap.of([indentWithTab, modS]),
       getLanguage(),
     ],
   });

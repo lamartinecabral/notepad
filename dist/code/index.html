@@ -11,6 +11,11 @@
 	<script>
 		![].find && loadscript('https://www.unpkg.com/core-js-bundle@3.36.0/minified.js');
 		!window.fetch && loadscript('https://cdn.jsdelivr.net/npm/cross-fetch/dist/cross-fetch.js');
+		loadscript('https://cdn.jsdelivr.net/npm/prettier@3.3.2/standalone.js');
+		loadscript('https://cdn.jsdelivr.net/npm/prettier@3.3.2/plugins/estree.js');
+		loadscript('https://cdn.jsdelivr.net/npm/prettier@3.3.2/plugins/babel.js');
+		loadscript('https://cdn.jsdelivr.net/npm/prettier@3.3.2/plugins/html.js');
+		loadscript('https://cdn.jsdelivr.net/npm/prettier@3.3.2/plugins/markdown.js');
 		loadscript('https://cdn.jsdelivr.net/npm/iuai@0.6.0/iuai.js');
 		loadscript('../js/codemirror.js');
 		loadscript('../js/firebase.js');

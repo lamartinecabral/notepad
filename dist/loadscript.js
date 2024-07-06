@@ -10,15 +10,21 @@
     }
     idle = false;
     var script = document.createElement("script");
-    script.src = urls[index];
+    var url = urls[index][0];
+    var props = urls[index][1];
+    script.src = url;
+    if (props) for (var prop in props) script[prop] = props[prop];
     script.onload = function () {
+      addScripts(index + 1);
+    };
+    script.onerror = function () {
       addScripts(index + 1);
     };
     document.body.appendChild(script);
   }
 
-  window.loadscript = function (url) {
-    urls.push(url);
+  window.loadscript = function (url, props) {
+    urls.push([url, props]);
     if (idle) addScripts();
   };
 })();

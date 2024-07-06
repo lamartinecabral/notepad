@@ -26,6 +26,7 @@ import {
   preview,
 } from "./refs";
 import { elem, style } from "../iuai";
+import { Languages } from "./model";
 
 /** @type {import('../codemirror/codemirror')} */ // @ts-ignore
 const { getValue, setValue, initEditor } = window.codemirror;
@@ -45,20 +46,17 @@ const elements = [
   elem("div", [
     elem(status, [elem("span", "Loading...")]),
     elem(header, [
-      elem(langSelect, [
-        elem("option", { value: "cpp" }, "c++"),
-        elem("option", { value: "css" }, "css"),
-        elem("option", { value: "html" }, "html"),
-        elem("option", { value: "java" }, "java"),
-        elem("option", { value: "javascript" }, "javascript"),
-        elem("option", { value: "markdown" }, "markdown"),
-        elem("option", { value: "python" }, "python"),
-      ]),
+      elem(
+        langSelect,
+        Object.values(Languages).map(({ label, value }) =>
+          elem("option", { value }, label),
+        ),
+      ),
       " ",
       elem(
         play,
         { href: "#", title: "shift+click to toggle a preview frame" },
-        "play"
+        "play",
       ),
       " ",
       btn({ id: password.id, hidden: true }, "password"),
@@ -74,7 +72,7 @@ const elements = [
             elem(
               "label",
               { htmlFor: protectedInput.id, title: "Only you can edit" },
-              "Protected"
+              "Protected",
             ),
           ]),
           elem("div", [
@@ -82,7 +80,7 @@ const elements = [
             elem(
               "label",
               { htmlFor: publicInput.id, title: "Everyone can read" },
-              "Public"
+              "Public",
             ),
           ]),
           elem("div", [elem(logout, "logout")]),

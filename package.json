@@ -15,6 +15,7 @@
         "firebase": "9.22.1",
         "iuai": "0.6.0",
         "marked": "5.0.4",
+        "prettier": "3.3.2",
         "qrcode": "1.5.3"
     },
     "devDependencies": {
