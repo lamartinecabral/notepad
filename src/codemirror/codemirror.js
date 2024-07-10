@@ -96,7 +96,15 @@ export const getValue = () => {
 
 /** @param {string} text */
 export const setValue = (text) => {
-  editor && editor.setState(state(text));
+  if (!editor) return;
+  const transaction = {
+    changes: [{ from: 0, to: editor.state.doc.length, insert: text }],
+  };
+  try {
+    editor.dispatch({ ...transaction, selection: editor.state.selection });
+  } catch (_) {
+    editor.dispatch(transaction);
+  }
 };
 
 /** @param {string} lang */
