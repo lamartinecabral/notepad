@@ -27,6 +27,8 @@ import {
   app,
 } from "./refs";
 import { elem } from "../iuai";
+import { State } from "./state";
+import { Cache } from "../cache";
 
 const elements = [
   elem(status, [elem("span", "Loading...")]),
@@ -52,7 +54,7 @@ const elements = [
           elem(
             "label",
             { htmlFor: protectedInput.id, title: "Only you can edit" },
-            "Protected"
+            "Protected",
           ),
         ]),
         elem("div", [
@@ -60,7 +62,7 @@ const elements = [
           elem(
             "label",
             { htmlFor: publicInput.id, title: "Everyone can read" },
-            "Public"
+            "Public",
           ),
         ]),
         elem("div", [elem(logout, "logout")]),
@@ -123,6 +125,7 @@ export class Html {
     const selectionStart = ta.selectionStart;
     const selectionEnd = ta.selectionEnd;
     ta.value = text;
+    if (State.isLogged.value) Cache.setText(text);
     ta.selectionStart = selectionStart;
     ta.selectionEnd = selectionEnd;
   }

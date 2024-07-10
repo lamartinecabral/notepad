@@ -1,6 +1,7 @@
 // @ts-check
 
 import { randomString, Subject } from "../utils";
+import { Cache } from "../cache";
 
 export const State = {
   isIE: !!navigator.userAgent.match(/(msie |rv:)(\d+(\.?_?\d+)+)/i),
@@ -8,12 +9,10 @@ export const State = {
   public: new Subject(false),
   protected: new Subject(false),
   status: new Subject("loading..."),
-  isLogged: new Subject(false),
+  isLogged: new Subject(!!Cache.getText()),
   hasOwner: new Subject(false),
   isHidden: new Subject(true),
-  nightMode: new Subject(
-    localStorage && localStorage.getItem("nightMode") === "true"
-  ),
+  nightMode: new Subject(Cache.getNightMode()),
   showOptions: new Subject(false),
   showPassword: new Subject(false),
 };

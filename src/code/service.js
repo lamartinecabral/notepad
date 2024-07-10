@@ -3,6 +3,7 @@
 import { State } from "./state";
 import { Html } from "./html";
 import * as firebase from "../firebase";
+import { Cache } from "../cache";
 
 const { auth, db } = firebase.initApp(State.docId || "");
 
@@ -51,7 +52,7 @@ export function initDocListener() {
       console.error(err);
       State.isHidden.pub(true);
       State.status.pub("Protected");
-    }
+    },
   );
 }
 
@@ -83,9 +84,10 @@ export const Service = class {
   }
 
   static save() {
+    if (State.isLogged.value) Cache.setText(Html.text);
     const docRef = doc(db, "docs", State.docId);
     return updateDoc(docRef, { text: Html.text }).catch(() =>
-      setDoc(docRef, { text: Html.text })
+      setDoc(docRef, { text: Html.text }),
     );
   }
 
@@ -99,7 +101,7 @@ export const Service = class {
       return Service.update({ protected: auth.currentUser.uid });
     } else {
       return Service.update({ public: deleteField() }).then(() =>
-        Service.update({ protected: deleteField() })
+        Service.update({ protected: deleteField() }),
       );
     }
   }

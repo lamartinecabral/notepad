@@ -3,6 +3,7 @@ import { marked } from "marked";
 import Prism from "./prism";
 import { State } from "./state";
 import * as firebase from "../firebase";
+import { Cache } from "../cache";
 
 const { auth, db } = firebase.initApp(State.docId || "");
 const { onAuthStateChanged } = firebase.auth;
@@ -20,6 +21,8 @@ var markdown = {
     if (!State.docId)
       markdown.setContent("# Marked in browser\n\nRendered by **marked**.");
     else {
+      const text = Cache.getText();
+      if (text !== null) markdown.setContent(text);
       markdown.liveContent(State.docId);
       markdown.liveAuth();
     }
@@ -50,11 +53,14 @@ var markdown = {
         if (res.metadata.hasPendingWrites) return;
         markdown.setContent(res.exists() ? res.data().text : "");
         if (State.hash) markdown.scrollToHash();
+        if (Cache.getText() !== null) {
+          Cache.setText(res.exists() ? res.data().text : "");
+        }
       },
       (err) => {
         console.error(err);
         markdown.setContent(err.message);
-      }
+      },
     );
   },
 

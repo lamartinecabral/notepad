@@ -27,6 +27,7 @@ import {
   form,
 } from "./refs";
 import { getElem, getChild, getParent } from "../iuai";
+import { Cache } from "../cache";
 
 export function initStateListeners() {
   State.protected.sub(function (value) {
@@ -60,7 +61,7 @@ export function initStateListeners() {
     const themes = ["light", "dark"];
     app().className = themes[+value];
     theme().innerText = themes[+!value];
-    if (localStorage) localStorage.setItem("nightMode", "" + value);
+    Cache.setNightMode(value);
   });
 
   State.showPassword.sub(function (value) {
@@ -152,7 +153,7 @@ export function initEventListeners() {
     Service.resetPassword(email)
       .then(() => {
         alert(
-          "You will receive an e-mail with instructions to reset your password."
+          "You will receive an e-mail with instructions to reset your password.",
         );
       })
       .catch((err) => {
@@ -192,6 +193,6 @@ export function initEventListeners() {
           console.error(err);
           State.status.pub("Protected");
         });
-    }, 500)
+    }, 500),
   );
 }
