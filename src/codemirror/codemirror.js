@@ -38,21 +38,23 @@ const changeListener = EditorView.updateListener.of((update) => {
     changeHandler(update.state.doc.toString());
 });
 
-let currentLang = "html";
+let currentLang = "";
 
 const getLanguage = () => {
-  return {
-    html: () => html(),
-    javascript: () => javascript(),
-    css: () => css(),
-    cpp: () => cpp(),
-    python: () => python(),
-    java: () => java(),
-    markdown: () =>
-      markdown({
-        defaultCodeLanguage: javascript(),
-      }),
-  }[currentLang]();
+  return (
+    {
+      html: () => html(),
+      javascript: () => javascript(),
+      css: () => css(),
+      cpp: () => cpp(),
+      python: () => python(),
+      java: () => java(),
+      markdown: () =>
+        markdown({
+          defaultCodeLanguage: javascript(),
+        }),
+    }[currentLang]?.() ?? { extension: [] }
+  );
 };
 
 /** @type {EditorView} */
