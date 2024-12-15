@@ -218,7 +218,11 @@ export function initEventListeners() {
 
   const delaySave = delayLatest(Control.save);
 
-  onChange(() => (State.showPreview.value ? delaySave(500) : delaySave(2000)));
+  let skipFirstChange = true;
+  onChange(() => {
+    if (skipFirstChange) return (skipFirstChange = false);
+    State.showPreview.value ? delaySave(500) : delaySave(2000);
+  });
 
   onModS(() => {
     format(Html.text, State.language.value).then((res) => {
