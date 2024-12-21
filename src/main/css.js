@@ -120,14 +120,16 @@ export function initCss() {
   style(":root", {
     "--light": "#fff",
     "--dark": "#000",
+    "--nightcolor": "#abb2bf",
+    "--nightbg": "#181b20",
   });
   style(".light", {
     "--background": "var(--light)",
     "--color": "var(--dark)",
   });
   style(".dark", {
-    "--background": "var(--dark)",
-    "--color": "var(--light)",
+    "--background": "var(--nightbg)",
+    "--color": "var(--nightcolor)",
   });
   !supportCssVar &&
     style(theme, {
