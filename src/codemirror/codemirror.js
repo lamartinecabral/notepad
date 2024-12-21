@@ -10,6 +10,7 @@ import { cpp } from "@codemirror/lang-cpp";
 import { markdown } from "@codemirror/lang-markdown";
 import { python } from "@codemirror/lang-python";
 import { java } from "@codemirror/lang-java";
+import { oneDark } from "@codemirror/theme-one-dark";
 
 let changeHandler;
 
@@ -57,6 +58,8 @@ const getLanguage = () => {
   );
 };
 
+let nightMode = false;
+
 /** @type {EditorView} */
 let editor;
 
@@ -69,6 +72,7 @@ const state = (text) => {
       basicSetup,
       keymap.of([indentWithTab, modS]),
       getLanguage(),
+      ...(nightMode ? [oneDark] : []),
     ],
   };
   try {
@@ -84,8 +88,10 @@ const state = (text) => {
 /**
  * @template T
  * @param {T extends Element ? T : never} parent
+ * @param {{nightMode?: boolean}} [options]
  */
-export const initEditor = (parent) => {
+export const initEditor = (parent, options) => {
+  nightMode = options?.nightMode === true;
   editor = new EditorView({
     ...state(""),
     parent,

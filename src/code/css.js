@@ -12,6 +12,8 @@ import {
   optionsModal,
   submitButton,
   langSelect,
+  editor,
+  preview,
 } from "./refs";
 
 export function initCss() {
@@ -19,8 +21,15 @@ export function initCss() {
     fontFamily: "monospace",
   });
   style(app, {
-    marginTop: "0",
+    margin: "0 8px",
     paddingTop: "0",
+    paddingBottom: "0",
+    background: "var(--background)",
+    color: "var(--color)",
+  });
+  style(editor, {
+    height: "calc(calc(100vh - 8px) - 1rem)",
+    overflow: "scroll",
   });
   style(status, {
     position: "fixed",
@@ -36,6 +45,8 @@ export function initCss() {
   style(header, {
     textAlign: "end",
     position: "relative",
+    height: "1rem",
+    zIndex: "5",
   });
   style(`${header} a, ${claim} a, ${resetPassword} a`, {
     textDecoration: "underline",
@@ -82,30 +93,35 @@ export function initCss() {
   });
   style(langSelect, {
     fontSize: "0.9rem",
+    background: "var(--background)",
+    color: "var(--color)",
   });
   style(":root", {
     "--light": "#fff",
     "--dark": "#000",
+    "--nightcolor": "#abb2bf",
+    "--nightbg": "#181b20",
   });
   style(".light", {
     "--background": "var(--light)",
     "--color": "var(--dark)",
   });
   style(".dark", {
-    "--background": "var(--dark)",
-    "--color": "var(--light)",
+    "--background": "var(--nightbg)",
+    "--color": "var(--nightcolor)",
   });
   style(".sideBySide", {
     float: "left",
     height: "100%",
     width: "60%",
   });
-  style(".sideBySide + iframe", {
+  style(`.sideBySide + ${preview}`, {
     position: "fixed",
     height: "calc(100% - 1em)",
     width: "calc(40% - 1em)",
     right: "0px",
     margin: "0.5em",
     boxSizing: "border-box",
+    background: "#fff",
   });
 }

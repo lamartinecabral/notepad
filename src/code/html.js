@@ -27,6 +27,7 @@ import {
 } from "./refs";
 import { elem, style } from "../iuai";
 import { Languages } from "./model";
+import { State } from "./state";
 
 /** @type {import('../codemirror/codemirror')} */ // @ts-ignore
 const { getValue, setValue, initEditor } = window.codemirror;
@@ -138,7 +139,7 @@ export class Html {
 export function initHtml() {
   document.body.id = app.id;
   app().hidden = true;
-  app().className = "light";
+  app().className = State.nightMode.value ? "dark" : "light";
   app().append(...elements);
-  initEditor(editor());
+  initEditor(editor(), { nightMode: State.nightMode.value });
 }
