@@ -1,6 +1,10 @@
 // @ts-check
 
 export const Languages = {
+  plaintext: {
+    value: "plaintext",
+    label: "plain text",
+  },
   cpp: {
     value: "cpp",
     label: "c++",
