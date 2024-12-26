@@ -30,6 +30,7 @@ import { getElem, getChild, getParent } from "../iuai";
 import { Html } from "./html";
 import { parseLanguage as lang } from "./model";
 import { format } from "./formatter";
+import { Cache } from "../cache";
 
 /** @type {import('../codemirror/codemirror')} */ // @ts-ignore
 const { onChange, setLanguage, onModS } = window.codemirror;
@@ -92,6 +93,14 @@ export function initStateListeners() {
 
     State.showPreview.pub(false);
   });
+
+  State.nightMode.sub(
+    function (value) {
+      Cache.setNightMode(value);
+      setTimeout(() => location.reload(), 0);
+    },
+    { latest: false },
+  );
 
   State.showPreview.sub(function (value) {
     preview().hidden = !value;
@@ -207,7 +216,12 @@ export function initEventListeners() {
   });
 
   langSelect().addEventListener("change", () => {
-    State.language.pub(lang(langSelect().value));
+    const selectedValue = langSelect().value;
+    if (selectedValue === "theme-light") {
+      State.nightMode.pub(false);
+    } else if (selectedValue === "theme-dark") {
+      State.nightMode.pub(true);
+    } else State.language.pub(lang(selectedValue));
   });
 
   play().addEventListener("click", (ev) => {

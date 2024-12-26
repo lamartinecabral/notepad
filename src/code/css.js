@@ -27,7 +27,7 @@ export function initCss() {
     background: "var(--background)",
     color: "var(--color)",
   });
-  style(editor, {
+  const editorRule = style(editor, {
     height: "calc(calc(100vh - 8px) - 1rem)",
     overflow: "scroll",
   });
@@ -124,4 +124,9 @@ export function initCss() {
     boxSizing: "border-box",
     background: "#fff",
   });
+
+  const setHeight = () =>
+    (editorRule.style.height = `calc(${window.innerHeight - 8}px - 1rem)`);
+  setHeight();
+  window.addEventListener("resize", setHeight);
 }

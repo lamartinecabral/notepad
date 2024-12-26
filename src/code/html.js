@@ -47,12 +47,23 @@ const elements = [
   elem("div", [
     elem(status, [elem("span", "Loading...")]),
     elem(header, [
-      elem(
-        langSelect,
-        Object.values(Languages).map(({ label, value }) =>
+      elem(langSelect, [
+        ...Object.values(Languages).map(({ label, value }) =>
           elem("option", { value }, label),
         ),
-      ),
+        elem("optgroup", { label: "# editor theme" }, [
+          elem(
+            "option",
+            { value: "theme-light", disabled: !State.nightMode.value },
+            "light",
+          ),
+          elem(
+            "option",
+            { value: "theme-dark", disabled: State.nightMode.value },
+            "dark",
+          ),
+        ]),
+      ]),
       " ",
       elem(
         play,

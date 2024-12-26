@@ -1,6 +1,7 @@
 // @ts-check
 
 import { randomString, Subject } from "../utils";
+import { Cache } from "../cache";
 import { parseLanguage as lang } from "./model";
 
 export const State = {
@@ -15,7 +16,7 @@ export const State = {
   showPassword: new Subject(false),
   language: new Subject(lang(location.hash.slice(1))),
   showPreview: new Subject(false),
-  nightMode: new Subject(localStorage.getItem("nightMode") === "true"),
+  nightMode: new Subject(Cache.getNightMode()),
 };
 if (!State.docId) location.replace("?" + randomString(6));
 else {

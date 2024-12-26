@@ -28,9 +28,10 @@ export class Subject {
       this.value = value;
       for (const i in cb) cb[i](value);
     };
-    /** @type {(callback: (value: T)=>void)=>()=>boolean} */
-    this.sub = function (callback) {
-      if (this.value !== undefined) callback(this.value);
+    /** @type {(callback: (value: T)=>void, opts?: {latest?: boolean})=>()=>boolean} */
+    this.sub = function (callback, opts) {
+      const latest = opts?.latest ?? true;
+      if (latest && this.value !== undefined) callback(this.value);
       const i = c++;
       cb[i] = callback;
       return () => delete cb[i];
