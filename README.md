@@ -1,4 +1,4 @@
-# [notepade.web.app](https://notepade.web.app)
+# [nopedat.web.app](https://nopedat.web.app)
 
 An online notepad.
 
@@ -6,7 +6,7 @@ No signup, no login, no password.
 
 As simple and insecure as the Windows Notepad.
 
-Start your notepad by changing the identifier after the question mark: `notepade.web.app/?mynotepad`
+Start your notepad by changing the identifier after the question mark: `nopedat.web.app/?mynotepad`
 
 Powered by [Firebase](https://firebase.google.com/)
 

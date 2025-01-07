@@ -55,7 +55,7 @@ const elements = [
             elem(
               "label",
               { htmlFor: passwordInput2.id },
-              " Repeat the password: "
+              " Repeat the password: ",
             ),
           ]),
           elem("td", [
@@ -111,7 +111,7 @@ export function docElem(doc) {
           href: location.origin + "/?" + doc.id,
           title: trunc(doc.text, 280),
         },
-        doc.id
+        doc.id,
       ),
     ]),
     elem("td", { className: "checkbox" }, [
@@ -140,8 +140,8 @@ export function docElem(doc) {
       " ",
       elem(
         "a",
-        { href: "https://notepadi.netlify.app/api/?id=" + doc.id },
-        "raw"
+        { href: "https://nopedat.netlify.app/api/?id=" + doc.id },
+        "raw",
       ),
       " ",
       elem("a", { href: location.origin + "/code/?" + doc.id }, "</>"),
@@ -155,7 +155,7 @@ export function docElem(doc) {
           disabled: !!doc.protected,
           onclick: () => Control.removeDoc(doc),
         },
-        "drop"
+        "drop",
       ),
     ]),
   ]);
