@@ -36,6 +36,7 @@ const btn = (() => {
   style(".btn", {
     cursor: "pointer",
     textDecoration: "underline",
+    background: "var(--background)",
   });
   return (attributes, children) => {
     const className = "btn " + (attributes.className || "");
