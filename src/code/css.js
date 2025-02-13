@@ -29,6 +29,7 @@ export function initCss() {
   });
   const editorRule = style(editor, {
     height: "calc(calc(100vh - 8px) - 1rem)",
+    scrollbarColor: "var(--color) transparent",
   });
   style(status, {
     position: "fixed",
