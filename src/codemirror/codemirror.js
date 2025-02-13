@@ -34,6 +34,11 @@ const handleModS = (_, ev) => {
 
 const modS = { key: "Mod-s", run: handleModS };
 
+const fixedHeightEditor = EditorView.theme({
+  "&": {height: "100%"},
+  ".cm-scroller": {overflow: "auto"}
+})
+
 const changeListener = EditorView.updateListener.of((update) => {
   if (update.docChanged && changeHandler)
     changeHandler(update.state.doc.toString());
@@ -72,6 +77,7 @@ const state = (text) => {
       basicSetup,
       keymap.of([indentWithTab, modS]),
       getLanguage(),
+      fixedHeightEditor,
       ...(nightMode ? [oneDark] : []),
     ],
   };

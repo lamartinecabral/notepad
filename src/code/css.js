@@ -29,7 +29,6 @@ export function initCss() {
   });
   const editorRule = style(editor, {
     height: "calc(calc(100vh - 8px) - 1rem)",
-    overflow: "scroll",
   });
   style(status, {
     position: "fixed",
