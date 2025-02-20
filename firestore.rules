@@ -52,6 +52,13 @@ service cloud.firestore {
         !isProtected(docId);
       allow get: if
       	!hasOwner(docId) || isOwner(docId);
+      allow list: if
+      	request.auth != null &&
+      	request.auth.uid == resource.data.owner;
+      allow delete: if
+      	!isProtected(docId) &&
+      	request.auth != null &&
+      	request.auth.uid == resource.data.owner;
     }
     
     function affectedKeys(){
