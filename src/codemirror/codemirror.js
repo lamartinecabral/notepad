@@ -27,17 +27,17 @@ export const onModS = (func) => {
 };
 
 const handleModS = (_, ev) => {
-  if (!modSHandler) return;
+  if (!modSHandler) return false;
   ev.preventDefault();
-  modSHandler();
+  return modSHandler(), true;
 };
 
 const modS = { key: "Mod-s", run: handleModS };
 
 const fixedHeightEditor = EditorView.theme({
-  "&": {height: "100%"},
-  ".cm-scroller": {overflow: "auto"}
-})
+  "&": { height: "100%" },
+  ".cm-scroller": { overflow: "auto" },
+});
 
 const changeListener = EditorView.updateListener.of((update) => {
   if (update.docChanged && changeHandler)
