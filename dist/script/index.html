@@ -28,6 +28,7 @@
       iframe = document.createElement('iframe');
       iframe.src = '../play/iframe.html?' + docId + location.hash;
       document.body.append(iframe);
+      setTimeout(addIframeHashChangeListener, 10);
     }
     window.addEventListener("message", ({ data }) => {
       if (data === "ready") document.querySelector('iframe').contentWindow.postMessage(docHtml);
@@ -65,10 +66,16 @@
     window.addEventListener("hashchange", () => {
       const iframe = document.querySelector("iframe");
       if (!docId || !iframe) return;
-      const srcURL = new URL(iframe.src);
-      srcURL.hash = location.hash;
-      iframe.src = srcURL.href;
+      iframe.contentWindow.location.hash = location.hash;
     });
+
+    function addIframeHashChangeListener() {
+      const iframe = document.querySelector("iframe");
+      if (!iframe) return;
+      iframe.contentWindow.addEventListener('hashchange', () => {
+        location.hash = iframe.contentWindow.location.hash;
+      });
+    }
   </script>
 </body>
 
