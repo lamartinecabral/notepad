@@ -61,9 +61,9 @@
       function setHeight() { document.body.style.height = window.innerHeight + "px" };
       return (setHeight(), setHeight);
     })());
-    
+
     window.addEventListener("hashchange", () => {
-      const iframe = document.querySelector('iframe');
+      const iframe = document.querySelector("iframe");
       if (!docId || !iframe) return;
       const srcURL = new URL(iframe.src);
       srcURL.hash = location.hash;
