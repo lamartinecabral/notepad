@@ -17,7 +17,7 @@
 <body style="margin: 0; overflow: hidden;">
   <script>
 
-    let [docId, hash] = (document.URL.split("?")[1] || "").split("#");
+    let docId = location.search.substring(1);
     docId = docId.toLowerCase()
 
     let docHtml = '';
@@ -26,7 +26,7 @@
       let iframe = document.querySelector('iframe');
       if (iframe) iframe.remove();
       iframe = document.createElement('iframe');
-      iframe.src = './iframe.html?' + docId;
+      iframe.src = './iframe.html?' + docId + location.hash;
       document.body.append(iframe);
     }
     window.addEventListener("message", ({ data }) => {
