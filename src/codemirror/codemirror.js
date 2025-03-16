@@ -26,13 +26,18 @@ export const onModS = (func) => {
   modSHandler = func;
 };
 
-const handleModS = (_, ev) => {
+const handleModS = () => {
   if (!modSHandler) return false;
-  ev.preventDefault();
   return modSHandler(), true;
 };
 
-const modS = { key: "Mod-s", run: handleModS };
+const modS = {
+  key: "Mod-s",
+  run: handleModS,
+  get preventDefault() {
+    return !!modSHandler;
+  },
+};
 
 const fixedHeightEditor = EditorView.theme({
   "&": { height: "100%" },
