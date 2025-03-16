@@ -25,6 +25,7 @@ import {
   resetPassword,
   textarea,
   app,
+  code,
 } from "./refs";
 import { elem } from "../iuai";
 import { State } from "./state";
@@ -43,7 +44,11 @@ const elements = [
       elem("img", { src: "./assets/github.svg" }),
     ]),
   ]),
-  elem(footer, { hidden: true }, [elem(markdown, { href: "#" }, "markdown")]),
+  elem(footer, { hidden: true }, [
+    elem(code, { href: "#" }, "</>"),
+    " ",
+    elem(markdown, { href: "#" }, "markdown"),
+  ]),
   elem(backdrop, { hidden: true }, [
     elem(modal, [
       elem(optionsModal, { hidden: true }, [

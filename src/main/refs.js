@@ -10,6 +10,7 @@ export const password = refElem("a");
 export const options = refElem("a");
 export const github = refElem("div");
 export const footer = refElem("div");
+export const code = refElem("a");
 export const markdown = refElem("a");
 export const backdrop = refElem("div");
 export const modal = refElem("div");

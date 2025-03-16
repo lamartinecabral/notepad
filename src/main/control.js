@@ -25,6 +25,7 @@ import {
   modal,
   logout,
   form,
+  code,
 } from "./refs";
 import { getElem, getChild, getParent } from "../iuai";
 import { Cache } from "../cache";
@@ -48,6 +49,7 @@ export function initStateListeners() {
     textarea().hidden = value;
     footer().hidden = value;
     if (!value) {
+      code().href = location.origin + "/code/?" + State.docId;
       markdown().href = location.origin + "/markdown/?" + State.docId;
     }
   });
