@@ -39,6 +39,7 @@ export function initStateListeners() {
 
   State.public.sub(function (value) {
     publicInput().checked = value;
+    Control.setReadonly();
   });
 
   State.status.sub(function (value) {
@@ -57,6 +58,7 @@ export function initStateListeners() {
   State.isLogged.sub(function (value) {
     password().hidden = value;
     options().hidden = !value;
+    Control.setReadonly();
   });
 
   State.nightMode.sub(function (value) {
@@ -91,6 +93,9 @@ class Control {
     claim().hidden = State.hasOwner.value || State.protected.value;
     getChild(claim.id, "a").href =
       location.origin + "/my/?claim=" + State.docId;
+  }
+  static setReadonly() {
+    textarea().readOnly = State.public.value && !State.isLogged.value;
   }
 }
 

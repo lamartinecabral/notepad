@@ -70,6 +70,8 @@ const getLanguage = () => {
 
 let nightMode = false;
 
+let readonly = false;
+
 /** @type {EditorView} */
 let editor;
 
@@ -84,6 +86,7 @@ const state = (text) => {
       getLanguage(),
       fixedHeightEditor,
       ...(nightMode ? [oneDark] : []),
+      ...(readonly ? [EditorState.readOnly.of(true)] : []),
     ],
   };
   try {
@@ -132,4 +135,10 @@ export const setLanguage = (lang) => {
     currentLang = lang;
     editor && editor.setState(state(getValue()));
   }
+};
+
+export const setReadonly = (value) => {
+  if (value === readonly) return;
+  readonly = value;
+  editor && editor.setState(state(getValue()));
 };

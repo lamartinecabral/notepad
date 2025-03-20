@@ -33,7 +33,7 @@ import { format } from "./formatter";
 import { Cache } from "../cache";
 
 /** @type {import('../codemirror/codemirror')} */ // @ts-ignore
-const { onChange, setLanguage, onModS } = window.codemirror;
+const { onChange, setLanguage, onModS, setReadonly } = window.codemirror;
 
 export function initStateListeners() {
   State.protected.sub(function (value) {
@@ -44,6 +44,7 @@ export function initStateListeners() {
 
   State.public.sub(function (value) {
     publicInput().checked = value;
+    Control.setReadonly();
   });
 
   State.status.sub(function (value) {
@@ -59,6 +60,7 @@ export function initStateListeners() {
   State.isLogged.sub(function (value) {
     password().hidden = value;
     options().hidden = !value;
+    Control.setReadonly();
   });
 
   State.showPassword.sub(function (value) {
@@ -114,6 +116,9 @@ class Control {
     claim().hidden = State.hasOwner.value || State.protected.value;
     getChild(claim.id, "a").href =
       location.origin + "/my/?claim=" + State.docId;
+  }
+  static setReadonly() {
+    setReadonly(State.public.value && !State.isLogged.value);
   }
 
   static setPlayButton() {
@@ -232,9 +237,7 @@ export function initEventListeners() {
 
   const delaySave = delayLatest(Control.save);
 
-  let skipFirstChange = true;
   onChange(() => {
-    if (skipFirstChange) return (skipFirstChange = false);
     State.showPreview.value ? delaySave(500) : delaySave(2000);
   });
 

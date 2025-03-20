@@ -46,7 +46,7 @@ export function initDocListener() {
       if (res.metadata.hasPendingWrites) return;
       State.isHidden.pub(false);
       State.status.pub("");
-      Html.text = data.text;
+      Html.text = State.lastLoadedText = data.text;
     },
     function (err) {
       console.error(err);
@@ -84,11 +84,14 @@ export const Service = class {
   }
 
   static save() {
-    if (State.isLogged.value) Cache.setText(Html.text);
+    const text = Html.text;
+    if (State.lastLoadedText === text) return Promise.resolve();
+    if (State.isLogged.value) Cache.setText(text);
+
     const docRef = doc(db, "docs", State.docId);
-    return updateDoc(docRef, { text: Html.text }).catch(() =>
-      setDoc(docRef, { text: Html.text }),
-    );
+    return updateDoc(docRef, { text })
+      .catch(() => setDoc(docRef, { text }))
+      .then(() => (State.lastLoadedText = text));
   }
 
   static update(obj) {

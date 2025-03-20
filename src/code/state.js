@@ -17,6 +17,9 @@ export const State = {
   language: new Subject(lang(location.hash.slice(1))),
   showPreview: new Subject(false),
   nightMode: new Subject(Cache.getNightMode()),
+
+  /** @type {string | null} */
+  lastLoadedText: null,
 };
 if (!State.docId) location.replace("?" + randomString(6));
 else {
