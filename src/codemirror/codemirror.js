@@ -123,7 +123,11 @@ export const setValue = (text) => {
     changes: [{ from: 0, to: editor.state.doc.length, insert: text }],
   };
   try {
-    editor.dispatch({ ...transaction, selection: editor.state.selection });
+    editor.dispatch({
+      ...transaction,
+      scrollIntoView: true,
+      selection: editor.state.selection,
+    });
   } catch (_) {
     editor.dispatch(transaction);
   }
