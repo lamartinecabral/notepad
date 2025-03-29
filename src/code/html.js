@@ -30,7 +30,7 @@ import { Languages } from "./model";
 import { State } from "./state";
 
 /** @type {import('../codemirror/codemirror')} */ // @ts-ignore
-const { getValue, setValue, initEditor } = window.codemirror;
+const { getValue, setValue, initEditor, getCursor } = window.codemirror;
 
 const btn = (() => {
   style(".btn", {
@@ -145,6 +145,12 @@ export class Html {
   }
   static set text(text) {
     setValue(text);
+  }
+  static setText(text, cursor) {
+    setValue(text, cursor);
+  }
+  static get cursor() {
+    return getCursor();
   }
 }
 

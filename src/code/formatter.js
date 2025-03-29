@@ -35,17 +35,17 @@ const pkg = {
 };
 
 /** @type {Map<Languages, {parser: string, plugins: Array<Exclude<keyof typeof pkg, 'standalone'>>}>} */
-const formatOptions = new Map();
+const parsers = new Map();
 
-formatOptions.set("html", {
+parsers.set("html", {
   parser: "html",
   plugins: ["html", "estree", "babel", "postcss"],
 });
-formatOptions.set("javascript", {
+parsers.set("javascript", {
   parser: "babel",
   plugins: ["estree", "babel"],
 });
-formatOptions.set("css", {
+parsers.set("css", {
   parser: "css",
   plugins: ["postcss"],
 });
@@ -53,28 +53,43 @@ formatOptions.set("css", {
 /**
  * @param {string} text
  * @param {Languages} language
- * @param {boolean} [requirePragma]
+ * @param {{cursorOffset?: number, requirePragma?: boolean}} [options]
+ * @returns {Promise<import('prettier').CursorResult | null>}
  */
-export const format = async (text, language, requirePragma) => {
-  const options = formatOptions.get(language);
-  if (!options) return text;
+export const format = async (text, language, options) => {
+  const parser = parsers.get(language);
+  if (!parser) return null;
 
   try {
     await Promise.all([
       loadPkg(pkg.standalone),
-      ...options.plugins.map((name) => loadPkg(pkg[name])),
+      ...parser.plugins.map((name) => loadPkg(pkg[name])),
     ]);
   } catch (e) {
     console.error(e);
-    return text;
+    return null;
   }
 
   /** @type {{prettier: PrettierStandalone, prettierPlugins: PrettierPlugins}} */ // @ts-ignore
   const { prettier, prettierPlugins } = window;
 
-  return prettier.format(text, {
-    parser: options.parser,
-    plugins: options.plugins.map((name) => prettierPlugins[name]),
-    requirePragma: !!requirePragma,
-  });
+  const formatOptions = {
+    parser: parser.parser,
+    plugins: parser.plugins.map((name) => prettierPlugins[name]),
+    requirePragma: !!options?.requirePragma,
+  };
+
+  if (options?.cursorOffset !== undefined)
+    return prettier
+      .formatWithCursor(text, {
+        ...formatOptions,
+        cursorOffset: options?.cursorOffset,
+      })
+      .then((res) => (res.formatted === text ? null : res));
+  else
+    return prettier
+      .format(text, formatOptions)
+      .then((formatted) =>
+        formatted === text ? null : { formatted, cursorOffset: undefined },
+      );
 };

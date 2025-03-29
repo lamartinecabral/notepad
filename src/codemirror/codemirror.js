@@ -2,7 +2,7 @@
 import { basicSetup } from "codemirror";
 import { EditorView, keymap } from "@codemirror/view";
 import { indentWithTab } from "@codemirror/commands";
-import { EditorState } from "@codemirror/state";
+import { EditorSelection, EditorState } from "@codemirror/state";
 import { syntaxTree } from "@codemirror/language";
 import { linter } from "@codemirror/lint";
 import { html } from "@codemirror/lang-html";
@@ -136,8 +136,11 @@ export const getValue = () => {
   return editor && editor.state.doc.toString();
 };
 
-/** @param {string} text */
-export const setValue = (text) => {
+/**
+ * @param {string} text
+ * @param {number} [cursor]
+ * */
+export const setValue = (text, cursor) => {
   if (!editor) return;
   const transaction = {
     changes: [{ from: 0, to: editor.state.doc.length, insert: text }],
@@ -146,11 +149,23 @@ export const setValue = (text) => {
     editor.dispatch({
       ...transaction,
       scrollIntoView: true,
-      selection: editor.state.selection,
+      selection:
+        cursor !== undefined
+          ? EditorSelection.create([EditorSelection.range(cursor, cursor)])
+          : editor.state.selection,
     });
   } catch (_) {
     editor.dispatch(transaction);
   }
+};
+
+/** @returns {number | undefined} */
+export const getCursor = () => {
+  if (!editor) return;
+  if (editor.state.selection.ranges.length !== 1) return;
+  const { from, to } = editor.state.selection.ranges[0];
+  if (from !== to) return;
+  return from;
 };
 
 /** @param {string} lang */

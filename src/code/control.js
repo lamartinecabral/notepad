@@ -242,9 +242,14 @@ export function initEventListeners() {
   });
 
   onModS(() => {
-    format(Html.text, State.language.value, true).then((res) => {
-      if (res === Html.text) return;
-      Html.text = res;
+    format(Html.text, State.language.value, {
+      requirePragma: true,
+      cursorOffset: Html.cursor,
+    }).then((res) => {
+      if (!res) return;
+      if (res.cursorOffset !== undefined)
+        Html.setText(res.formatted, res.cursorOffset);
+      else Html.text = res.formatted;
       delaySave(0);
     });
   });
