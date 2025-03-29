@@ -3,6 +3,8 @@ import { basicSetup } from "codemirror";
 import { EditorView, keymap } from "@codemirror/view";
 import { indentWithTab } from "@codemirror/commands";
 import { EditorState } from "@codemirror/state";
+import { syntaxTree } from "@codemirror/language";
+import { linter } from "@codemirror/lint";
 import { html } from "@codemirror/lang-html";
 import { javascript } from "@codemirror/lang-javascript";
 import { css } from "@codemirror/lang-css";
@@ -49,22 +51,40 @@ const changeListener = EditorView.updateListener.of((update) => {
     changeHandler(update.state.doc.toString());
 });
 
+const syntaxErrorLinter = linter((view) => {
+  /** @type {import("@codemirror/lint").Diagnostic[]} */
+  const diagnostics = [];
+  syntaxTree(view.state)
+    .cursor()
+    .iterate((node) => {
+      if (node.type.isError) {
+        diagnostics.push({
+          from: node.from,
+          to: node.to,
+          severity: "error",
+          message: "SyntaxError",
+        });
+      }
+    });
+  return diagnostics;
+});
+
 let currentLang = "";
 
 const getLanguage = () => {
   return (
     {
-      html: () => html(),
-      javascript: () => javascript(),
-      css: () => css(),
-      cpp: () => cpp(),
-      python: () => python(),
-      java: () => java(),
+      html: () => [html(), syntaxErrorLinter],
+      javascript: () => [javascript(), syntaxErrorLinter],
+      css: () => [css(), syntaxErrorLinter],
+      cpp: () => [cpp(), syntaxErrorLinter],
+      python: () => [python(), syntaxErrorLinter],
+      java: () => [java(), syntaxErrorLinter],
       markdown: () =>
         markdown({
           defaultCodeLanguage: javascript(),
         }),
-    }[currentLang]?.() ?? { extension: [] }
+    }[currentLang]?.() ?? []
   );
 };
 
