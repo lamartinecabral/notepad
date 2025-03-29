@@ -3,7 +3,7 @@
 /**
  * @typedef {keyof typeof import('./model').Languages} Languages
  * @typedef {import('prettier')} PrettierStandalone
- * @typedef {{estree: import('prettier/plugins/estree.js'), babel: import('prettier/plugins/babel.js'), html: import('prettier/plugins/html.js'), postcss: import('prettier/plugins/postcss.js'), markdown: import('prettier/plugins/markdown.js')}} PrettierPlugins
+ * @typedef {{estree: import('prettier/plugins/estree.js'), babel: import('prettier/plugins/babel.js'), html: import('prettier/plugins/html.js'), postcss: import('prettier/plugins/postcss.js')}} PrettierPlugins
  */
 
 /** @type {(url: string) => Promise<any>} */
@@ -53,8 +53,9 @@ formatOptions.set("css", {
 /**
  * @param {string} text
  * @param {Languages} language
+ * @param {boolean} [requirePragma]
  */
-export const format = async (text, language) => {
+export const format = async (text, language, requirePragma) => {
   const options = formatOptions.get(language);
   if (!options) return text;
 
@@ -74,5 +75,6 @@ export const format = async (text, language) => {
   return prettier.format(text, {
     parser: options.parser,
     plugins: options.plugins.map((name) => prettierPlugins[name]),
+    requirePragma: !!requirePragma,
   });
 };

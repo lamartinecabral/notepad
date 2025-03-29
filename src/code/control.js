@@ -242,7 +242,7 @@ export function initEventListeners() {
   });
 
   onModS(() => {
-    format(Html.text, State.language.value).then((res) => {
+    format(Html.text, State.language.value, true).then((res) => {
       if (res === Html.text) return;
       Html.text = res;
       delaySave(0);
