@@ -49,7 +49,8 @@
     }
 
     window.addEventListener("message", (event) => {
-      setHTML(event.data);
+      if (event?.data?.type !== 'notepadIframeSource') return;
+      setHTML(event?.data?.source);
     });
 
     window.addEventListener("DOMContentLoaded", () => {
