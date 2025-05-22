@@ -9,6 +9,7 @@ module.exports = {
     "js/qrcode": "./src/qrcode/index.js",
     "js/codemirror": "./src/codemirror/index.js",
     "js/firebase": "./src/firebase/index.js",
+    "js/firebase8": "./src/firebase8/index.js",
   },
   module: {
     rules: [
