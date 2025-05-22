@@ -8,8 +8,11 @@ jobs:
     if: "${{ github.event.pull_request.head.repo.full_name == github.repository }}"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - run: npm ci && npm run build && node build-data.js
+      - run: npm test
+        env:
+          TEST_DOC_ID: ${{ secrets.TEST_DOC_ID }}
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"

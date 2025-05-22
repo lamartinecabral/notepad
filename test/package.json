@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "test": "jest",
+    "test:local": "HOST=local jest",
+    "test:remote": "HOST=remote jest"
+  },
+  "dependencies": {
+    "jest": "29.7.0",
+    "puppeteer": "24.9.0"
+  }
+}

@@ -1,0 +1,27 @@
+name: Run tests
+
+on:
+  workflow_dispatch:
+    inputs:
+      host:
+        type: choice
+        description: Host
+        options: 
+        - remote
+        - local
+
+jobs:
+  run_tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build app
+        if: github.event.inputs.host == 'local'
+        run: npm ci && npm run build
+
+      - run: cd test && npm ci
+
+      - run: cd test && npm run test:${{ github.event.inputs.host }}
+        env:
+          TEST_DOC_ID: ${{ secrets.TEST_DOC_ID }}

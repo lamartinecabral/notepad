@@ -2,6 +2,7 @@
     "scripts": {
         "build": "webpack --mode=production",
         "start": "webpack server --mode=development --open --static=dist --port=8000",
+        "test": "cd test && npm ci && npm run test:local",
         "deploy": "npm run build && firebase deploy --only hosting",
         "deploy:rules": "firebase deploy --only firestore:rules"
     },
