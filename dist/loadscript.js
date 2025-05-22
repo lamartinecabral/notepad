@@ -14,13 +14,13 @@
     var props = urls[index][1];
     script.src = url;
     if (props) for (var prop in props) script[prop] = props[prop];
-    script.onload = function () {
+    script.addEventListener("load", function () {
       addScripts(index + 1);
-    };
-    script.onerror = function () {
+    });
+    script.addEventListener("error", function () {
       addScripts(index + 1);
-    };
-    document.body.appendChild(script);
+    });
+    document.head.appendChild(script);
   }
 
   window.loadscript = function (url, props) {

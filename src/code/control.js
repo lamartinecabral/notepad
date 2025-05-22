@@ -32,7 +32,7 @@ import { parseLanguage as lang } from "./model";
 import { format } from "./formatter";
 import { Cache } from "../cache";
 
-/** @type {import('../codemirror/codemirror')} */ // @ts-ignore
+/** @typedef {import('../codemirror/index')} */
 const { onChange, setLanguage, onModS, setReadonly } = window.codemirror;
 
 export function initStateListeners() {
