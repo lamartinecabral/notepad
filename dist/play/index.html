@@ -31,14 +31,14 @@
       setTimeout(addIframeHashChangeListener, 10);
     }
     window.addEventListener("message", ({ data }) => {
-      if (data === "ready") document.querySelector('iframe').contentWindow.postMessage({
+      if (data === "notepadIframeReady") document.querySelector('iframe').contentWindow.postMessage({
         type: 'notepadIframeSource',
         source: docHtml
       });
     });
 
-    const { auth, db } = firebase.initApp(docId || '');
-    const { doc, onSnapshot } = firebase.firestore;
+    const { auth, db } = _firebase.initApp(docId || '');
+    const { doc, onSnapshot } = _firebase.firestore;
 
     let killLiveContent = null
     function liveContent(docId, col = "docs") {

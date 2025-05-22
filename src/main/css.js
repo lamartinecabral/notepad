@@ -15,6 +15,8 @@ import {
   optionsModal,
   submitButton,
   theme,
+  markdown,
+  code,
 } from "./refs";
 
 export function initCss() {
@@ -132,7 +134,7 @@ export function initCss() {
     "--color": "var(--nightcolor)",
   });
   !supportCssVar &&
-    style(theme, {
+    style(`${theme}, ${code}, ${markdown}`, {
       display: "none",
     });
 

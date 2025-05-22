@@ -1,135 +1,153 @@
 // @ts-check
 import { State } from "./state";
+import { elem, style, getElem } from "../iuai";
 import * as firebase from "../firebase";
 
 const { auth, storage } = firebase.initApp(State.docId || "");
 const { onAuthStateChanged } = firebase.auth;
-const { deleteObject, getDownloadURL, listAll, ref, uploadBytes } = firebase.storage;
+const { deleteObject, getDownloadURL, listAll, ref, uploadBytes } =
+  firebase.storage;
 
-var drive = {
-	initApp: function () {
-		console.log("initDrive");
-		if (!State.docId)
-			drive.setContent("# Marked in browser\n\nRendered by **marked**.");
-		else {
-			drive.liveAuth();
-		}
-	},
+const drive = {
+  initApp: () => {
+    console.log("initDrive");
 
-	liveAuth: function () {
-		onAuthStateChanged(auth, function (user) {
-			if (user) {
-				// @ts-ignore
-				if (user.email.split("@")[0] === State.docId) {
-					console.log("Logged");
-				} else {
-					console.log("Not logged");
-				}
-			} else {
-				console.log("No user.");
-			}
-			drive.listAll();
-		});
-	},
+    style("*", { fontFamily: "monospace" });
+    style("#wait", { position: "absolute", background: "white" });
+    document.body.appendChild(
+      elem("div", [
+        elem("div", { id: "wait", hidden: true }, "please wait..."),
+        elem("button", { onclick: () => drive.selectFile() }, "upload"),
+        elem("input", {
+          id: "input",
+          type: "file",
+          hidden: true,
+          onchange: (ev) => drive.upload(ev.target.files[0]),
+        }),
+        elem("div", [elem("table", { id: "table" })]),
+      ]),
+    );
 
-	listAll: function(){
-		drive.wait();
-		listAll(ref(storage, State.docId)).then((res) => {
-			Promise.all(
-				res.items.sort((a,b)=>a.name < b.name ? -1 : 1)
-					.map(item=>getDownloadURL(item))
-			).then(urls=>{
-				for(var i=0; i<urls.length; i++){
-					drive.addItem(res.items[i], urls[i]);
-				}
-				drive.done();
-			})
-		}).catch(err=>{
-			drive.done();
-			drive.clearList();
-			console.error(err)
-		});
-	},
+    if (State.docId) {
+      drive.liveAuth();
+    }
+  },
 
-	clearList: function(){
-		var table = document.getElementsByTagName('table')[0];
-		for(var i=table.children.length-1; i>=0; i--){
-			var tr = table.children[i];
-			tr.remove();
-		}
-	},
+  liveAuth: () => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // @ts-ignore
+        if (user.email.split("@")[0] === State.docId) {
+          console.log("Logged");
+        } else {
+          console.log("Not logged");
+        }
+      } else {
+        console.log("No user.");
+      }
+      drive.listAll();
+    });
+  },
 
-	addItem: function(itemRef, url){
-		(document.getElementById(itemRef.fullPath) || {remove:()=>{}}).remove();
-		var table = document.getElementsByTagName('table')[0];
-		var tr = document.createElement('tr');
-		tr.id = itemRef.fullPath;
+  listAll: () => {
+    drive.waiting = true;
+    listAll(ref(storage, State.docId))
+      .then((res) => {
+        Promise.all(
+          res.items
+            .sort((a, b) => (a.name < b.name ? -1 : 1))
+            .map((item) => getDownloadURL(item)),
+        ).then((urls) => {
+          for (var i = 0; i < urls.length; i++) {
+            drive.addItem(res.items[i], urls[i]);
+          }
+          drive.waiting = false;
+        });
+      })
+      .catch((err) => {
+        drive.waiting = false;
+        drive.clearList();
+        drive.error(err);
+      });
+  },
 
-		var td1 = document.createElement('td');
-		var a = document.createElement('a');
-		a.download = a.innerText = itemRef.name;
-		a.target = "_blank";
-		a.href = url;
-		td1.append(a);
-		
-		var td2 = document.createElement('td');
-		var button = document.createElement('button');
-		button.innerText = 'delete';
-		button.onclick = ()=>drive.delete(itemRef.fullPath);
-		td2.append(button);
+  clearList: () => {
+    const table = getElem("table");
+    for (let i = table.children.length - 1; i >= 0; i--) {
+      const tr = table.children[i];
+      tr.remove();
+    }
+  },
 
-		tr.append(td1);
-		tr.append(td2);
-		table.append(tr);
-	},
+  addItem: (itemRef, url) => {
+    document.getElementById(itemRef.fullPath)?.remove();
 
-	selectFile: function(){
-		if(drive.waiting) return;
-		var input = document.createElement('input');
-		input.type = 'file';
-		// @ts-ignore
-		input.onchange = ()=>drive.upload(input.files[0]);
-		input.click();
-	},
+    getElem("table").appendChild(
+      elem("tr", { id: itemRef.fullPath }, [
+        elem("td", [
+          elem("a", {
+            download: itemRef.name,
+            innerText: itemRef.name,
+            target: "_blank",
+            href: url,
+          }),
+        ]),
+        elem("td", [
+          elem("button", {
+            innerText: "delete",
+            onclick: () => drive.delete(itemRef.fullPath),
+          }),
+        ]),
+      ]),
+    );
+  },
 
-	upload: function(file){
-		if(!file) return;
-		if(file.size > 10 * 1024 * 1024) return drive.error('size limit exceeded');
-		var storageRef = ref(storage, State.docId+'/'+file.name);
-		drive.wait();
-		uploadBytes(storageRef, file).then((res) => {
-			drive.listAll();
-		}).catch(drive.error);
-	},
+  selectFile: () => {
+    if (drive.waiting) return;
+    getElem("input").click();
+  },
 
-	delete: function(fullPath){
-		if(drive.waiting) return;
-		drive.wait();
-		deleteObject(ref(storage, fullPath)).then(()=>{
-			// @ts-ignore
-			document.getElementById(fullPath).remove();
-			drive.done();
-		}).catch(drive.error);
-	},
+  upload: (file) => {
+    if (!file) return;
+    if (file.size > 10 * 1024 * 1024) return drive.error("size limit exceeded");
+    const storageRef = ref(storage, State.docId + "/" + file.name);
+    drive.waiting = true;
+    uploadBytes(storageRef, file)
+      .then(() => {
+        drive.listAll();
+      })
+      .catch((err) => {
+        drive.error(err);
+        drive.waiting = false;
+      });
+  },
 
-	error: function(err){
-		alert(err.message || err);
-		console.error(err);
-	},
+  delete: (fullPath) => {
+    if (drive.waiting) return;
+    drive.waiting = true;
+    deleteObject(ref(storage, fullPath))
+      .then(() => {
+        document.getElementById(fullPath)?.remove();
+        drive.waiting = false;
+      })
+      .catch((err) => {
+        drive.error(err);
+        drive.waiting = false;
+      });
+  },
 
-	waiting: false,
-	wait: function(){
-		drive.waiting = true;
-		// @ts-ignore
-		document.getElementById('wait').hidden = false;
-	},
+  error: (err) => {
+    alert(err.message || err);
+    console.error(err);
+  },
 
-	done: function(){
-		drive.waiting = false;
-		// @ts-ignore
-		document.getElementById('wait').hidden = true;
-	},
+  get waiting() {
+    return !getElem("wait").hidden;
+  },
 
+  set waiting(val) {
+    getElem("wait").hidden = !val;
+  },
 };
 
 // @ts-ignore
