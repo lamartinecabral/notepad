@@ -3,6 +3,7 @@
         "build": "webpack --mode=production",
         "start": "webpack server --mode=development --open --static=dist --port=8000",
         "test": "cd test && npm ci && npm run test:local",
+        "serve": "python3 -m http.server -d dist",
         "deploy": "npm run build && firebase deploy --only hosting",
         "deploy:rules": "firebase deploy --only firestore:rules"
     },

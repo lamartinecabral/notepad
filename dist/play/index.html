@@ -15,28 +15,10 @@
 </head>
 
 <body style="margin: 0; overflow: hidden;">
+  <script src="../iframe/handler.js"></script>
   <script>
 
-    let docId = location.search.substring(1);
-    docId = docId.toLowerCase()
-
-    let docHtml = '';
-    function setContent(text) {
-      docHtml = text;
-      let iframe = document.querySelector('iframe');
-      if (iframe) iframe.remove();
-      iframe = document.createElement('iframe');
-      iframe.src = './iframe.html?' + docId + location.hash;
-      document.body.append(iframe);
-      setTimeout(addIframeHashChangeListener, 10);
-    }
-    window.addEventListener("message", ({ data }) => {
-      if (data === "notepadIframeReady") document.querySelector('iframe').contentWindow.postMessage({
-        type: 'notepadIframeSource',
-        source: docHtml
-      });
-    });
-
+    const docId = location.search.substring(1).toLowerCase();
     const { auth, db } = _firebase.initApp(docId || '');
     const { doc, onSnapshot } = _firebase.firestore;
 
@@ -46,39 +28,20 @@
         doc(db, col, docId),
         (res) => {
           if (res.metadata.hasPendingWrites) return;
-          setContent(res.exists() ? res.data().text : "");
+          notepadIframe.setContent(res.exists() ? res.data().text : "");
         },
         (err) => {
           console.error(err);
-          setContent(err.message);
+          notepadIframe.setContent(err.message);
         }
       );
     }
 
-    if (!docId)
-      setContent("<h1>HTML IFrame</h1>");
+    if (!docId) notepadIframe.setContent("<h1>HTML IFrame</h1>");
     else {
       liveContent(docId);
     }
 
-    window.addEventListener("resize", (function () {
-      function setHeight() { document.body.style.height = window.innerHeight + "px" };
-      return (setHeight(), setHeight);
-    })());
-
-    window.addEventListener("hashchange", () => {
-      const iframe = document.querySelector("iframe");
-      if (!docId || !iframe) return;
-      iframe.contentWindow.location.hash = location.hash;
-    });
-
-    function addIframeHashChangeListener() {
-      const iframe = document.querySelector("iframe");
-      if (!iframe) return;
-      iframe.contentWindow.addEventListener('hashchange', () => {
-        location.hash = iframe.contentWindow.location.hash;
-      });
-    }
   </script>
 </body>
 
