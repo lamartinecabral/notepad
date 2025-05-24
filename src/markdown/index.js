@@ -1,23 +1,21 @@
 // @ts-check
-import { marked } from "marked";
-import Prism from "./prism";
 import { State } from "./state";
 import * as firebase from "../firebase";
 import { Cache } from "../cache";
+
+/** @typedef {import('../marked/index')} */
+const marked = window.marked;
 
 const { auth, db } = firebase.initApp(State.docId || "");
 const { onAuthStateChanged } = firebase.auth;
 const { doc, onSnapshot } = firebase.firestore;
 
 var markdown = {
-  /** @type {(id: string) => HTMLElement} */
-  // @ts-ignore
   elem: (id) => document.getElementById(id),
   content: () => markdown.elem("content"),
 
   initApp: function () {
     console.log("initMarkdown");
-    markdown.setMarkedOptions();
     if (!State.docId)
       markdown.setContent("# Marked in browser\n\nRendered by **marked**.");
     else {
@@ -72,15 +70,6 @@ var markdown = {
       document.body.scrollTop = y;
       State.hash = "";
     }, 50);
-  },
-
-  setMarkedOptions: function () {
-    marked.setOptions({
-      breaks: true,
-      highlight: function (code) {
-        return Prism.highlight(code, Prism.languages.javascript, "javascript");
-      },
-    });
   },
 };
 

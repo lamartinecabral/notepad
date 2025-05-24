@@ -2,6 +2,7 @@ const entries = {
   entry: {
     "js/my": "./src/my/index.js",
     "js/markdown": "./src/markdown/index.js",
+    "js/marked": "./src/marked/index.js",
     "js/html": "./src/html/index.js",
     "js/code": "./src/code/index.js",
     "js/qrcode": "./src/qrcode/index.js",
