@@ -159,5 +159,6 @@ export function initHtml() {
   app().hidden = true;
   app().className = State.nightMode.value ? "dark" : "light";
   app().append(...elements);
+  preview().src = "./preview.html?" + State.docId;
   initEditor(editor(), { nightMode: State.nightMode.value });
 }

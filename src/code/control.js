@@ -31,6 +31,7 @@ import { Html } from "./html";
 import { parseLanguage as lang } from "./model";
 import { format } from "./formatter";
 import { Cache } from "../cache";
+import { getParsedCode } from "./preview";
 
 /** @typedef {import('../codemirror/index')} */
 const { onChange, setLanguage, onModS, setReadonly } = window.codemirror;
@@ -107,7 +108,7 @@ export function initStateListeners() {
   State.showPreview.sub(function (value) {
     preview().hidden = !value;
     getParent(editor.id).classList.toggle("sideBySide", value);
-    preview().src = value ? play().href : "";
+    Control.setPreview();
   });
 }
 
@@ -141,8 +142,16 @@ class Control {
     if (!isHidden) play().href = location.origin + path + State.docId;
   }
 
+  static setPreview() {
+    preview().contentWindow.postMessage({
+      type: "codePreviewSource",
+      source: State.showPreview.value ? getParsedCode() : "",
+    });
+  }
+
   static save() {
     State.status.pub("Saving...");
+    if (State.showPreview.value) Control.setPreview();
     Service.save()
       .then(() => {
         State.status.pub("");

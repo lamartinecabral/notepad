@@ -9,7 +9,7 @@
     if (iframe) iframe.remove();
     iframe = document.createElement("iframe");
     iframe.src =
-      "../iframe/" + location.search + (renderCount === 1 ? "" : location.hash);
+      "/iframe/" + location.search + (renderCount === 1 ? "" : location.hash);
     document.body.appendChild(iframe);
     setTimeout(addIframeHashChangeListener, 10);
   }

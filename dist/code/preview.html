@@ -1,0 +1,41 @@
+<html>
+
+<head>
+  <base target="_parent">
+  <style>
+    body {
+      margin: 0;
+    }
+
+    iframe {
+      border: none;
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <script src="../iframe/handler.js"></script>
+  <script>
+
+    window.addEventListener("message", function (ev) {
+      if (ev?.data?.type === "codePreviewSource") {
+        window.notepadIframe?.setContent(ev.data.source);
+      }
+    });
+
+    window.addEventListener(
+      "resize",
+      (function () {
+        function setHeight() {
+          document.body.style.height = window.innerHeight + "px";
+        }
+        return setHeight(), setHeight;
+      })(),
+    );
+
+  </script>
+</body>
+
+</html>
