@@ -25,6 +25,7 @@ import {
   editor,
   langSelect,
   preview,
+  previewButton,
 } from "./refs";
 import { getElem, getChild, getParent } from "../iuai";
 import { Html } from "./html";
@@ -110,6 +111,11 @@ export function initStateListeners() {
     getParent(editor.id).classList.toggle("sideBySide", value);
     Control.setPreview();
   });
+
+  State.isMobile.sub(function (value) {
+    Control.setPlayButton();
+    State.showPreview.pub(false);
+  });
 }
 
 class Control {
@@ -125,12 +131,16 @@ class Control {
   static setPlayButton() {
     const language = State.language.value;
     const isHidden = State.isHidden.value;
+    const isMobile = State.isMobile.value;
 
-    play().hidden =
+    const hide =
       isHidden ||
       (language !== "html" &&
         language !== "markdown" &&
         language !== "javascript");
+
+    play().hidden = hide || !isMobile;
+    previewButton().hidden = hide || isMobile;
 
     const path =
       language === "markdown"
@@ -139,7 +149,9 @@ class Control {
           ? "/script/?"
           : "/play/?";
 
-    if (!isHidden) play().href = location.origin + path + State.docId;
+    const href = location.origin + path + State.docId;
+    play().href = href;
+    previewButton().href = href;
   }
 
   static setPreview() {
@@ -240,6 +252,12 @@ export function initEventListeners() {
 
   play().addEventListener("click", (ev) => {
     if (!ev.shiftKey) return;
+    ev.preventDefault();
+    State.showPreview.pub(!State.showPreview.value);
+  });
+
+  previewButton().addEventListener("click", (ev) => {
+    if (ev.altKey || ev.ctrlKey || ev.metaKey || ev.shiftKey) return;
     ev.preventDefault();
     State.showPreview.pub(!State.showPreview.value);
   });

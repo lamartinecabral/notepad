@@ -24,6 +24,7 @@ import {
   editor,
   langSelect,
   preview,
+  previewButton,
 } from "./refs";
 import { elem, style } from "../iuai";
 import { Languages } from "./model";
@@ -68,8 +69,21 @@ const elements = [
       " ",
       elem(
         play,
-        { href: "#", title: "shift+click to toggle a preview frame" },
+        {
+          href: "#",
+          title: "shift+click to toggle a preview frame",
+          hidden: !State.isMobile.value,
+        },
         "play",
+      ),
+      elem(
+        previewButton,
+        {
+          href: "#",
+          title: "click to toggle a preview frame",
+          hidden: State.isMobile.value,
+        },
+        "preview",
       ),
       " ",
       btn({ id: password.id, hidden: true }, "password"),

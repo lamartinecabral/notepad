@@ -15,6 +15,7 @@ import {
   editor,
   preview,
 } from "./refs";
+import * as State from "./state";
 
 export function initCss() {
   style("*", {
@@ -125,8 +126,10 @@ export function initCss() {
     background: "#fff",
   });
 
-  const setHeight = () =>
-    (editorRule.style.height = `calc(${window.innerHeight - 8}px - 1rem)`);
-  setHeight();
-  window.addEventListener("resize", setHeight);
+  const resizeListener = () => {
+    State.State.isMobile.pub(window.innerWidth <= 480);
+    editorRule.style.height = `calc(${window.innerHeight - 8}px - 1rem)`;
+  };
+  resizeListener();
+  window.addEventListener("resize", resizeListener);
 }

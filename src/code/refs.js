@@ -25,3 +25,4 @@ export const claim = refElem("div");
 export const resetPassword = refElem("div");
 export const langSelect = refElem("select");
 export const preview = refElem("iframe");
+export const previewButton = refElem("a");

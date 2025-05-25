@@ -17,6 +17,7 @@ export const State = {
   language: new Subject(lang(location.hash.slice(1))),
   showPreview: new Subject(false),
   nightMode: new Subject(Cache.getNightMode()),
+  isMobile: new Subject(false),
 
   /** @type {string | null} */
   lastLoadedText: null,
