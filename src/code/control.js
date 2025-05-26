@@ -269,7 +269,7 @@ export function initEventListeners() {
   const delaySave = delayLatest(Control.save);
 
   onChange(() => {
-    State.showPreview.value ? delaySave(500) : delaySave(2000);
+    State.showPreview.value ? delaySave(1000) : delaySave(2000);
   });
 
   onModS(() => {

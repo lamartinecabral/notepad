@@ -50,6 +50,7 @@
 
     window.addEventListener("message", (event) => {
       if (event?.data?.type !== 'notepadIframeSource') return;
+      console.clear();
       setHTML(event?.data?.source);
     });
 
