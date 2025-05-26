@@ -133,21 +133,25 @@ class Control {
     const isHidden = State.isHidden.value;
     const isMobile = State.isMobile.value;
 
-    const hide =
-      isHidden ||
-      (language !== "html" &&
-        language !== "markdown" &&
-        language !== "javascript");
+    const path = (() => {
+      switch (language) {
+        case "html":
+          return "/play/?";
+        case "markdown":
+          return "/markdown/?";
+        case "javascript":
+          return "/script/?";
+        case "jsx":
+          return "/react/?";
+        default:
+          return "";
+      }
+    })();
+
+    const hide = isHidden || !path;
 
     play().hidden = hide || !isMobile;
     previewButton().hidden = hide || isMobile;
-
-    const path =
-      language === "markdown"
-        ? "/markdown/?"
-        : language === "javascript"
-          ? "/script/?"
-          : "/play/?";
 
     const href = location.origin + path + State.docId;
     play().href = href;

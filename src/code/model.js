@@ -25,6 +25,10 @@ export const Languages = {
     value: "javascript",
     label: "javascript",
   },
+  jsx: {
+    value: "jsx",
+    label: "JSX",
+  },
   markdown: {
     value: "markdown",
     label: "markdown",

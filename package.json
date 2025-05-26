@@ -19,6 +19,7 @@
         "marked": "5.0.4"
     },
     "devDependencies": {
+        "@types/babel__standalone": "7.1.9",
         "firebase-tools": "13.31.2",
         "iuai": "0.6.3",
         "prettier": "3.3.2",

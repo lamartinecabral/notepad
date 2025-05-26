@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" charset="UTF-8">
+  <link rel="icon" type="image/ico" href="../assets/favicon.ico">
+  <style>
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+  </style>
+  <script src="https://unpkg.com/@babel/standalone@7.27.2/babel.min.js"></script>
+  <script src="../js/firebase.js"></script>
+</head>
+
+<body style="margin: 0; overflow: hidden;">
+  <script src="../iframe/handler.js"></script>
+  <script>
+
+    const docId = location.search.substring(1).toLowerCase();
+    const { auth, db } = _firebase.initApp(docId || '');
+    const { doc, onSnapshot } = _firebase.firestore;
+
+    let killLiveContent = null
+    function liveContent(docId, col = "docs") {
+      killLiveContent = onSnapshot(
+        doc(db, col, docId),
+        (res) => {
+          if (res.metadata.hasPendingWrites) return;
+          try {
+            const text = res.exists() ? res.data().text : '';
+            const source =
+              `${text}\n` +
+              `try { ReactDOM.createRoot(document.getElementById("root")).render(<App />); }\n` +
+              `catch(e) { document.getElementById("root").innerHTML = '<pre>' + e.name + ': ' + e.message + '</pre>';}`;
+            const { code } = Babel.transform(source, { presets: ['react'] });
+            const content = (
+              `<body><div id="root"></div><script type="module">\n` +
+              `import "https://cdn.jsdelivr.net/npm/react@18/umd/react.development.js"; import "https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.development.js";\n` +
+              `${code}\n` +
+              `<\/script><\/body>`
+            );
+            notepadIframe.setContent(content);
+          }
+          catch (e) {
+            console.error(e);
+            notepadIframe.setContent(`<pre>${e.name}: ${e.message}</pre>`);
+          }
+        },
+        (err) => {
+          console.error(err);
+          notepadIframe.setContent(err.message);
+        }
+      );
+    }
+
+    if (!docId) notepadIframe.setContent("<h1>HTML IFrame</h1>");
+    else {
+      liveContent(docId);
+    }
+
+  </script>
+</body>
+
+</html>

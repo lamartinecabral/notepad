@@ -76,6 +76,7 @@ const getLanguage = () => {
     {
       html: () => [html(), syntaxErrorLinter],
       javascript: () => [javascript(), syntaxErrorLinter],
+      jsx: () => [javascript({ jsx: true }), syntaxErrorLinter],
       css: () => [css(), syntaxErrorLinter],
       cpp: () => [cpp(), syntaxErrorLinter],
       python: () => [python(), syntaxErrorLinter],

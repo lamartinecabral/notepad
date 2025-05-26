@@ -45,6 +45,10 @@ parsers.set("javascript", {
   parser: "babel",
   plugins: ["estree", "babel"],
 });
+parsers.set("jsx", {
+  parser: "babel",
+  plugins: ["estree", "babel"],
+});
 parsers.set("css", {
   parser: "css",
   plugins: ["postcss"],

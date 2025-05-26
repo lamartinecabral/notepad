@@ -23,8 +23,30 @@ export const getParsedCode = () => {
         </body>
       `;
     }
+    case "jsx": {
+      if (!getBabel()) throw new Error("@babel/standalone module not imported");
+      try {
+        const source =
+          `${Html.text}\n` +
+          `try { ReactDOM.createRoot(document.getElementById("root")).render(<App />); }\n` +
+          `catch(e) { document.getElementById("root").innerHTML = '<pre>' + e.name + ': ' + e.message + '</pre>';}`;
+        const { code } = getBabel().transform(source, { presets: ["react"] });
+        return (
+          `<body><div id="root"></div><script type="module">\n` +
+          `import "https://cdn.jsdelivr.net/npm/react@18/umd/react.development.js"; import "https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.development.js";\n` +
+          `${code}\n` +
+          `</script></body>`
+        );
+      } catch (e) {
+        console.error(e);
+        return `<pre>${e.name}: ${e.message}</pre>`;
+      }
+    }
     default: {
       return "";
     }
   }
 };
+
+/** @type {() => import ('@babel/standalone')}  */
+const getBabel = () => window.Babel;
