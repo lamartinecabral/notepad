@@ -3,8 +3,10 @@ import { initCss } from "./css";
 import { initHtml } from "./html";
 import { initAuthListener } from "./service";
 
-initHtml();
-initCss();
-initStateListeners();
-initEventListeners();
-initAuthListener();
+setTimeout(() => {
+  initHtml();
+  initCss();
+  initStateListeners();
+  initEventListeners();
+  initAuthListener();
+}, 0);

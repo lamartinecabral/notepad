@@ -194,6 +194,21 @@ describe(`notepad ${host} app`, () => {
       expect(innerText).toBe("play page test");
     });
   });
+
+  describe("my page", () => {
+    beforeAll(async () => {
+      page = await browser.newPage();
+      await page.goto(`${baseUrl}/my`);
+    });
+    afterAll(async () => {
+      await page.close();
+    });
+
+    it("should show a login page", async () => {
+      const form = `document.querySelector('form')`;
+      await page.waitForFunction(`${form}?.checkVisibility()`);
+    });
+  });
 });
 
 // ======================================
