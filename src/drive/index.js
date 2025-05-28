@@ -22,7 +22,7 @@ const drive = {
           id: "input",
           type: "file",
           hidden: true,
-          onchange: (ev) => drive.upload(ev.target.files[0]),
+          onchange: (/** @type {any} */ ev) => drive.upload(ev.target.files[0]),
         }),
         elem("div", [elem("table", { id: "table" })]),
       ]),
