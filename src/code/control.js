@@ -108,7 +108,7 @@ export function initStateListeners() {
 
   State.showPreview.sub(function (value) {
     preview().hidden = !value;
-    getParent(editor.id).classList.toggle("sideBySide", value);
+    getParent(editor.id).classList.toggle("split", value);
     Control.setPreview();
   });
 

@@ -102,6 +102,7 @@ export function initCss() {
     "--dark": "#000",
     "--nightcolor": "#abb2bf",
     "--nightbg": "#181b20",
+    "--splitsize": "60%",
   });
   style(".light", {
     "--background": "var(--light)",
@@ -111,15 +112,15 @@ export function initCss() {
     "--background": "var(--nightbg)",
     "--color": "var(--nightcolor)",
   });
-  style(".sideBySide", {
+  style(".split", {
     float: "left",
     height: "100%",
-    width: "60%",
+    width: "var(--splitsize)",
   });
-  style(`.sideBySide + ${preview}`, {
+  style(`.split + ${preview}`, {
     position: "fixed",
     height: "calc(100% - 1em)",
-    width: "calc(40% - 1em)",
+    width: "calc(calc(100% - var(--splitsize)) - 1em)",
     right: "0px",
     margin: "0.5em",
     boxSizing: "border-box",
