@@ -5,6 +5,8 @@ const entries = {
     "js/marked": "./src/marked/index.js",
     "js/html": "./src/html/index.js",
     "js/code": "./src/code/index.js",
+    "js/code.worker": "./src/code/worker.js",
+    "js/code.boilerplate": "./src/code/boilerplate.js",
     "js/qrcode": "./src/qrcode/index.js",
     "js/codemirror": "./src/codemirror/index.js",
     "js/firebase": "./src/firebase/index.js",

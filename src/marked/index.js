@@ -1,2 +1,2 @@
 import * as marked from "./marked";
-window.marked = marked;
+self.marked = marked;

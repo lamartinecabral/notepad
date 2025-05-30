@@ -158,10 +158,10 @@ class Control {
     previewButton().href = href;
   }
 
-  static setPreview() {
+  static async setPreview() {
     preview().contentWindow.postMessage({
       type: "codePreviewSource",
-      source: State.showPreview.value ? getParsedCode() : "",
+      source: State.showPreview.value ? await getParsedCode() : "",
     });
   }
 

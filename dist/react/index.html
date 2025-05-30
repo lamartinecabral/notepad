@@ -13,6 +13,7 @@
   </style>
   <script src="https://unpkg.com/@babel/standalone@7.27.2/babel.min.js"></script>
   <script src="../js/firebase.js"></script>
+  <script src="../js/code.boilerplate.js"></script>
 </head>
 
 <body style="margin: 0; overflow: hidden;">
@@ -31,17 +32,8 @@
           if (res.metadata.hasPendingWrites) return;
           try {
             const text = res.exists() ? res.data().text : '';
-            const source =
-              `${text}\n` +
-              `try { ReactDOM.createRoot(document.getElementById("root")).render(<App />); }\n` +
-              `catch(e) { document.getElementById("root").innerHTML = '<pre>' + e.name + ': ' + e.message + '</pre>';}`;
-            const { code } = Babel.transform(source, { presets: ['react'] });
-            const content = (
-              `<body><div id="root"></div><script type="module">\n` +
-              `import "https://cdn.jsdelivr.net/npm/react@18/umd/react.development.js"; import "https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.development.js";\n` +
-              `${code}\n` +
-              `<\/script><\/body>`
-            );
+            const { code } = Babel.transform(text, { presets: ['react'] });
+            const content = codeBoilerplate({ language: 'jsx', source: code });
             notepadIframe.setContent(content);
           }
           catch (e) {

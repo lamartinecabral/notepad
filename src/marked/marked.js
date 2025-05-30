@@ -1,6 +1,8 @@
 // @ts-check
 import { marked } from "marked";
-import Prism from "./prism";
+
+globalThis.Prism = { disableWorkerMessageHandler: true };
+const Prism = require("./prism");
 
 /** @type {(text: string) => string} */
 export const parse = (function () {

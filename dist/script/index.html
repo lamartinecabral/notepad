@@ -12,6 +12,7 @@
     }
   </style>
   <script src="../js/firebase.js"></script>
+  <script src="../js/code.boilerplate.js"></script>
 </head>
 
 <body style="margin: 0; overflow: hidden;">
@@ -28,7 +29,7 @@
         doc(db, col, docId),
         (res) => {
           if (res.metadata.hasPendingWrites) return;
-          const content = '<script type="module">' + (res.exists() ? res.data().text : "") + "<\/script>";
+          const content = codeBoilerplate({ language: 'javascript', source: res.exists() ? res.data().text : "" });
           notepadIframe.setContent(content);
         },
         (err) => {
