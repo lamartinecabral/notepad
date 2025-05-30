@@ -102,7 +102,7 @@ export function initCss() {
     "--dark": "#000",
     "--nightcolor": "#abb2bf",
     "--nightbg": "#181b20",
-    "--splitsize": "60%",
+    "--splitsize": "60vw",
   });
   style(".light", {
     "--background": "var(--light)",
@@ -114,15 +114,13 @@ export function initCss() {
   });
   style(".split", {
     float: "left",
-    height: "100%",
     width: "var(--splitsize)",
   });
   style(`.split + ${preview}`, {
     position: "fixed",
-    height: "calc(100% - 1em)",
-    width: "calc(calc(100% - var(--splitsize)) - 1em)",
-    right: "0px",
-    margin: "0.5em",
+    height: "calc(100% - 16px)",
+    width: "calc(calc(100% - var(--splitsize)) - 24px)",
+    margin: "8px",
     boxSizing: "border-box",
     background: "#fff",
   });

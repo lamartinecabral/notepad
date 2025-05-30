@@ -166,9 +166,13 @@ class Control {
   }
 
   static save() {
+    const savePromise = Service.save();
+    if (!savePromise) return;
+
     State.status.pub("Saving...");
     if (State.showPreview.value) Control.setPreview();
-    Service.save()
+
+    savePromise
       .then(() => {
         State.status.pub("");
       })

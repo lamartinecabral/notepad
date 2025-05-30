@@ -85,7 +85,7 @@ export const Service = class {
 
   static save() {
     const text = Html.text;
-    if (State.lastLoadedText === text) return Promise.resolve();
+    if (State.lastLoadedText === text) return;
     if (State.isLogged.value) Cache.setText(text);
 
     const docRef = doc(db, "docs", State.docId);

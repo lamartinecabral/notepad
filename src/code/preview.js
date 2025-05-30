@@ -11,7 +11,12 @@ codeWorker.onmessage = (ev) => {
 };
 
 export const getParsedCode = async () => {
-  if (!isWorkerReady) throw new Error("codeWorker unavailable");
+  for (let i = 0; i < 12; i++) {
+    if (isWorkerReady) break;
+    await new Promise((r) => setTimeout(r, 250));
+  }
+  if (!isWorkerReady)
+    throw new Error("codeWorker is unavailable and timed out");
   return await new Promise((resolve) => {
     codeWorker.postMessage({
       type: "codeWorkerMessage",
