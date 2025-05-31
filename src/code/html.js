@@ -30,8 +30,8 @@ import { elem, style } from "../iuai";
 import { Languages } from "./model";
 import { State } from "./state";
 
-/** @type {import('../codemirror/codemirror')} */ // @ts-ignore
-const { getValue, setValue, initEditor, getCursor } = window.codemirror;
+/** @type {import('../codemirror/codemirror')} */
+const Editor = window.codemirror;
 
 const btn = (() => {
   style(".btn", {
@@ -155,16 +155,16 @@ const elements = [
 
 export class Html {
   static get text() {
-    return getValue();
+    return Editor.getValue();
   }
   static set text(text) {
-    setValue(text);
+    Editor.setValue(text);
   }
   static setText(text, cursor) {
-    setValue(text, cursor);
+    Editor.setValue(text, cursor);
   }
   static get cursor() {
-    return getCursor();
+    return Editor.getCursor();
   }
 }
 
@@ -174,5 +174,5 @@ export function initHtml() {
   app().className = State.nightMode.value ? "dark" : "light";
   app().append(...elements);
   preview().src = "./preview.html?" + State.docId;
-  initEditor(editor(), { nightMode: State.nightMode.value });
+  Editor.initEditor(editor(), { nightMode: State.nightMode.value });
 }

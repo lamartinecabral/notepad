@@ -35,7 +35,7 @@ import { Cache } from "../cache";
 import { getParsedCode } from "./preview";
 
 /** @typedef {import('../codemirror/index')} */
-const { onChange, setLanguage, onModS, setReadonly } = window.codemirror;
+const Editor = window.codemirror;
 
 export function initStateListeners() {
   State.protected.sub(function (value) {
@@ -87,7 +87,7 @@ export function initStateListeners() {
   State.language.sub(function (value) {
     location.hash = value;
     Control.setPlayButton();
-    setLanguage(value);
+    Editor.setLanguage(value);
     /** @type {HTMLOptionElement[]} */ // @ts-ignore
     const options = [...langSelect().children];
     options.forEach((option) => {
@@ -107,7 +107,7 @@ export function initStateListeners() {
   );
 
   State.showPreview.sub(function (value) {
-    preview().hidden = !value;
+    getParent(editor.id).style.removeProperty("width");
     getParent(editor.id).classList.toggle("split", value);
     Control.setPreview();
   });
@@ -125,7 +125,7 @@ class Control {
       location.origin + "/my/?claim=" + State.docId;
   }
   static setReadonly() {
-    setReadonly(State.public.value && !State.isLogged.value);
+    Editor.setReadonly(State.public.value && !State.isLogged.value);
   }
 
   static setPlayButton() {
@@ -272,11 +272,11 @@ export function initEventListeners() {
 
   const delaySave = delayLatest(Control.save);
 
-  onChange(() => {
+  Editor.onChange(() => {
     State.showPreview.value ? delaySave(1000) : delaySave(2000);
   });
 
-  onModS(() => {
+  Editor.onModS(() => {
     format(Html.text, State.language.value, {
       requirePragma: true,
       cursorOffset: Html.cursor,

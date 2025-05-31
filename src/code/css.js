@@ -22,11 +22,13 @@ export function initCss() {
     fontFamily: "monospace",
   });
   style(app, {
-    margin: "0 8px",
-    paddingTop: "0",
-    paddingBottom: "0",
+    margin: "0",
+    padding: "0",
     background: "var(--background)",
     color: "var(--color)",
+  });
+  style(`${app} > div`, {
+    margin: "0 8px",
   });
   const editorRule = style(editor, {
     height: "calc(calc(100vh - 8px) - 1rem)",
@@ -37,7 +39,7 @@ export function initCss() {
     textAlign: "center",
     width: "100%",
     top: "0",
-    zIndex: "1",
+    zIndex: "10",
   });
   style(status + " span", {
     background: "var(--background)",
@@ -115,12 +117,18 @@ export function initCss() {
   style(".split", {
     float: "left",
     width: "var(--splitsize)",
+    resize: "horizontal",
+    overflow: "auto",
+  });
+  style(preview, {
+    display: "none",
   });
   style(`.split + ${preview}`, {
+    display: "unset",
     position: "fixed",
     height: "calc(100% - 16px)",
-    width: "calc(calc(100% - var(--splitsize)) - 24px)",
-    margin: "8px",
+    width: "-webkit-fill-available",
+    margin: "8px 8px 8px 0",
     boxSizing: "border-box",
     background: "#fff",
   });
