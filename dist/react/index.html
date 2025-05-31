@@ -38,7 +38,7 @@
           }
           catch (e) {
             console.error(e);
-            notepadIframe.setContent(`<pre>${e.name}: ${e.message}</pre>`);
+            notepadIframe.setContent(`<pre style="color:red;">${String(e)}</pre>`);
           }
         },
         (err) => {
