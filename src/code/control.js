@@ -85,7 +85,7 @@ export function initStateListeners() {
   });
 
   State.language.sub(function (value) {
-    location.hash = value;
+    history.replaceState(null, "", "#" + value);
     Control.setPlayButton();
     Editor.setLanguage(value);
     /** @type {HTMLOptionElement[]} */ // @ts-ignore
