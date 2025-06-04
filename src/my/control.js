@@ -13,10 +13,12 @@ import {
   loginForm,
   message,
   docList,
+  docGrid,
   claimButton,
   logout,
+  changeLayout,
 } from "./refs";
-import { docElem } from "./html";
+import { docListElem, docGridElem } from "./html";
 import { Service } from "./service";
 import { State } from "./state";
 
@@ -42,13 +44,29 @@ export function initStateListeners() {
     message().hidden = !value;
     getChild(docList.id).hidden = !!value;
   });
+  State.viewMode.sub(function (value) {
+    if (value === "grid") {
+      docList().hidden = true;
+      docGrid().style.removeProperty("display");
+    }
+    if (value === "list") {
+      docList().hidden = false;
+      docGrid().style.display = "none";
+    }
+    localStorage.setItem("notepade_mypage_viewmode", value);
+    Control.resetDocs();
+  });
 }
 
 export class Control {
   static addDoc(doc) {
     State.docs.push(doc);
-    getChild(docList.id).append(docElem(doc));
-    State.message.pub("");
+    if (State.viewMode.value === "list") {
+      getChild(docList.id).append(docListElem(doc));
+    }
+    if (State.viewMode.value === "grid") {
+      docGrid().append(docGridElem(doc));
+    }
   }
   static removeDoc(doc) {
     const message =
@@ -57,8 +75,9 @@ export class Control {
     State.docs = State.docs.filter((d) => d.id !== doc.id);
     getElem("tr_" + doc.id).remove();
     Service.drop(doc.id);
-    if (!State.docs.length)
+    if (!State.docs.length) {
       State.message.pub("You have not claimed any notes yet.");
+    }
   }
   static setProtected(id, value) {
     const publ = getElem("cbpubl_" + id, "input");
@@ -76,6 +95,24 @@ export class Control {
     const list = getChild(docList.id);
     for (let i = list.children.length - 1; i >= 1; --i)
       list.children[i].remove();
+    for (let i = docGrid().children.length - 1; i >= 0; --i)
+      docGrid().children[i].remove();
+  }
+  static resetDocs() {
+    const docs = State.docs.slice();
+    State.docs.splice(0, docs.length);
+    Control.clear();
+
+    (async () => {
+      for (const doc of docs) {
+        await new Promise((r) =>
+          setTimeout(() => {
+            Control.addDoc(doc);
+            r();
+          }, 0),
+        );
+      }
+    })();
   }
 
   static checkUrlParams() {
@@ -86,7 +123,7 @@ export class Control {
       .catch((err) => {
         console.error(err);
         alert(
-          "Failed. The note already has owner or is protected or does not exist."
+          "Failed. The note already has owner or is protected or does not exist.",
         );
       })
       .then(() => {
@@ -97,7 +134,7 @@ export class Control {
 }
 
 export function initEventListeners() {
-  getElem(loginForm.id).addEventListener("submit", (ev) => {
+  loginForm().addEventListener("submit", (ev) => {
     ev.preventDefault();
     if (!ev.target) return;
     const email = ev.target[0].value;
@@ -113,27 +150,27 @@ export function initEventListeners() {
     });
   });
 
-  getElem(claimButton.id).addEventListener("click", () => {
+  claimButton().addEventListener("click", () => {
     const docId = prompt("Note ID:");
     if (!docId) return;
     Service.claim(docId).catch((err) => {
       console.error(err);
       alert(
-        "Failed. The note already has owner or is protected or does not exist."
+        "Failed. The note already has owner or is protected or does not exist.",
       );
     });
   });
 
-  getElem(logout.id).addEventListener("click", () => {
+  logout().addEventListener("click", () => {
     Service.logout();
   });
 
-  getElem(resetPassword.id).addEventListener("click", () => {
-    const email = getElem(loginForm.id)[0].value;
+  resetPassword().addEventListener("click", () => {
+    const email = loginForm()[0]["value"];
     Service.resetPassword(email)
       .then(() => {
         alert(
-          "You will receive an e-mail with instructions to reset your password."
+          "You will receive an e-mail with instructions to reset your password.",
         );
       })
       .catch((err) => {
@@ -142,11 +179,15 @@ export function initEventListeners() {
       });
   });
 
-  getElem(signinMode.id).addEventListener("click", () => {
+  signinMode().addEventListener("click", () => {
     State.signupMode.pub(false);
   });
 
-  getElem(signupMode.id).addEventListener("click", () => {
+  signupMode().addEventListener("click", () => {
     State.signupMode.pub(true);
+  });
+
+  changeLayout().addEventListener("click", () => {
+    State.viewMode.pub(State.viewMode.value === "grid" ? "list" : "grid");
   });
 }

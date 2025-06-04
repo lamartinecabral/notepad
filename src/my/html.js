@@ -16,12 +16,14 @@ import {
   content,
   userEmail,
   docList,
+  docGrid,
   message,
   claimButton,
+  changeLayout,
   logout,
   app,
 } from "./refs";
-import { elem } from "../iuai";
+import { elem, getElem } from "../iuai";
 
 const elements = [
   elem(loginContainer, { className: "center", hidden: true }, [
@@ -81,27 +83,112 @@ const elements = [
       elem(resetPassword, { href: "#" }, "reset password"),
     ]),
   ]),
-  elem(content, { className: "center", hidden: true }, [
-    elem(userEmail),
+  elem(content, { hidden: true }, [
+    elem("div", { className: "nav margin" }, [
+      elem(userEmail),
+      elem(logout, "logout"),
+      elem(claimButton, ["claim"]),
+      elem(changeLayout, ["change layout"]),
+    ]),
+    elem(message, { className: "margin" }, "Loading..."),
+    elem(docGrid),
     elem(docList, { className: "margin" }, [
       elem("table", [
         elem("tr", [
-          elem("th"),
+          elem("th", "Note ID"),
           elem("th", { title: "Only you can edit" }, "Protected"),
           elem("th", { title: "Everyone can read" }, "Public"),
         ]),
       ]),
-      elem(message, "Loading..."),
-    ]),
-    elem("div", { className: "margin" }, [
-      elem(claimButton, { className: "margin" }, ["claim"]),
-      elem(logout, { type: "button", className: "margin" }, "Logout"),
     ]),
   ]),
 ];
 
 /** @param {import("./state").Doc} doc */
-export function docElem(doc) {
+export function docGridElem(doc) {
+  let optMode = false;
+  const optClick = () => {
+    optMode = !optMode;
+    getElem("ta_" + doc.id).hidden = optMode;
+    getElem("to_" + doc.id).hidden = !optMode;
+  };
+  return elem("div", { id: "tr_" + doc.id }, [
+    elem("div", { className: "header" }, [
+      elem(
+        "a",
+        {
+          href: "../?" + doc.id,
+          target: "_blank",
+          className: "docname",
+          title: doc.id,
+        },
+        doc.id,
+      ),
+      elem(
+        "a",
+        {
+          href: "#",
+          className: "btn",
+          onclick: () => optClick(),
+        },
+        "✏️",
+      ),
+    ]),
+    elem("div", { className: "textarea" }, [
+      elem(
+        "textarea",
+        {
+          id: "ta_" + doc.id,
+          readOnly: true,
+          hidden: optMode,
+        },
+        [doc.text],
+      ),
+      elem("div", { id: "to_" + doc.id, hidden: !optMode }, [
+        elem("div", [
+          elem("div", [
+            elem("div", { className: "checkboxContainer" }, [
+              elem("input", {
+                id: "cbprot_" + doc.id,
+                type: "checkbox",
+                checked: !!doc.protected,
+                onchange: (/** @type {any} */ ev) => {
+                  Control.setProtected(doc.id, ev.target.checked);
+                },
+              }),
+              "protected",
+            ]),
+            elem("div", { className: "checkboxContainer" }, [
+              elem("input", {
+                id: "cbpubl_" + doc.id,
+                type: "checkbox",
+                disabled: !doc.protected,
+                checked: !!doc.public,
+                onchange: (/** @type {any} */ ev) => {
+                  Control.setPublic(doc.id, ev.target.checked);
+                },
+              }),
+              "public",
+            ]),
+          ]),
+          elem(
+            "button",
+            {
+              id: "bt_" + doc.id,
+              disabled: !!doc.protected,
+              onclick: () => Control.removeDoc(doc),
+              className: "margin",
+            },
+            "drop",
+          ),
+        ]),
+      ]),
+    ]),
+  ]);
+}
+
+/** @param {import("./state").Doc} doc */
+export function docListElem(doc) {
   return elem("tr", { id: "tr_" + doc.id }, [
     elem("td", [
       elem(

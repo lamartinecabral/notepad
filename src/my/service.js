@@ -54,16 +54,20 @@ export function initAuthListener() {
 function listDocs() {
   const filter = query(
     collection(db, "ownerships"),
-    where("owner", "==", (auth.currentUser || {}).uid)
+    where("owner", "==", (auth.currentUser || {}).uid),
   );
   State.message.pub("Loading...");
   return getDocs(filter)
     .then(function (res) {
-      res.docs.forEach(({ id }) => {
-        Service.getDoc(id).then((doc) => {
-          Control.addDoc(doc);
-        });
-      });
+      Promise.all(
+        res.docs.map((item) => {
+          return Service.getDoc(item.id);
+        }),
+      )
+        .then((docs) => {
+          return docs.forEach(Control.addDoc);
+        })
+        .then(() => res.docs.length && State.message.pub(""));
       if (!res.docs.length)
         State.message.pub("You have not claimed any notes yet.");
       Control.checkUrlParams();
@@ -131,7 +135,7 @@ export class Service {
       }).then(() =>
         Service.update(doc, {
           protected: deleteField(),
-        })
+        }),
       );
     }
   }

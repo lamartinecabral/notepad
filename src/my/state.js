@@ -11,4 +11,8 @@ export const State = {
   signupMode: new Subject(false),
   /** @type {Doc[]} */ docs: [],
   message: new Subject("Loading..."),
+  /** @type {Subject<'grid' | 'list'>} */ // @ts-ignore
+  viewMode: new Subject(
+    localStorage.getItem("notepade_mypage_viewmode") || "list",
+  ),
 };

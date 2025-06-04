@@ -1,17 +1,36 @@
 // @ts-check
 
 import { style } from "../iuai";
-import { loginContainer, content, userEmail } from "./refs";
+import {
+  app,
+  loginContainer,
+  content,
+  userEmail,
+  docGrid,
+  docList,
+} from "./refs";
 
 export function initCss() {
   style("*", {
     fontFamily: "monospace",
   });
+  style(app, {
+    margin: "0",
+    padding: "0",
+  });
   style("th", {
     minWidth: "9ch",
   });
+  style("tr > td:first-child", {
+    textAlign: "start",
+  });
   style(".margin", {
     margin: "1em",
+  });
+  style(".nav", {
+    display: "flex",
+    gap: "1em",
+    alignItems: "center",
   });
   style(".center", {
     textAlign: "center",
@@ -23,6 +42,11 @@ export function initCss() {
   style("td.checkbox", {
     textAlign: "center",
   });
+  style(".checkboxContainer", {
+    display: "flex",
+    alignItems: "center",
+    gap: "3px",
+  });
   style("a, a:visited", {
     color: "blue",
   });
@@ -32,11 +56,55 @@ export function initCss() {
   style(content, {
     maxWidth: "100%",
   });
-  style(content + " table", {
-    margin: "auto",
-    overflowX: "scroll",
-  });
   style(userEmail, {
     color: "#a9a9a9",
+  });
+  style(`${docList} tr:nth-child(even)`, {
+    background: "#eee",
+  });
+
+  style(docGrid, {
+    padding: "0 1.5em 1.5em 1.5em",
+    width: "calc(100vw - 3em)",
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fill, minmax(180px, auto))",
+    columnGap: "1.5em",
+    rowGap: "0.5em",
+  });
+  style(`${docGrid} > div > div.header`, {
+    display: "flex",
+    justifyContent: "space-between",
+  });
+  style(`${docGrid} > div > div > a.btn`, {
+    padding: "0 8px",
+    textDecoration: "none",
+  });
+  style(`${docGrid} > div .docname`, {
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+  });
+  style(`${docGrid} > div div.textarea`, {
+    display: "flex",
+    height: "200px",
+  });
+  style(`${docGrid} > div div.textarea > textarea`, {
+    color: "#555",
+    background: "#eee",
+    resize: "none",
+    whiteSpace: "pre",
+    width: "100%",
+  });
+  style(`${docGrid} > div div.textarea > div`, {
+    color: "#555",
+    background: "#eee",
+    width: "100%",
+  });
+  style(`${docGrid} > div div.textarea > div > div`, {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    height: "100%",
   });
 }
