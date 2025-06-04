@@ -98,6 +98,7 @@ const elements = [
           elem("th", "Note ID"),
           elem("th", { title: "Only you can edit" }, "Protected"),
           elem("th", { title: "Everyone can read" }, "Public"),
+          elem("th", "Ownership"),
         ]),
       ]),
     ]),
@@ -215,18 +216,6 @@ export function docListElem(doc) {
       }),
     ]),
     elem("td", { style: { whiteSpace: "nowrap" } }, [
-      elem("a", { href: location.origin + "/markdown/?" + doc.id }, "MD"),
-      " ",
-      elem(
-        "a",
-        { href: "https://nopedat.netlify.app/api/?id=" + doc.id },
-        "raw",
-      ),
-      " ",
-      elem("a", { href: location.origin + "/code/?" + doc.id }, "</>"),
-      " ",
-      elem("a", { href: location.origin + "/play/?" + doc.id }, "▶"),
-      " ",
       elem(
         "button",
         {
