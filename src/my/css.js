@@ -78,6 +78,7 @@ export function initCss() {
   style(`${docGrid} > div > div > a.btn`, {
     padding: "0 8px",
     textDecoration: "none",
+    cursor: "pointer",
   });
   style(`${docGrid} > div .docname`, {
     whiteSpace: "nowrap",

@@ -107,7 +107,9 @@ const elements = [
 /** @param {import("./state").Doc} doc */
 export function docGridElem(doc) {
   let optMode = false;
-  const optClick = () => {
+  const optClick = (/** @type {Event} */ ev) => {
+    ev.preventDefault();
+    ev.stopPropagation();
     optMode = !optMode;
     getElem("ta_" + doc.id).hidden = optMode;
     getElem("to_" + doc.id).hidden = !optMode;
@@ -127,9 +129,8 @@ export function docGridElem(doc) {
       elem(
         "a",
         {
-          href: "#",
           className: "btn",
-          onclick: () => optClick(),
+          onclick: (ev) => optClick(ev),
         },
         "✏️",
       ),
