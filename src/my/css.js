@@ -68,16 +68,17 @@ export function initCss() {
     width: "calc(100vw - 3em)",
     display: "grid",
     gridTemplateColumns: "repeat(auto-fill, minmax(180px, auto))",
-    columnGap: "1.5em",
-    rowGap: "0.5em",
+    gap: "0.5em 1em",
   });
   style(`${docGrid} > div > div.header`, {
     display: "flex",
     justifyContent: "space-between",
   });
-  style(`${docGrid} > div > div > a.btn`, {
+  style(`${docGrid} > div > div > button`, {
     padding: "0 8px",
-    textDecoration: "none",
+    margin: "unset",
+    background: "unset",
+    border: "unset",
     cursor: "pointer",
   });
   style(`${docGrid} > div .docname`, {
@@ -95,6 +96,10 @@ export function initCss() {
     resize: "none",
     whiteSpace: "pre",
     width: "100%",
+    overflow: "hidden",
+  });
+  style(`${docGrid} > div div.textarea > textarea:focus`, {
+    overflow: "scroll",
   });
   style(`${docGrid} > div div.textarea > div`, {
     color: "#555",

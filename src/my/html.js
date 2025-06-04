@@ -88,7 +88,7 @@ const elements = [
       elem(userEmail),
       elem(logout, "logout"),
       elem(claimButton, ["claim"]),
-      elem(changeLayout, ["change layout"]),
+      elem(changeLayout, ["layout"]),
     ]),
     elem(message, { className: "margin" }, "Loading..."),
     elem(docGrid),
@@ -108,8 +108,6 @@ const elements = [
 export function docGridElem(doc) {
   let optMode = false;
   const optClick = (/** @type {Event} */ ev) => {
-    ev.preventDefault();
-    ev.stopPropagation();
     optMode = !optMode;
     getElem("ta_" + doc.id).hidden = optMode;
     getElem("to_" + doc.id).hidden = !optMode;
@@ -126,14 +124,7 @@ export function docGridElem(doc) {
         },
         doc.id,
       ),
-      elem(
-        "a",
-        {
-          className: "btn",
-          onclick: (ev) => optClick(ev),
-        },
-        "✏️",
-      ),
+      elem("button", { onclick: optClick }, "✏️"),
     ]),
     elem("div", { className: "textarea" }, [
       elem(
