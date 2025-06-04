@@ -125,7 +125,7 @@ export function docGridElem(doc) {
         },
         doc.id,
       ),
-      elem("button", { onclick: optClick }, "✏️"),
+      elem("button", { onclick: optClick }, "⚙️"),
     ]),
     elem("div", { className: "textarea" }, [
       elem(
@@ -215,7 +215,7 @@ export function docListElem(doc) {
         },
       }),
     ]),
-    elem("td", { style: { whiteSpace: "nowrap" } }, [
+    elem("td", { className: "checkbox" }, [
       elem(
         "button",
         {

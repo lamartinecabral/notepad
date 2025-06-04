@@ -72,7 +72,6 @@ export function initCss() {
   });
   style(`${docGrid} > div > div.header`, {
     display: "flex",
-    justifyContent: "space-between",
   });
   style(`${docGrid} > div > div > button`, {
     padding: "0 8px",
