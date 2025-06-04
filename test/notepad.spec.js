@@ -150,27 +150,6 @@ describe(`notepad ${host} app`, () => {
     });
   });
 
-  describe("drive page", () => {
-    beforeAll(async () => {
-      page = await browser.newPage();
-      await page.goto(`${baseUrl}/drive/?${docId}`);
-      await page.waitForFunction(`document.readyState === 'complete'`);
-    });
-    afterAll(async () => {
-      await page.close();
-    });
-
-    it("should show a list with one item", async () => {
-      const loadingMessage = `document.querySelector('#wait')`;
-      await page.waitForFunction(`${loadingMessage}.hidden == false`);
-      await page.waitForFunction(`${loadingMessage}.hidden == true`);
-
-      const table = await page.$("table#table");
-      const childCount = await table?.evaluate((el) => el.children.length);
-      expect(childCount).toBe(1);
-    });
-  });
-
   describe("play page", () => {
     beforeAll(async () => {
       const source = `<div id="this_div_should_render">play page test</div>`;

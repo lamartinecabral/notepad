@@ -19,27 +19,9 @@ export const initApp = (name) => {
     get auth() {
       return app.auth();
     },
-    get storage() {
-      return app.storage();
-    },
   };
 };
 
-export const storage = {
-  /** @param {firebase.storage.Reference} ref */
-  deleteObject: (ref) => ref.delete(),
-  /** @param {firebase.storage.Reference} ref */
-  getDownloadURL: (ref) => ref.getDownloadURL(),
-  /** @param {firebase.storage.Reference} ref */
-  listAll: (ref) => ref.listAll(),
-  /** @param {firebase.storage.Storage} storage */
-  ref: (storage, path) => storage.ref(path),
-  /**
-   * @param {firebase.storage.Reference} ref
-   * @param {Blob | Uint8Array | ArrayBuffer} data
-   * */
-  uploadBytes: (ref, data) => ref.put(data),
-};
 export const firestore = {
   /** @param {firebase.firestore.Firestore} db */
   collection: (db, ...path) => db.collection(path.join("/")),

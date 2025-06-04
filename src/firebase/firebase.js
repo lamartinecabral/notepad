@@ -1,14 +1,6 @@
 // @ts-check
 import { initializeApp } from "firebase/app";
 import {
-  deleteObject,
-  getDownloadURL,
-  getStorage,
-  listAll,
-  ref,
-  uploadBytes,
-} from "firebase/storage";
-import {
   collection,
   deleteDoc,
   deleteField,
@@ -46,19 +38,9 @@ export const initApp = (name) => {
     get auth() {
       return getAuth(app);
     },
-    get storage() {
-      return getStorage(app);
-    },
   };
 };
 
-export const storage = {
-  deleteObject,
-  getDownloadURL,
-  listAll,
-  ref,
-  uploadBytes,
-};
 export const firestore = {
   collection,
   deleteDoc,

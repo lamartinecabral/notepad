@@ -16,7 +16,6 @@ const entries = {
 const es5Entries = {
   entry: {
     "js/main": "./src/main/index.js",
-    "js/drive": "./src/drive/index.js",
     "js/firebase8": "./src/firebase8/index.js",
   },
   module: {

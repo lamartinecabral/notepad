@@ -1,6 +1,6 @@
 // @ts-check
 /** @typedef {import('./firebase/index')} */
 
-const { auth, firestore, initApp, storage } = window._firebase;
+const { auth, firestore, initApp } = window._firebase;
 
-export { auth, firestore, initApp, storage };
+export { auth, firestore, initApp };
