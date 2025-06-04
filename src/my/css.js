@@ -70,26 +70,30 @@ export function initCss() {
     gridTemplateColumns: "repeat(auto-fill, minmax(180px, auto))",
     gap: "0.5em 1em",
   });
-  style(`${docGrid} > div > div.header`, {
+  style(`${docGrid} div.header`, {
     display: "flex",
+    gap: "5px",
   });
-  style(`${docGrid} > div > div > button`, {
+  style(`${docGrid} div.header button`, {
     padding: "0 8px",
     margin: "unset",
     background: "unset",
     border: "unset",
     cursor: "pointer",
   });
-  style(`${docGrid} > div .docname`, {
+  style(`${docGrid} div.header button.active`, {
+    background: "#eee",
+  });
+  style(`${docGrid} a.docname`, {
     whiteSpace: "nowrap",
     overflow: "hidden",
     textOverflow: "ellipsis",
   });
-  style(`${docGrid} > div div.textarea`, {
+  style(`${docGrid} div.textarea`, {
     display: "flex",
     height: "200px",
   });
-  style(`${docGrid} > div div.textarea > textarea`, {
+  style(`${docGrid} div.textarea textarea`, {
     color: "#555",
     background: "#eee",
     resize: "none",
@@ -97,15 +101,15 @@ export function initCss() {
     width: "100%",
     overflow: "hidden",
   });
-  style(`${docGrid} > div div.textarea > textarea:focus`, {
+  style(`${docGrid} div.textarea > textarea:focus`, {
     overflow: "scroll",
   });
-  style(`${docGrid} > div div.textarea > div`, {
+  style(`${docGrid} div.textarea > div`, {
     color: "#555",
     background: "#eee",
     width: "100%",
   });
-  style(`${docGrid} > div div.textarea > div > div`, {
+  style(`${docGrid} div.textarea > div > div`, {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",

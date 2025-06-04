@@ -108,8 +108,9 @@ const elements = [
 /** @param {import("./state").Doc} doc */
 export function docGridElem(doc) {
   let optMode = false;
-  const optClick = (/** @type {Event} */ ev) => {
+  const optClick = (ev) => {
     optMode = !optMode;
+    ev.target.classList.toggle("active", optMode);
     getElem("ta_" + doc.id).hidden = optMode;
     getElem("to_" + doc.id).hidden = !optMode;
   };
@@ -125,7 +126,11 @@ export function docGridElem(doc) {
         },
         doc.id,
       ),
-      elem("button", { onclick: optClick }, "⚙️"),
+      elem(
+        "button",
+        { className: optMode ? "active" : "", onclick: optClick },
+        "⚙️",
+      ),
     ]),
     elem("div", { className: "textarea" }, [
       elem(
