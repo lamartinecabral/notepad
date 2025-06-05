@@ -2,6 +2,7 @@
 import { State } from "./state";
 import * as firebase from "../firebase";
 import { Cache } from "../cache";
+import { assert } from "../utils";
 
 /** @typedef {import('../marked/index')} */
 const marked = window.marked;
@@ -11,7 +12,7 @@ const { onAuthStateChanged } = firebase.auth;
 const { doc, onSnapshot } = firebase.firestore;
 
 var markdown = {
-  elem: (id) => document.getElementById(id),
+  elem: (id) => assert(document.getElementById(id)),
   content: () => markdown.elem("content"),
 
   initApp: function () {

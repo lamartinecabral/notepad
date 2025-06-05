@@ -37,7 +37,7 @@ const getParsedCode = ({ language, source }) => {
     }
     case "jsx": {
       const { code } = getBabel().transform(source, { presets: ["react"] });
-      return codeBoilerplate({ language: "jsx", source: code });
+      return codeBoilerplate({ language: "jsx", source: code ?? "" });
     }
     default: {
       return "";

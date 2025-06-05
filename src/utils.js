@@ -70,8 +70,8 @@ export function delayLatest(handler) {
   };
 }
 
-const counter = {};
-export function ref(prefix = "") {
-  if (counter[prefix] === undefined) counter[prefix] = 0;
-  return prefix + (counter[prefix]++).toString(36);
+/** @type {<T>(val: T | null | undefined) => T} */
+export function assert(val) {
+  if (val === null || val === undefined) throw new Error("invalid value");
+  return val;
 }

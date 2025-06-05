@@ -108,7 +108,7 @@ export class Control {
         await new Promise((r) =>
           setTimeout(() => {
             Control.addDoc(doc);
-            r();
+            r(null);
           }, 0),
         );
       }

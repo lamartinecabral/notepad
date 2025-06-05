@@ -6,6 +6,6 @@
   },
   "dependencies": {
     "jest": "29.7.0",
-    "puppeteer": "24.9.0"
+    "puppeteer": "24.10.0"
   }
 }

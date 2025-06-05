@@ -90,10 +90,12 @@ export const format = async (text, language, options) => {
         cursorOffset: options?.cursorOffset,
       })
       .then((res) => (res.formatted === text ? null : res));
-  else
+  else {
+    // @ts-ignore
     return prettier
       .format(text, formatOptions)
       .then((formatted) =>
         formatted === text ? null : { formatted, cursorOffset: undefined },
       );
+  }
 };

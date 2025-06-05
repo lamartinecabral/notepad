@@ -159,7 +159,7 @@ class Control {
   }
 
   static async setPreview() {
-    preview().contentWindow.postMessage({
+    preview().contentWindow?.postMessage({
       type: "codePreviewSource",
       source: State.showPreview.value ? await getParsedCode() : "",
     });

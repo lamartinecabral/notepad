@@ -1,6 +1,7 @@
 // @ts-check
 
 import { style } from "../iuai";
+import { assert } from "../utils";
 import {
   app,
   status,
@@ -138,7 +139,8 @@ export function initCss() {
       display: "none",
     });
 
-  const setHeight = () => (appRule.style.height = window.innerHeight + "px");
+  const setHeight = () =>
+    (assert(appRule).style.height = window.innerHeight + "px");
   setHeight();
   window.addEventListener("resize", setHeight);
 }

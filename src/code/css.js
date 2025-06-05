@@ -1,6 +1,7 @@
 // @ts-check
 
 import { style } from "../iuai";
+import { assert } from "../utils";
 import {
   app,
   status,
@@ -135,7 +136,8 @@ export function initCss() {
 
   const resizeListener = () => {
     State.State.isMobile.pub(window.innerWidth <= 480);
-    editorRule.style.height = `calc(${window.innerHeight - 8}px - 1rem)`;
+    assert(editorRule).style.height =
+      `calc(${window.innerHeight - 8}px - 1rem)`;
   };
   resizeListener();
   window.addEventListener("resize", resizeListener);

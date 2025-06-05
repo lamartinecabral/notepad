@@ -111,6 +111,7 @@ const mapDoc = (doc) => ({
 
 /** @type {(query: firebase.firestore.QuerySnapshot) => QuerySnapshot} */
 const mapQuery = (query) => ({
+  // @ts-ignore
   get docs() {
     return query.docs.map(mapDoc);
   },
@@ -121,7 +122,10 @@ const mapQuery = (query) => ({
     return query.empty;
   },
   metadata: query.metadata,
+  // @ts-ignore
   docChanges: undefined,
+  // @ts-ignore
   forEach: undefined,
+  // @ts-ignore
   query: undefined,
 });

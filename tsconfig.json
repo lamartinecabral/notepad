@@ -2,6 +2,8 @@
   "include": ["src"],
   "compilerOptions": {
     "allowJs": true,
+    "strict": true,
+    "noImplicitAny": false,
     "outDir": "dist/js/",
     "target": "ES5",
     "module": "NodeNext"
