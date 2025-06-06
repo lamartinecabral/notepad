@@ -23,13 +23,19 @@ export function initCss() {
     fontFamily: "monospace",
   });
   style(app, {
+    display: "flex",
     margin: "0",
-    padding: "0",
+    padding: "8px",
+    gap: "8px",
     background: "var(--background)",
     color: "var(--color)",
   });
   style(`${app} > div`, {
-    margin: "0 8px",
+    height: "100%",
+    marginTop: "-8px",
+  });
+  style(`${app} > div:not(.split)`, {
+    width: "100%",
   });
   const editorRule = style(editor, {
     height: "calc(calc(100vh - 8px) - 1rem)",
@@ -116,7 +122,6 @@ export function initCss() {
     "--color": "var(--nightcolor)",
   });
   style(".split", {
-    float: "left",
     width: "var(--splitsize)",
     resize: "horizontal",
     overflow: "auto",
@@ -126,10 +131,8 @@ export function initCss() {
   });
   style(`.split + ${preview}`, {
     display: "unset",
-    position: "fixed",
-    height: "calc(100% - 16px)",
-    width: "-webkit-fill-available",
-    margin: "8px 8px 8px 0",
+    flexGrow: "1",
+    width: "0",
     boxSizing: "border-box",
     background: "#fff",
   });
