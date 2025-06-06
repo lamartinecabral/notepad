@@ -174,6 +174,31 @@ describe(`notepad ${host} app`, () => {
     });
   });
 
+  describe("react page", () => {
+    beforeAll(async () => {
+      const source = `const App = () => <div id="this_div_should_render">react page test</div>`;
+      await setNote(docId, source);
+      page = await browser.newPage();
+      await page.goto(`${baseUrl}/react/?${docId}`);
+    });
+    afterAll(async () => {
+      await page.close();
+    });
+
+    it("should render note's content", async () => {
+      const iframeDocument = `document.querySelector('iframe')?.contentDocument`;
+      const rootElement = `${iframeDocument}?.querySelector('#root')`;
+      await page.waitForFunction(`${rootElement}?.children.length`);
+
+      const iframe = await page.$("iframe");
+      const contentFrame = await iframe?.contentFrame();
+      const div = await contentFrame?.$("div#this_div_should_render");
+
+      const innerText = await div?.evaluate((el) => el.innerText);
+      expect(innerText).toBe("react page test");
+    });
+  });
+
   describe("my page", () => {
     beforeAll(async () => {
       page = await browser.newPage();
