@@ -22,7 +22,7 @@
     "devDependencies": {
         "@types/babel__standalone": "7.1.9",
         "firebase-tools": "13.31.2",
-        "iuai": "0.8.1",
+        "iuai": "0.9.1",
         "prettier": "3.3.2",
         "ts-loader": "9.4.3",
         "webpack": "5.98.0",

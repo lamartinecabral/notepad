@@ -1,7 +1,7 @@
+// @ts-check
 const fs = require("fs");
-const path = require("node:path");
 function run() {
-  const filepath = path.resolve(__dirname, "dist/index.html");
+  const filepath = "dist/index.html";
   const buffer = fs.readFileSync(filepath);
   let fileContent = buffer.toString();
 

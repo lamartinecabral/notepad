@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: npm ci && npm run build && node build-data.js
+      - run: npm ci && npm run build && node scripts/add-build-data.js
       - run: npm test
         env:
           TEST_DOC_ID: ${{ secrets.TEST_DOC_ID }}
