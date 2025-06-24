@@ -121,7 +121,12 @@ export class Service {
   }
 
   static update(docum, obj) {
-    return updateDoc(doc(db, "docs", docum), obj);
+    return updateDoc(doc(db, "docs", docum), obj).then(() => {
+      State.docs.forEach(async ({ id }, i, a) => {
+        if (id !== docum) return;
+        a[i] = await Service.getDoc(docum);
+      });
+    });
   }
 
   static setProtected(doc, value = true) {
