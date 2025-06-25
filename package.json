@@ -1,5 +1,6 @@
 {
     "scripts": {
+        "postinstall": "node scripts/update-static-files.js",
         "build": "webpack --mode=production",
         "start": "webpack server --mode=development --open --static=dist --port=8000",
         "test": "cd test && npm ci && npm run test:local",
