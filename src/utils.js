@@ -75,3 +75,23 @@ export function assert(val) {
   if (val === null || val === undefined) throw new Error("invalid value");
   return val;
 }
+
+export const NoteHistory = {
+  /** @type {Record<string,string>} */
+  get entries() {
+    return JSON.parse(localStorage.getItem("__NoteHistory") || "{}");
+  },
+  set entries(val) {
+    localStorage.setItem("__NoteHistory", JSON.stringify(val));
+  },
+  add: function (id) {
+    const entries = this.entries;
+    entries[id] = new Date().toISOString();
+    this.entries = entries;
+  },
+  remove: function (id) {
+    const entries = this.entries;
+    delete entries[id];
+    this.entries = entries;
+  },
+};

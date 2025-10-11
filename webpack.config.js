@@ -8,6 +8,7 @@ const entries = {
     "js/code.worker": "./src/code/worker.js",
     "js/code.boilerplate": "./src/code/boilerplate.js",
     "js/qrcode": "./src/qrcode/index.js",
+    "js/history": "./src/history/index.js",
     "js/codemirror": "./src/codemirror/index.js",
     "js/firebase": "./src/firebase/index.js",
   },

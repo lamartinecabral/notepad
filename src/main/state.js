@@ -1,6 +1,6 @@
 // @ts-check
 
-import { randomString, Subject } from "../utils";
+import { randomString, Subject, NoteHistory } from "../utils";
 import { Cache } from "../cache";
 
 export const State = {
@@ -17,4 +17,7 @@ export const State = {
   showPassword: new Subject(false),
 };
 if (!State.docId) location.replace("?" + randomString(6));
-else State.docId = State.docId.toLowerCase();
+else {
+  State.docId = State.docId.toLowerCase();
+  NoteHistory.add(State.docId);
+}

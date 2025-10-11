@@ -1,6 +1,6 @@
 // @ts-check
 
-import { randomString, Subject } from "../utils";
+import { randomString, Subject, NoteHistory } from "../utils";
 import { Cache } from "../cache";
 import { parseLanguage as lang } from "./model";
 
@@ -25,6 +25,7 @@ export const State = {
 if (!State.docId) location.replace("?" + randomString(6));
 else {
   State.docId = State.docId.toLowerCase();
+  NoteHistory.add(State.docId);
   if (!location.hash.slice(1)) {
     const language =
       localStorage && localStorage.getItem(State.docId + "_lang");
