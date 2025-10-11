@@ -5,7 +5,7 @@
         "start": "webpack server --mode=development --open --static=dist --port=8000",
         "test": "cd test && npm ci && npm run test:local",
         "serve": "python3 -m http.server -d dist",
-        "deploy": "npm run build && firebase deploy --only hosting",
+        "deploy": "npm run build && node scripts/add-build-data.js && firebase deploy --only hosting && node scripts/add-build-data.js 0",
         "deploy:rules": "firebase deploy --only firestore:rules"
     },
     "dependencies": {
