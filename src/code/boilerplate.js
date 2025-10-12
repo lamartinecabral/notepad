@@ -24,7 +24,7 @@ const codeBoilerplate = ({ language, source }) => {
     case "jsx": {
       return (
         `<body><div id="root"></div><script type="module">\n` +
-        `import "/assets/react@19.1.0/bundle.js";\n` +
+        `import "/assets/react@19.2.0/bundle.js";\n` +
         `try {\n` +
         `${source}\n` +
         `ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(App, null)); }` +
