@@ -71,7 +71,7 @@ export function initCss() {
     width: "100%",
     height: "100%",
     background: "rgba(0, 0, 0, 0.6)",
-    zIndex: "1",
+    zIndex: "15",
   });
   style(modal, {
     background: "var(--background)",
