@@ -229,7 +229,15 @@ export function initEventListeners() {
       ? ev.target[0].value
       : State.docId + "@notepade.web.app";
     const password = ev.target[1].value;
-    Service.login(email, password);
+    Service.login(email, password).then((res) => {
+      if (res === "user created") {
+        Service.setProtected().catch(async (err) => {
+          if (err.code !== "not-found") throw err;
+          await Service.save(true);
+          return Service.setProtected();
+        });
+      }
+    });
     State.showPassword.pub(false);
     // @ts-ignore
     ev.target.reset();

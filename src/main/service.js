@@ -72,6 +72,7 @@ export const Service = class {
     return signInWithEmailAndPassword(auth, email, password)
       .then(() => {
         initDocListener();
+        return "user signed in";
       })
       .catch((err) => {
         if (isOwnerLogin || err.code !== "auth/user-not-found") {
@@ -81,6 +82,7 @@ export const Service = class {
         return createUserWithEmailAndPassword(auth, email, password)
           .then(() => {
             initDocListener();
+            return "user created";
           })
           .catch((err) => {
             alert(err.message);
