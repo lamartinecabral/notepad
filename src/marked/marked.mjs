@@ -9,9 +9,8 @@ const marked = new Marked(
   markedHighlight({
     emptyLangClass: "language-",
     highlight(code, lang) {
-      if (!lang) lang = "js";
+      if (!lang) lang = "ts";
       if (!(lang in Prism.languages)) lang = "plaintext";
-      console.log(Prism.languages);
       return Prism.highlight(code, Prism.languages[lang], lang);
     },
   }),
