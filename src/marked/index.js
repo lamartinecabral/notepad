@@ -1,2 +1,2 @@
-import * as marked from "./marked";
+import * as marked from "./marked.mjs";
 self.marked = marked;
