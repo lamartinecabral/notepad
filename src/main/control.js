@@ -92,7 +92,7 @@ class Control {
   static setClaimButton() {
     claim().hidden = State.hasOwner.value || State.protected.value;
     getChild(claim.id, "a").href =
-      location.origin + "/my/?claim=" + State.docId;
+      location.origin + "/account/?claim=" + State.docId;
   }
   static setReadonly() {
     textarea().readOnly = State.public.value && !State.isLogged.value;

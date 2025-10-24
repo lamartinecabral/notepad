@@ -199,10 +199,10 @@ describe(`notepad ${host} app`, () => {
     });
   });
 
-  describe("my page", () => {
+  describe("account page", () => {
     beforeAll(async () => {
       page = await browser.newPage();
-      await page.goto(`${baseUrl}/my`);
+      await page.goto(`${baseUrl}/account`);
     });
     afterAll(async () => {
       await page.close();
