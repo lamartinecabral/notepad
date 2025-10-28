@@ -30,6 +30,11 @@ export function initStateListeners() {
   State.showOptions.sub(function (value) {
     backdrop().hidden = !value;
     optionsModal().hidden = !value;
+    if (value) {
+      setTimeout(() => {
+        secretName().focus();
+      }, 50);
+    }
   });
 
   State.nightMode.sub(function (value) {
@@ -69,6 +74,13 @@ export function initEventListeners() {
     State.isHidden.pub(true);
     State.status.pub("loading...");
     initDocListener();
+  });
+
+  secretName().addEventListener("keydown", (ev) => {
+    if (ev.keyCode === 13 || ev.key === "Enter") {
+      ev.preventDefault();
+      submitButton().click();
+    }
   });
 
   textarea().addEventListener("keydown", (ev) => {
