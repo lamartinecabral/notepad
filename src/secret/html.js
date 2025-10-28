@@ -32,10 +32,16 @@ const elements = [
               elem(
                 "span",
                 {
-                  title:
-                    "Your note will be stored with strong encryption. Keep in mind that the note's name is the key to access the decrypted content. If you plan to keep sensitive data, consider choosing a complex name for your note.",
+                  className: "withTooltip",
                 },
-                "⚠️",
+                [
+                  "⚠️",
+                  elem(
+                    "span",
+                    { className: "tooltip" },
+                    "Your note will be stored with strong encryption. Keep in mind that the note's name is the key to access the decrypted content. If you plan to keep sensitive data, consider choosing a complex name for your note.",
+                  ),
+                ],
               ),
               " secret note:",
             ]),

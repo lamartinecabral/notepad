@@ -96,8 +96,20 @@ export function initCss() {
   style(`${secretName}`, {
     resize: "none",
   });
-  style(`label[for=${secretName.id}] > span`, {
-    cursor: "help",
+  style(".withTooltip", {
+    position: "relative",
+  });
+  style(".tooltip", {
+    visibility: "hidden",
+    position: "absolute",
+    backgroundColor: "#333",
+    color: "#fff",
+    padding: "1.5ch",
+    width: "30ch",
+    zIndex: "10",
+  });
+  style(".withTooltip:hover .tooltip", {
+    visibility: "visible",
   });
   style(":root", {
     "--light": "#fff",
