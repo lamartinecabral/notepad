@@ -7,12 +7,7 @@ import * as firebase from "../firebase";
 /** @type {import("crytop")} */
 const Crytop = globalThis.Crytop;
 
-const _db = {};
-function getDb() {
-  if (_db[State.docId]) return _db[State.docId];
-  const { db } = firebase.initApp(State.docId || undefined);
-  return (_db[State.docId] = db);
-}
+const { db } = firebase.initApp("/secret");
 
 function getDocId() {
   return Crytop.encrypt(State.docId, State.docId).then((docId) =>
@@ -29,7 +24,7 @@ export async function initDocListener() {
   const docId = await getDocId();
   if (offSnapshot) offSnapshot();
   offSnapshot = onSnapshot(
-    doc(getDb(), "docs", docId),
+    doc(db, "docs", docId),
     async function (res) {
       const data = res.data() || { text: "" };
       if (res.metadata.hasPendingWrites) return;
@@ -54,7 +49,7 @@ export const Service = class {
       Html.text ? Crytop.encrypt(Html.text, State.docId) : "",
       getDocId(),
     ]);
-    const docRef = doc(getDb(), "docs", docId);
+    const docRef = doc(db, "docs", docId);
     return updateDoc(docRef, { text }).catch(() => setDoc(docRef, { text }));
   }
 };
