@@ -213,6 +213,22 @@ describe(`notepad ${host} app`, () => {
       await page.waitForFunction(`${form}?.checkVisibility()`);
     });
   });
+
+  describe("secret page", () => {
+    beforeAll(async () => {
+      page = await browser.newPage();
+      await page.goto(`${baseUrl}/secret/#${docId}`);
+    });
+    afterAll(async () => {
+      await page.close();
+    });
+
+    it("should show a textarea field", async () => {
+      await page.waitForSelector("textarea:not([hidden])");
+      const textarea = await page.$("textarea");
+      expect(await textarea?.isHidden()).toBe(false);
+    });
+  });
 });
 
 // ======================================
