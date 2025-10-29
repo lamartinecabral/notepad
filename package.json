@@ -23,6 +23,7 @@
     },
     "devDependencies": {
         "@types/babel__standalone": "7.1.9",
+        "crytop": "0.2.0",
         "firebase-tools": "14.22.0",
         "iuai": "0.9.1",
         "prettier": "3.3.2",
