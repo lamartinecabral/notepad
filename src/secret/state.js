@@ -15,3 +15,8 @@ export const State = {
   showOptions: new Subject(!localStorage.getItem("_nopedat_secretNote")),
   nightMode: new Subject(Cache.getNightMode()),
 };
+
+if (location.hash) {
+  State.docId = location.hash.slice(1);
+  location.hash = "";
+}

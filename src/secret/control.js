@@ -46,6 +46,14 @@ export function initStateListeners() {
 }
 
 export function initEventListeners() {
+  addEventListener("hashchange", () => {
+    if (!location.hash) return;
+    const val = location.hash.slice(1);
+    secretName().value = val;
+    submitButton().click();
+    location.hash = "";
+  });
+
   app().addEventListener("keyup", (ev) => {
     if (ev.key === "Escape" || ev.keyCode === 27) {
       State.showOptions.pub(false);
