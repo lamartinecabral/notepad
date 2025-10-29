@@ -11,7 +11,7 @@ const { db } = firebase.initApp("/secret");
 
 function getDocId() {
   return Crytop.encrypt(State.docId, State.docId).then(
-    (docId) => "secret_" + docId.replace(/\//g, "-"),
+    (cypherDocId) => "secret_" + cypherDocId.replace(/\//g, "-"),
   );
 }
 
