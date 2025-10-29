@@ -10,8 +10,8 @@ const Crytop = globalThis.Crytop;
 const { db } = firebase.initApp("/secret");
 
 function getDocId() {
-  return Crytop.encrypt(State.docId, State.docId).then((docId) =>
-    docId.replace(/\//g, "-"),
+  return Crytop.encrypt(State.docId, State.docId).then(
+    (docId) => "secret_" + docId.replace(/\//g, "-"),
   );
 }
 
