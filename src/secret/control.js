@@ -14,6 +14,7 @@ import {
   modal,
   submitButton,
   secretName,
+  remember,
 } from "./refs";
 import { getChild } from "../iuai";
 import { Cache } from "../cache";
@@ -82,6 +83,10 @@ export function initEventListeners() {
     State.isHidden.pub(true);
     State.status.pub("loading...");
     initDocListener();
+  });
+
+  remember().addEventListener("change", () => {
+    State.remember = !State.remember;
   });
 
   secretName().addEventListener("keydown", (ev) => {

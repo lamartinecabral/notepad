@@ -12,6 +12,7 @@ import {
   textarea,
   app,
   secretName,
+  remember,
 } from "./refs";
 import { elem } from "../iuai";
 import { State } from "./state";
@@ -51,6 +52,10 @@ const elements = [
             }),
           ]),
           elem("p", [elem(submitButton, "Submit")]),
+          elem("div", [
+            elem(remember, { type: "checkbox", checked: State.remember }),
+            elem("label", { htmlFor: remember.id }, "remember in this device"),
+          ]),
         ]),
       ]),
     ]),

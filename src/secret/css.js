@@ -9,10 +9,10 @@ import {
   textarea,
   backdrop,
   modal,
-  submitButton,
   theme,
   optionsModal,
   secretName,
+  remember,
 } from "./refs";
 
 export function initCss() {
@@ -110,6 +110,12 @@ export function initCss() {
   });
   style(".withTooltip:hover .tooltip", {
     visibility: "visible",
+  });
+  style(`div:has(> ${remember})`, {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "4px",
   });
   style(":root", {
     "--light": "#fff",

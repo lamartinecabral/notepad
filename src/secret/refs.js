@@ -12,4 +12,5 @@ export const modal = refElem("div");
 export const optionsModal = refElem("div");
 export const secretName = refElem("textarea");
 export const submitButton = refElem("button");
+export const remember = refElem("input");
 export const textarea = refElem("textarea");
