@@ -1,7 +1,7 @@
 // @ts-check
 importScripts("/js/marked.js");
 importScripts("/js/code.boilerplate.js");
-importScripts("https://unpkg.com/@babel/standalone@7.27.2/babel.min.js");
+importScripts("/assets/babel@7.27.2/babel.min.js");
 
 postMessage("codeWorkerReady");
 
