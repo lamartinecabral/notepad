@@ -1,6 +1,7 @@
 // @ts-check
 import { Marked } from "marked";
 import { markedHighlight } from "marked-highlight";
+import markedKatex from "marked-katex-extension";
 import "./prism.js";
 
 const Prism = globalThis.Prism;
@@ -14,6 +15,7 @@ const marked = new Marked(
       return Prism.highlight(code, Prism.languages[lang], lang);
     },
   }),
+  markedKatex({ throwOnError: false }),
 );
 
 /** @type {(text: string) => string} */

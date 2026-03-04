@@ -15,6 +15,7 @@ const codeBoilerplate = ({ language, source }) => {
         <head>
           <link href="/markdown/prism.css" rel="stylesheet" />
           <link href="/markdown/markdown.css" rel="stylesheet" />
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css">
         </head>
         <body>
           <div id="content">${source}</div>
