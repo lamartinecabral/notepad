@@ -15,7 +15,7 @@ const marked = new Marked(
       return Prism.highlight(code, Prism.languages[lang], lang);
     },
   }),
-  markedKatex({ throwOnError: false }),
+  markedKatex({ throwOnError: false, nonStandard: true }),
 );
 
 /** @type {(text: string) => string} */
