@@ -2,7 +2,7 @@
 
 import { Service } from "./service";
 import { State } from "./state";
-import { debounce, Img } from "../utils";
+import { debounce, imgResize, toDataURL } from "../utils";
 import {
   protectedInput,
   publicInput,
@@ -207,7 +207,7 @@ export function initEventListeners() {
         const file = item.getAsFile();
         if (!file) continue;
         (async () => {
-          const dataUrl = await Img.resize(await Img.toDataURL(file), 600);
+          const dataUrl = await imgResize(await toDataURL(file), 1024);
           document.execCommand("insertText", false, dataUrl);
         })();
         break;
