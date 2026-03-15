@@ -197,6 +197,7 @@ export function initEventListeners() {
   });
 
   textarea().addEventListener("paste", (ev) => {
+    if (textarea().value) return;
     const items = ev.clipboardData?.items;
     if (!items) return;
     for (let i = 0; i < items.length; i++) {
@@ -207,7 +208,6 @@ export function initEventListeners() {
         if (!file) continue;
         (async () => {
           const dataUrl = await Img.resize(await Img.toDataURL(file), 600);
-          document.execCommand("selectAll", false);
           document.execCommand("insertText", false, dataUrl);
         })();
         break;
