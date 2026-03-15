@@ -2,7 +2,7 @@
 
 import { Service } from "./service";
 import { State } from "./state";
-import { debounce } from "../utils";
+import { debounce, Img } from "../utils";
 import {
   protectedInput,
   publicInput,
@@ -193,6 +193,25 @@ export function initEventListeners() {
         else ident = "";
       }
       return document.execCommand("insertText", false, "\n" + ident);
+    }
+  });
+
+  textarea().addEventListener("paste", (ev) => {
+    const items = ev.clipboardData?.items;
+    if (!items) return;
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+      if (item.type.startsWith("image/")) {
+        ev.preventDefault();
+        const file = item.getAsFile();
+        if (!file) continue;
+        (async () => {
+          const dataUrl = await Img.resize(await Img.toDataURL(file), 600);
+          document.execCommand("selectAll", false);
+          document.execCommand("insertText", false, dataUrl);
+        })();
+        break;
+      }
     }
   });
 

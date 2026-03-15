@@ -95,3 +95,38 @@ export const NoteHistory = {
     this.entries = entries;
   },
 };
+
+export const Img = {
+  /**
+   * convert a file to a src base64 string.
+   * Usage example: input file to img element
+   * @param {File} file File to be processed
+   * @returns {Promise<string>}
+   */
+  toDataURL(file) {
+    return new Promise((resolve) => {
+      let fr = new FileReader();
+      fr.onload = () => resolve(String(fr.result));
+      fr.readAsDataURL(file);
+    });
+  },
+
+  /** @returns {Promise<string>} */
+  resize(dataURL, maxSize) {
+    return new Promise((resolve) => {
+      let img = document.createElement("img");
+      img.src = dataURL;
+      img.onload = () => {
+        let multiplier = Math.min(maxSize / Math.max(img.height, img.width), 1);
+
+        let canvas = document.createElement("canvas");
+        canvas.width = Math.round(img.width * multiplier);
+        canvas.height = Math.round(img.height * multiplier);
+        let ctx = canvas.getContext("2d");
+
+        ctx?.drawImage(img, 0, 0, canvas.width, canvas.height);
+        resolve(canvas.toDataURL("image/jpeg"));
+      };
+    });
+  },
+};
