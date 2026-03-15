@@ -215,6 +215,26 @@ export function initEventListeners() {
     }
   });
 
+  textarea().addEventListener("drop", (ev) => {
+    if (textarea().value) return;
+    const files = ev.dataTransfer?.files;
+    if (!files || files.length !== 1) return;
+    const file = files[0];
+    if (file.size >= 350 * 1024) return;
+    (async () => {
+      ev.preventDefault();
+      textarea().focus();
+      console.log(file.type);
+      if (file.type.startsWith("text/")) {
+        const text = await file.text();
+        document.execCommand("insertText", false, text);
+      } else {
+        const dataUrl = await toDataURL(file);
+        document.execCommand("insertText", false, dataUrl);
+      }
+    })();
+  });
+
   textarea().addEventListener(
     "input",
     debounce(function () {
