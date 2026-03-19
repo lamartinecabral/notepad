@@ -56,7 +56,7 @@ export function initCss() {
     textAlign: "end",
     position: "relative",
     height: "1rem",
-    zIndex: "5",
+    zIndex: "15",
   });
   style(`${header} a, ${claim} a, ${resetPassword} a`, {
     textDecoration: "underline",
