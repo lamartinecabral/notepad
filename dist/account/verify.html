@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nopedat – Account Action</title>
+
+  <style>
+    body {
+      background: #ECEFF1;
+      color: rgba(0, 0, 0, 0.87);
+      font-family: Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    #message {
+      background: white;
+      max-width: 360px;
+      margin: 100px auto 16px;
+      padding: 32px 24px 24px;
+      border-radius: 3px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+      text-align: center;
+    }
+
+    #message h1 {
+      font-size: 22px;
+      font-weight: 300;
+      color: rgba(0, 0, 0, 0.6);
+      margin: 0 0 12px;
+    }
+
+    #message p {
+      line-height: 140%;
+      margin: 0 0 24px;
+      font-size: 14px;
+      color: rgba(0, 0, 0, 0.6);
+    }
+
+    #action-btn {
+      display: block;
+      text-align: center;
+      background: #039be5;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: white;
+      padding: 16px;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+      cursor: pointer;
+    }
+
+    #action-btn:hover {
+      background: #0288d1;
+    }
+
+    #error-msg {
+      color: #e53935;
+      font-size: 14px;
+      margin-top: 16px;
+    }
+
+    @media (max-width: 600px) {
+
+      body,
+      #message {
+        margin-top: 0;
+        background: white;
+        box-shadow: none;
+      }
+
+      body {
+        border-top: 16px solid #039be5;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="message">
+    <h1 id="title">Account Action</h1>
+    <p id="description">Click the button below to continue.</p>
+    <a id="action-btn" href="#">Continue</a>
+    <p id="error-msg" hidden></p>
+  </div>
+
+  <script>
+    (function () {
+      var params = new URLSearchParams(window.location.search);
+      var mode = params.get('mode');
+      var oobCode = params.get('oobCode');
+      var apiKey = params.get('apiKey');
+      var lang = params.get('lang');
+
+      var title = document.getElementById('title');
+      var description = document.getElementById('description');
+      var btn = document.getElementById('action-btn');
+      var errorMsg = document.getElementById('error-msg');
+
+      if (!mode || !oobCode) {
+        title.textContent = 'Invalid Link';
+        description.textContent = 'This link is missing required parameters. Please use the link sent to your email.';
+        btn.hidden = true;
+        errorMsg.hidden = false;
+        errorMsg.textContent = 'Missing mode or oobCode parameter.';
+        return;
+      }
+
+      var labels = {
+        verifyEmail: {
+          title: 'Verify Your Email',
+          description: 'Click the button below to verify your email address.',
+          btn: 'Verify Email',
+        },
+        resetPassword: {
+          title: 'Reset Your Password',
+          description: 'Click the button below to proceed with resetting your password.',
+          btn: 'Reset Password',
+        },
+      };
+
+      var label = labels[mode] || {
+        title: 'Account Action',
+        description: 'Click the button below to continue.',
+        btn: 'Continue',
+      };
+
+      title.textContent = label.title;
+      description.textContent = label.description;
+      btn.textContent = label.btn;
+
+      var target = new URL('https://lamart-notepad.firebaseapp.com/__/auth/action');
+      target.searchParams.set('mode', mode);
+      target.searchParams.set('oobCode', oobCode);
+      if (apiKey) target.searchParams.set('apiKey', apiKey);
+      if (lang) target.searchParams.set('lang', lang);
+      // Forward any other extra params (e.g. continueUrl)
+      params.forEach(function (value, key) {
+        if (key !== 'mode' && key !== 'oobCode' && key !== 'apiKey' && key !== 'lang') {
+          target.searchParams.set(key, value);
+        }
+      });
+
+      btn.href = target.toString();
+    })();
+  </script>
+</body>
+
+</html>
