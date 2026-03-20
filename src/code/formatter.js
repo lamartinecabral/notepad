@@ -25,7 +25,7 @@ const loadPkg = (() => {
   };
 })();
 
-const pkgPrefix = "https://cdn.jsdelivr.net/npm/prettier@3.3.2";
+const pkgPrefix = "https://cdn.jsdelivr.net/npm/prettier@3.8.1";
 const pkg = {
   standalone: pkgPrefix + "/standalone.js",
   estree: pkgPrefix + "/plugins/estree.js",

@@ -5,7 +5,7 @@
     "test:remote": "HOST=remote jest"
   },
   "dependencies": {
-    "jest": "29.7.0",
-    "puppeteer": "24.10.0"
+    "jest": "30.3.0",
+    "puppeteer": "24.40.0"
   }
 }
