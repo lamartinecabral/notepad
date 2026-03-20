@@ -21,44 +21,40 @@ service cloud.firestore {
           request.resource.data.text is string &&
           (
             !('protected' in resource.data.keys()) ||
-            request.auth.uid == resource.data.protected
+            uidEqual(resource.data.protected)
           )
         ) || (
           addedKeys() == ['protected'].toSet() &&
-          request.auth != null &&
-          request.auth.uid == request.resource.data.protected &&
+          uidEqual(request.resource.data.protected) &&
           ( !hasOwner(docId) || isOwner(docId) )
         ) || (
           removedKeys() == ['protected'].toSet() &&
-          request.auth.uid == resource.data.protected
+          uidEqual(resource.data.protected)
         ) || (
           affectedKeys() == ['public'].toSet() &&
-          request.auth.uid == resource.data.protected
+          uidEqual(resource.data.protected)
         );
       allow get: if
         !exists(request.path) ||
         !('protected' in resource.data) ||
-        request.auth.uid == resource.data.protected ||
+        uidEqual(resource.data.protected) ||
         'public' in resource.data;
     }
     
     match /ownerships/{docId} {
       allow create: if
         request.resource.data.keys() == ['owner'] &&
-        request.auth != null &&
-        request.auth.uid == request.resource.data.owner &&
+        uidEqual(request.resource.data.owner) &&
         request.auth.token.email_verified &&
         exists(path(/docs/$(docId))) &&
         !isProtected(docId);
       allow get: if
       	!hasOwner(docId) || isOwner(docId);
       allow list: if
-      	request.auth != null &&
-      	request.auth.uid == resource.data.owner;
+      	uidEqual(resource.data.owner);
       allow delete: if
       	!isProtected(docId) &&
-      	request.auth != null &&
-      	request.auth.uid == resource.data.owner;
+      	uidEqual(resource.data.owner);
     }
     
     function affectedKeys(){
@@ -84,6 +80,9 @@ service cloud.firestore {
     }
     function isOwner(docId){
     	return request.auth != null && request.auth.uid == get(path(/ownerships/$(docId))).data.owner;
+    }
+    function uidEqual(value){
+    	return request.auth != null && request.auth.uid == value;
     }
   }
 }
