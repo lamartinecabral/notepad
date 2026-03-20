@@ -2,16 +2,34 @@
 !(function () {
   var docHtml = "";
   var renderCount = 0;
+
+  /** @param {string} text */
   function setContent(text) {
     renderCount++;
     docHtml = text;
-    var iframe = document.querySelector("iframe");
-    if (iframe) iframe.remove();
+    var iframe = getIframe();
+
+    /** @type {[number, number] | undefined} */
+    var xy;
+    if (iframe) {
+      var wind = iframe.contentWindow;
+      if (wind) xy = [wind.scrollX, wind.scrollY];
+      iframe.remove();
+    }
+
     iframe = document.createElement("iframe");
     iframe.src =
       "/iframe/" + location.search + (renderCount === 1 ? "" : location.hash);
     document.body.appendChild(iframe);
     setTimeout(addIframeHashChangeListener, 10);
+
+    if (xy)
+      iframe.addEventListener("load", function () {
+        setTimeout(() => {
+          var wind = iframe && iframe.contentWindow;
+          xy && wind && wind.scrollTo(...xy);
+        }, 10);
+      });
   }
 
   window.addEventListener("message", function (ev) {
@@ -37,7 +55,7 @@
       function setHeight() {
         document.body.style.height = window.innerHeight + "px";
       }
-      return setHeight(), setHeight;
+      return (setHeight(), setHeight);
     })(),
   );
 
@@ -64,5 +82,6 @@
   var thisModule = {};
   thisModule.setContent = setContent;
 
+  // @ts-ignore
   return (window["notepadIframe"] = thisModule);
 })();
