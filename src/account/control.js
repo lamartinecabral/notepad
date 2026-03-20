@@ -166,17 +166,18 @@ export function initEventListeners() {
   });
 
   resetPassword().addEventListener("click", () => {
-    const email = loginForm()[0]["value"];
-    Service.resetPassword(email)
-      .then(() => {
-        alert(
-          "You will receive an e-mail with instructions to reset your password.",
-        );
-      })
-      .catch((err) => {
-        console.error(err);
-        alert(err.message);
-      });
+    alert('We are really sorry, but the password reset is currently disabled due to technical issues. Please try again later.');
+    // const email = loginForm()[0]["value"];
+    // Service.resetPassword(email)
+    //   .then(() => {
+    //     alert(
+    //       "You will receive an e-mail with instructions to reset your password.",
+    //     );
+    //   })
+    //   .catch((err) => {
+    //     console.error(err);
+    //     alert(err.message);
+    //   });
   });
 
   signinMode().addEventListener("click", () => {
@@ -184,7 +185,8 @@ export function initEventListeners() {
   });
 
   signupMode().addEventListener("click", () => {
-    State.signupMode.pub(true);
+    alert('We are really sorry, but the account creation is currently disabled due to technical issues. Please try again later.');
+    // State.signupMode.pub(true);
   });
 
   changeLayout().addEventListener("click", () => {
