@@ -1,4 +1,4 @@
-import * as thisModule from "./marked";
+import * as thisModule from "./marked.mjs";
 
 declare global {
   var marked: typeof thisModule;

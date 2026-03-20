@@ -7,9 +7,6 @@ import { firebaseConfig } from "../firebase/config.js";
 /** @type {import('../../dist/assets/firebase@8.2.4').default} */ // @ts-ignore
 const firebase = window.firebase;
 
-/**
- * @param {string} [name]
- */
 export const initApp = (name) => {
   const app = firebase.initializeApp(firebaseConfig, name);
   return {

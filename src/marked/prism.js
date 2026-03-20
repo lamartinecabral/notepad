@@ -1,3 +1,4 @@
+// @ts-nocheck
 globalThis.Prism = { disableWorkerMessageHandler: true };
 /* PrismJS 1.30.0
 https://prismjs.com/download#themes=prism&languages=markup+css+clike+javascript+arduino+bash+c+csharp+cpp+csv+go+graphql+java+json+latex+markdown+markup-templating+matlab+php+powershell+python+jsx+tsx+regex+ruby+rust+scss+sql+typescript */

@@ -4,6 +4,7 @@
         "build": "webpack --mode=production",
         "start": "webpack server --mode=development --open --static=dist --port=8000",
         "test": "cd test && npm ci && npm run test:local",
+        "typecheck": "tsc --noEmit --allowJs --checkJs",
         "serve": "python3 -m http.server -d dist",
         "deploy": "npm run build && node scripts/add-build-data.js && firebase deploy --only hosting && node scripts/add-build-data.js 0",
         "deploy:rules": "firebase deploy --only firestore:rules"
@@ -29,6 +30,7 @@
         "iuai": "0.9.5",
         "prettier": "3.8.1",
         "ts-loader": "9.5.4",
+        "typescript": "5.9.3",
         "webpack": "5.105.4",
         "webpack-cli": "7.0.2",
         "webpack-dev-server": "5.2.3"
