@@ -1,13 +1,36 @@
 html {
   --default-font: system-ui, Tahoma, monospace !important;
 }
-body{
+
+body {
   font-family: var(--default-font);
   margin: 0;
 }
-#content{
+
+#content {
   padding: 1em;
 }
-img{
+
+img {
   max-width: 100%;
+}
+
+td,
+th {
+  border: 0.5px solid black;
+  padding: 4px;
+}
+
+table {
+  border: 0.5px solid black;
+  border-spacing: 0;
+  margin: 1em 0;
+}
+
+tr:not(:has(:is(td, th:not(:empty)))) {
+  display: none;
+}
+
+pre {
+  font-size: 0.8rem;
 }
