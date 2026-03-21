@@ -12,8 +12,12 @@
     /** @type {[number, number] | undefined} */
     var xy;
     if (iframe) {
-      var wind = iframe.contentWindow;
-      if (wind) xy = [wind.scrollX, wind.scrollY];
+      try {
+        var wind = iframe.contentWindow;
+        if (wind) xy = [wind.scrollX, wind.scrollY];
+      } catch (e) {
+        console.error(e);
+      }
       iframe.remove();
     }
 
