@@ -18,7 +18,7 @@ img {
 td,
 th {
   border: 0.5px solid black;
-  padding: 4px;
+  padding: 6px 13px;
 }
 
 table {
@@ -31,6 +31,13 @@ tr:not(:has(:is(td, th:not(:empty)))) {
   display: none;
 }
 
+tr:nth-child(2n) {
+  background-color: hsla(0, 0%, 50%, 0.1);
+}
+
 pre {
-  font-size: 0.8rem;
+  font-size: 0.85rem;
+  padding: 1rem;
+  border-radius: 6px;
+  background-color: hsla(0, 0%, 50%, 0.1);
 }
