@@ -12,6 +12,7 @@ const entries = {
     "js/history": "./src/history/index.js",
     "js/codemirror": "./src/codemirror/index.js",
     "js/firebase": "./src/firebase/index.js",
+    "js/download": "./src/download/index.js",
   },
 };
 
