@@ -1,6 +1,7 @@
 // @ts-check
 import { elem, style } from "../iuai";
 import * as firebase from "../firebase";
+import { Languages } from "../code/model";
 
 const docId = (location.search.slice(1) || "").toLowerCase();
 if (!docId) location.replace("/");
@@ -143,12 +144,13 @@ function dataUrlToBlob(dataUrl) {
  * @param {string} dataUrl
  */
 function setupDataUrlDownload(dataUrl) {
-  if (_prevObjectUrl) URL.revokeObjectURL(_prevObjectUrl);
+  const prevObjectUrl = downloadLink.href;
+  if (prevObjectUrl) URL.revokeObjectURL(prevObjectUrl);
   const mime = mimeFromDataUrl(dataUrl);
   const ext = extFromMime(mime);
   const filename = docId + "." + ext;
   const blob = dataUrlToBlob(dataUrl);
-  const url = (_prevObjectUrl = URL.createObjectURL(blob));
+  const url = URL.createObjectURL(blob);
 
   downloadLink.href = url;
   downloadLink.download = filename;
@@ -164,22 +166,50 @@ function setupDataUrlDownload(dataUrl) {
   }
 }
 
+/** @returns {keyof Languages | ""} */
+function getLang() {
+  const hash = location.hash.slice(1).trim();
+  // @ts-ignore
+  if (hash in Languages) return hash;
+  const cache = localStorage.getItem(docId + "_lang") ?? "";
+  // @ts-ignore
+  if (cache in Languages) return cache;
+  return "";
+}
+
 /**
  * Sets up the download anchor for plain text content.
  * @param {string} text
  */
 function setupTextDownload(text) {
-  if (_prevObjectUrl) URL.revokeObjectURL(_prevObjectUrl);
+  const prevObjectUrl = downloadLink.href;
+  if (prevObjectUrl) URL.revokeObjectURL(prevObjectUrl);
   const blob = new Blob([text], { type: "text/plain" });
-  const url = (_prevObjectUrl = URL.createObjectURL(blob));
-  const filename = docId + ".txt";
+  const url = URL.createObjectURL(blob);
+
+  const lang = getLang();
+  const ext =
+    {
+      javascript: "js",
+      markdown: "md",
+      python: "py",
+      plaintext: "txt",
+    }[lang] ||
+    lang ||
+    "txt";
+
+  const filename = docId + "." + ext;
   downloadLink.href = url;
   downloadLink.download = filename;
   downloadLink.textContent = "Download " + filename;
   downloadLink.style.display = "inline-block";
-  statusMsg.textContent = "Text note";
+  if (lang) {
+    const label = Languages[lang]?.label || lang;
+    statusMsg.textContent = "Text note (" + label + ")";
+  } else {
+    statusMsg.textContent = "Text note";
+  }
 }
-let _prevObjectUrl = "";
 
 onSnapshot(
   doc(db, "docs", docId),
