@@ -150,20 +150,16 @@ function setupDataUrlDownload(dataUrl) {
   const blob = dataUrlToBlob(dataUrl);
   const url = (_prevObjectUrl = URL.createObjectURL(blob));
 
+  downloadLink.href = url;
+  downloadLink.download = filename;
+  downloadLink.textContent = "Download " + filename;
+  downloadLink.style.display = "inline-block";
   if (isImageMime(mime)) {
     imagePreview.src = url;
     imageWrapper.style.display = "block";
-    downloadLink.href = url;
-    downloadLink.download = filename;
-    downloadLink.textContent = "Download " + filename;
-    downloadLink.style.display = "inline-block";
     statusMsg.textContent = "Image detected (" + mime + ")";
   } else {
     imageWrapper.style.display = "none";
-    downloadLink.href = url;
-    downloadLink.download = filename;
-    downloadLink.textContent = "Download " + filename;
-    downloadLink.style.display = "inline-block";
     statusMsg.textContent = "File detected (" + mime + ")";
   }
 }
