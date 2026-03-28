@@ -1,9 +1,6 @@
 // @ts-check
 import { elem, style } from "../iuai";
 import * as firebase from "../firebase";
-import { Cache } from "../cache";
-
-// this page is completely AI generated
 
 const docId = (location.search.slice(1) || "").toLowerCase();
 if (!docId) location.replace("/");
@@ -13,21 +10,6 @@ const { doc, onSnapshot } = firebase.firestore;
 
 style("*", { fontFamily: "monospace", boxSizing: "border-box" });
 style("body", { margin: "0", padding: "0", background: "#fff", color: "#000" });
-style(":root", {
-  "--bg": "#fff",
-  "--fg": "#000",
-  "--border": "#ccc",
-  "--accent": "#0066cc",
-});
-
-style("body.dark", {
-  "--bg": "#181b20",
-  "--fg": "#abb2bf",
-  "--border": "#444",
-  "--accent": "#61afef",
-});
-
-style("body", { background: "var(--bg)", color: "var(--fg)" });
 
 const container = elem("div", {
   id: "container",
@@ -45,14 +27,6 @@ const heading = elem(
   "Download note",
 );
 
-const noteId = elem(
-  "p",
-  {
-    style: { color: "var(--accent)", marginBottom: "2em", fontWeight: "bold" },
-  },
-  docId,
-);
-
 const statusMsg = elem(
   "p",
   { id: "status", style: { marginBottom: "1em" } },
@@ -62,10 +36,10 @@ const statusMsg = elem(
 const downloadLink = elem("a", {
   id: "download-link",
   style: {
-    display: "inline-block",
+    display: "none",
     padding: "0.6em 1.4em",
-    background: "var(--accent)",
-    color: "var(--bg)",
+    background: "#0066cc",
+    color: "#fff",
     textDecoration: "none",
     borderRadius: "4px",
     fontWeight: "bold",
@@ -74,23 +48,38 @@ const downloadLink = elem("a", {
   },
 });
 
+const imageWrapper = elem("div", {
+  id: "image-wrapper",
+  style: { display: "none", marginTop: "0.5em" },
+});
+
+const imagePreview = elem("img", {
+  id: "image-preview",
+  alt: "image preview",
+  style: {
+    maxWidth: "100%",
+    maxHeight: "60vh",
+    borderRadius: "6px",
+    boxShadow: "0 2px 12px rgba(0,0,0,0.15)",
+    display: "block",
+    margin: "1rem auto",
+  },
+});
+
 const backLink = elem("p", { style: { marginTop: "2em" } }, [
   elem(
     "a",
     {
       href: location.origin + "/?" + docId,
-      style: { color: "var(--accent)", textDecoration: "underline" },
+      style: { color: "#0066cc", textDecoration: "underline" },
     },
     "← back to note",
   ),
 ]);
 
-container.append(heading, noteId, statusMsg, downloadLink, backLink);
+container.append(heading, statusMsg, downloadLink, imageWrapper, backLink);
+imageWrapper.append(imagePreview);
 document.body.appendChild(container);
-
-if (Cache.getNightMode()) {
-  document.body.classList.add("dark");
-}
 
 /**
  * Detects if a string is a data URL.
@@ -99,6 +88,15 @@ if (Cache.getNightMode()) {
  */
 function isDataUrl(text) {
   return /^data:[^;]+;base64,/.test(text.trim());
+}
+
+/**
+ * Returns true if the MIME type is an image type.
+ * @param {string} mime
+ * @returns {boolean}
+ */
+function isImageMime(mime) {
+  return mime.startsWith("image/");
 }
 
 /**
@@ -145,18 +143,47 @@ function extFromMime(mime) {
 }
 
 /**
+ * Converts a data URL string to a Blob.
+ * @param {string} dataUrl
+ * @returns {Blob}
+ */
+function dataUrlToBlob(dataUrl) {
+  const mime = mimeFromDataUrl(dataUrl);
+  const base64 = dataUrl.slice(dataUrl.indexOf(",") + 1);
+  const binary = atob(base64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+  return new Blob([bytes], { type: mime });
+}
+
+/**
  * Sets up the download anchor for a data URL.
  * @param {string} dataUrl
  */
 function setupDataUrlDownload(dataUrl) {
+  if (_prevObjectUrl) URL.revokeObjectURL(_prevObjectUrl);
   const mime = mimeFromDataUrl(dataUrl);
   const ext = extFromMime(mime);
   const filename = docId + "." + ext;
-  downloadLink.href = dataUrl;
-  downloadLink.download = filename;
-  downloadLink.textContent = "Download " + filename;
-  downloadLink.hidden = false;
-  statusMsg.textContent = "File detected (" + mime + ")";
+  const blob = dataUrlToBlob(dataUrl);
+  const url = (_prevObjectUrl = URL.createObjectURL(blob));
+
+  if (isImageMime(mime)) {
+    imagePreview.src = url;
+    imageWrapper.style.display = "block";
+    downloadLink.href = url;
+    downloadLink.download = filename;
+    downloadLink.textContent = "Download " + filename;
+    downloadLink.style.display = "inline-block";
+    statusMsg.textContent = "Image detected (" + mime + ")";
+  } else {
+    imageWrapper.style.display = "none";
+    downloadLink.href = url;
+    downloadLink.download = filename;
+    downloadLink.textContent = "Download " + filename;
+    downloadLink.style.display = "inline-block";
+    statusMsg.textContent = "File detected (" + mime + ")";
+  }
 }
 
 /**
@@ -171,7 +198,7 @@ function setupTextDownload(text) {
   downloadLink.href = url;
   downloadLink.download = filename;
   downloadLink.textContent = "Download " + filename;
-  downloadLink.hidden = false;
+  downloadLink.style.display = "inline-block";
   statusMsg.textContent = "Text note";
 }
 let _prevObjectUrl = "";
@@ -184,7 +211,7 @@ onSnapshot(
 
     if (!text) {
       statusMsg.textContent = "Note is empty.";
-      downloadLink.hidden = true;
+      downloadLink.style.display = "none";
       return;
     }
 
@@ -197,6 +224,6 @@ onSnapshot(
   function (err) {
     console.error(err);
     statusMsg.textContent = "Error: " + err.message;
-    downloadLink.hidden = true;
+    downloadLink.style.display = "none";
   },
 );
