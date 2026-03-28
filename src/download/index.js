@@ -116,28 +116,10 @@ function mimeFromDataUrl(dataUrl) {
  */
 function extFromMime(mime) {
   const map = /** @type {Record<string,string>} */ ({
-    "image/png": "png",
-    "image/jpeg": "jpg",
-    "image/gif": "gif",
-    "image/webp": "webp",
     "image/svg+xml": "svg",
-    "image/bmp": "bmp",
-    "image/tiff": "tiff",
-    "image/avif": "avif",
     "audio/mpeg": "mp3",
-    "audio/ogg": "ogg",
-    "audio/wav": "wav",
-    "audio/webm": "webm",
-    "video/mp4": "mp4",
-    "video/webm": "webm",
     "video/ogg": "ogv",
-    "application/pdf": "pdf",
-    "application/zip": "zip",
-    "application/json": "json",
     "text/plain": "txt",
-    "text/html": "html",
-    "text/css": "css",
-    "text/csv": "csv",
   });
   return map[mime] || mime.split("/")[1] || "bin";
 }
